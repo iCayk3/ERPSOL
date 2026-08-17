@@ -1,0 +1,61 @@
+{
+ "app": "sol_brasil",
+ "charts": [],
+ "content": "[{\"id\":\"sol-financeiro-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Financeiro</b></span>\",\"col\":12}},{\"id\":\"sol-financeiro-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faturas\",\"col\":4}},{\"id\":\"sol-financeiro-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Emitir fatura\",\"col\":4}},{\"id\":\"sol-financeiro-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Recebimentos\",\"col\":4}},{\"id\":\"sol-financeiro-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Registrar recebimento\",\"col\":4}},{\"id\":\"sol-financeiro-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cobran\u00e7as\",\"col\":4}}]",
+ "creation": "2026-08-17 10:28:10.353489",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "credit-card",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Financeiro",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-08-17 15:33:16.390818",
+ "modified_by": "Administrator",
+ "module": "SOL Brasil",
+ "name": "Financeiro",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Faturas",
+   "link_to": "Sales Invoice",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "New",
+   "label": "Emitir fatura",
+   "link_to": "Sales Invoice",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Recebimentos",
+   "link_to": "Payment Entry",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "New",
+   "label": "Registrar recebimento",
+   "link_to": "Payment Entry",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Cobran\u00e7as",
+   "link_to": "Dunning",
+   "type": "DocType"
+  }
+ ],
+ "title": "Financeiro",
+ "type": "Workspace"
+}

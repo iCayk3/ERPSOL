@@ -1,0 +1,33 @@
+{
+ "doctype": "DocType",
+ "name": "Contrato Preliminar",
+ "module": "SOL Brasil",
+ "autoname": "format:PRE-{YYYY}-{#####}",
+ "title_field": "lead",
+ "search_fields": "lead,customer,subscription_plan",
+ "engine": "InnoDB",
+ "field_order": ["parties_section", "lead", "customer", "flow_section", "contract_flow", "subscription_plan", "start_date", "contract_status", "payment_section", "payment_reference", "payment_date", "conversion_section", "converted_subscription", "notes"],
+ "fields": [
+  {"fieldname": "parties_section", "fieldtype": "Section Break", "label": "Futuro cliente"},
+  {"fieldname": "lead", "fieldtype": "Link", "label": "Lead", "options": "Lead", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "customer", "fieldtype": "Link", "label": "Cliente convertido", "options": "Customer", "read_only": 1},
+  {"fieldname": "flow_section", "fieldtype": "Section Break", "label": "Condições do contrato"},
+  {"fieldname": "contract_flow", "fieldtype": "Select", "label": "Fluxo de cobrança", "options": "Pré-pagamento\nPós-pagamento", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "subscription_plan", "fieldtype": "Link", "label": "Plano", "options": "Subscription Plan", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "start_date", "fieldtype": "Date", "label": "Início previsto", "default": "Today", "reqd": 1},
+  {"fieldname": "contract_status", "fieldtype": "Select", "label": "Situação", "options": "Rascunho\nAguardando pagamento\nPago\nPronto para conversão\nConvertido\nCancelado", "default": "Rascunho", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "payment_section", "fieldtype": "Section Break", "label": "Pagamento inicial", "depends_on": "eval:doc.contract_flow == 'Pré-pagamento'"},
+  {"fieldname": "payment_reference", "fieldtype": "Data", "label": "Referência/comprovante"},
+  {"fieldname": "payment_date", "fieldtype": "Date", "label": "Pagamento confirmado em"},
+  {"fieldname": "conversion_section", "fieldtype": "Section Break", "label": "Conversão"},
+  {"fieldname": "converted_subscription", "fieldtype": "Link", "label": "Contrato definitivo", "options": "Subscription", "read_only": 1},
+  {"fieldname": "notes", "fieldtype": "Small Text", "label": "Observações"}
+ ],
+ "permissions": [
+  {"role": "Sales User", "read": 1, "write": 1, "create": 1},
+  {"role": "Sales Manager", "read": 1, "write": 1, "create": 1, "delete": 1},
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

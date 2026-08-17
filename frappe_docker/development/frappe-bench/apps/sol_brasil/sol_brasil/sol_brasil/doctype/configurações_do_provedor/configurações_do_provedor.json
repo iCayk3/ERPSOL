@@ -1,0 +1,18 @@
+{
+ "doctype": "DocType",
+ "name": "Configurações do Provedor",
+ "module": "SOL Brasil",
+ "issingle": 1,
+ "engine": "InnoDB",
+ "field_order": ["lead_section", "lead_contract_flow", "require_prepaid_payment", "navigation_section", "return_to_customer_after_save"],
+ "fields": [
+  {"fieldname": "lead_section", "fieldtype": "Section Break", "label": "Conversão de futuros clientes"},
+  {"fieldname": "lead_contract_flow", "fieldtype": "Select", "label": "Fluxo de contrato disponível no Lead", "options": "Permitir escolha no Lead\nPré-pagamento\nPós-pagamento", "default": "Permitir escolha no Lead", "reqd": 1, "description": "Define se o operador poderá escolher o fluxo ou se o provedor utilizará apenas um modelo."},
+  {"fieldname": "require_prepaid_payment", "fieldtype": "Check", "label": "Exigir confirmação do pagamento antes da conversão no pré-pagamento", "default": "1"},
+  {"fieldname": "navigation_section", "fieldtype": "Section Break", "label": "Navegação"},
+  {"fieldname": "return_to_customer_after_save", "fieldtype": "Check", "label": "Retornar à ficha do cliente após salvar documentos relacionados", "default": "1"}
+ ],
+ "permissions": [{"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1}],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

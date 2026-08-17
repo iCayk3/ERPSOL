@@ -1,0 +1,40 @@
+# Environment Variables
+.env
+
+# mounted volume
+sites
+
+development/*
+!development/README.md
+!development/installer.py
+!development/apps-example.json
+!development/vscode-example/
+!development/frappe-bench/
+development/frappe-bench/*
+!development/frappe-bench/apps/
+development/frappe-bench/apps/*
+!development/frappe-bench/apps/sol_brasil/
+!development/frappe-bench/apps/sol_brasil/**
+
+# Pycharm
+.idea
+
+# VS Code
+.vscode/**
+!.vscode/extensions.json
+
+# VS Code devcontainer
+.devcontainer
+*.code-workspace
+
+# Python
+*.pyc
+__pycache__
+venv
+
+# NodeJS
+node_modules
+
+# VitePress
+**/.vitepress/dist
+**/.vitepress/cache

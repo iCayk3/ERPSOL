@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SOL Provedor">
+  <defs>
+    <linearGradient id="sol" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffb020"/>
+      <stop offset="1" stop-color="#ff6b00"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0878d1"/>
+  <circle cx="32" cy="27" r="10" fill="url(#sol)"/>
+  <g stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M32 10v4M15 27h4M45 27h4M20 15l3 3M44 15l-3 3"/>
+    <path d="M17 48c8-9 22-9 30 0M23 53c5-5 13-5 18 0"/>
+  </g>
+  <circle cx="32" cy="56" r="2.5" fill="#fff"/>
+</svg>

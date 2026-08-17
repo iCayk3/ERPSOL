@@ -1,0 +1,85 @@
+{
+ "app": "sol_brasil",
+ "charts": [],
+ "content": "[{\"id\":\"sol-sol_provedor-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>SOL Provedor</b></span>\",\"col\":12}},{\"id\":\"sol-sol_provedor-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Clientes\",\"col\":4}},{\"id\":\"sol-sol_provedor-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contratos\",\"col\":4}},{\"id\":\"sol-sol_provedor-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Planos\",\"col\":4}},{\"id\":\"sol-sol_provedor-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Financeiro\",\"col\":4}},{\"id\":\"sol-sol_provedor-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Atendimento\",\"col\":4}},{\"id\":\"sol-sol_provedor-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rede e equipamentos\",\"col\":4}},{\"id\":\"sol-sol_provedor-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Estoque\",\"col\":4}},{\"id\":\"sol-sol_provedor-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Relat\u00f3rios\",\"col\":4}},{\"id\":\"sol-sol_provedor-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es\",\"col\":4}}]",
+ "creation": "2026-08-17 10:28:09.194448",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "home",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "SOL Provedor",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-08-17 15:33:16.245760",
+ "modified_by": "Administrator",
+ "module": "SOL Brasil",
+ "name": "SOL Provedor",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "Clientes",
+   "type": "URL",
+   "url": "/app/clientes"
+  },
+  {
+   "doc_view": "",
+   "label": "Contratos",
+   "type": "URL",
+   "url": "/app/contratos"
+  },
+  {
+   "doc_view": "",
+   "label": "Planos",
+   "type": "URL",
+   "url": "/app/planos"
+  },
+  {
+   "doc_view": "",
+   "label": "Financeiro",
+   "type": "URL",
+   "url": "/app/financeiro"
+  },
+  {
+   "doc_view": "",
+   "label": "Atendimento",
+   "type": "URL",
+   "url": "/app/atendimento"
+  },
+  {
+   "doc_view": "",
+   "label": "Rede e equipamentos",
+   "type": "URL",
+   "url": "/app/rede-e-equipamentos"
+  },
+  {
+   "doc_view": "",
+   "label": "Estoque",
+   "type": "URL",
+   "url": "/app/estoque"
+  },
+  {
+   "doc_view": "",
+   "label": "Relat\u00f3rios",
+   "type": "URL",
+   "url": "/app/relat\u00f3rios"
+  },
+  {
+   "doc_view": "",
+   "label": "Configura\u00e7\u00f5es",
+   "type": "URL",
+   "url": "/app/configura\u00e7\u00f5es"
+  }
+ ],
+ "title": "SOL Provedor",
+ "type": "Workspace"
+}

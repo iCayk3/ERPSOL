@@ -20,6 +20,9 @@ node_modules/
 # Aider AI Chat
 .aider*
 
+# Backups locais dos antigos repositórios aninhados
+.git-backups/
+
 # Banking SPA
 erpnext/public/banking
 erpnext/www/banking.html

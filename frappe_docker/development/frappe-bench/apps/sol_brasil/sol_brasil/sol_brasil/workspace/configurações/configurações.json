@@ -1,0 +1,55 @@
+{
+ "app": "sol_brasil",
+ "charts": [],
+ "content": "[{\"id\":\"sol-configura\u00e7\u00f5es-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Configura\u00e7\u00f5es</b></span>\",\"col\":12}},{\"id\":\"sol-configura\u00e7\u00f5es-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Empresa\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Usu\u00e1rios\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Permiss\u00f5es\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do sistema\",\"col\":4}}]",
+ "creation": "2026-08-17 10:28:10.475883",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "settings",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Configura\u00e7\u00f5es",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-08-17 15:33:16.687164",
+ "modified_by": "Administrator",
+ "module": "SOL Brasil",
+ "name": "Configura\u00e7\u00f5es",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Empresa",
+   "link_to": "Company",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Usu\u00e1rios",
+   "link_to": "User",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Permiss\u00f5es",
+   "link_to": "Role Permission Manager",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Configura\u00e7\u00f5es do sistema",
+   "link_to": "System Settings",
+   "type": "DocType"
+  }
+ ],
+ "title": "Configura\u00e7\u00f5es",
+ "type": "Workspace"
+}

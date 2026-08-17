@@ -1,0 +1,666 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SOL Brasil\n"
+"Language: pt_BR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Billing Currency"
+msgstr "Moeda de cobrança"
+
+msgid "Company Bank Account"
+msgstr "Conta bancária da empresa"
+
+msgid "Customer Type"
+msgstr "Tipo de cliente"
+
+msgid "Assign"
+msgstr "Atribuir responsável"
+
+msgid "Last Edited By You"
+msgstr "Editado por você"
+
+msgid "Created by you"
+msgstr "Criado por você"
+
+msgid "Created By You"
+msgstr "Criado por você"
+
+msgid "Subscription"
+msgstr "Contrato"
+
+msgid "Subscriptions"
+msgstr "Contratos"
+
+msgid "Subscription Plan"
+msgstr "Plano de internet"
+
+msgid "Subscription Plans"
+msgstr "Planos de internet"
+
+msgid "Sales Invoice"
+msgstr "Fatura"
+
+msgid "Sales Invoices"
+msgstr "Faturas"
+
+msgid "Payment Entry"
+msgstr "Recebimento"
+
+msgid "Payment Entries"
+msgstr "Recebimentos"
+
+msgid "Maintenance Visit"
+msgstr "Ordem de serviço"
+
+msgid "Maintenance Visits"
+msgstr "Ordens de serviço"
+
+msgid "Issue"
+msgstr "Chamado"
+
+msgid "Issues"
+msgstr "Chamados"
+
+msgid "Asset"
+msgstr "Equipamento"
+
+msgid "Assets"
+msgstr "Equipamentos"
+
+msgid "Customer"
+msgstr "Cliente"
+
+msgid "Customers"
+msgstr "Clientes"
+
+msgid "Lead"
+msgstr "Futuro cliente"
+
+msgid "Leads"
+msgstr "Futuros clientes"
+
+msgid "Party Type"
+msgstr "Tipo de parte"
+
+msgid "Party"
+msgstr "Cliente"
+
+msgid "Company"
+msgstr "Empresa"
+
+msgid "Status"
+msgstr "Situação"
+
+msgid "Start Date"
+msgstr "Data de início"
+
+msgid "End Date"
+msgstr "Data de término"
+
+msgid "Subscription Start Date"
+msgstr "Início do contrato"
+
+msgid "Subscription End Date"
+msgstr "Término do contrato"
+
+msgid "Generate Invoice At"
+msgstr "Gerar fatura em"
+
+msgid "Beginning of the current subscription period"
+msgstr "Início do período atual do contrato"
+
+msgid "End of the current subscription period"
+msgstr "Final do período atual do contrato"
+
+msgid "Days before the current subscription period"
+msgstr "Dias antes do período atual do contrato"
+
+msgid "Days Until Due"
+msgstr "Dias até o vencimento"
+
+msgid "Plans"
+msgstr "Planos"
+
+msgid "Comments"
+msgstr "Comentários"
+
+msgid "Activity"
+msgstr "Atividade"
+
+msgid "Show all activity"
+msgstr "Mostrar toda a atividade"
+
+msgid "New Email"
+msgstr "Novo e-mail"
+
+msgid "New Event"
+msgstr "Novo evento"
+
+msgid "Attachments"
+msgstr "Anexos"
+
+msgid "Tags"
+msgstr "Etiquetas"
+
+msgid "Share"
+msgstr "Compartilhar"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "Download"
+msgstr "Baixar"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Draft"
+msgstr "Rascunho"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgid "Completed"
+msgstr "Concluído"
+
+msgid "Unpaid"
+msgstr "Não pago"
+
+msgid "Paid"
+msgstr "Pago"
+
+msgid "Overdue"
+msgstr "Vencido"
+
+msgid "Open"
+msgstr "Em aberto"
+
+msgid "Closed"
+msgstr "Fechado"
+
+msgid "Items & Pricing"
+msgstr "Itens e preços"
+
+msgid "Terms Template"
+msgstr "Modelo de termos"
+
+msgid "Tax Template"
+msgstr "Modelo de impostos"
+
+msgid "Selling Setup"
+msgstr "Configuração de vendas"
+
+msgid "{0}% completed"
+msgstr "{0}% concluído"
+
+msgid "completed"
+msgstr "concluído"
+
+msgid "View Sales Order Analysis"
+msgstr "Visualizar análise de pedidos de venda"
+
+msgid "Review Selling Settings"
+msgstr "Revisar configurações de vendas"
+
+msgid "Partnership"
+msgstr "Sociedade"
+
+msgid "Begin typing for results."
+msgstr "Comece a digitar para buscar."
+
+msgid "Comment"
+msgstr "Comentário"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Today"
+msgstr "Hoje"
+
+msgid "January"
+msgstr "Janeiro"
+
+msgid "February"
+msgstr "Fevereiro"
+
+msgid "March"
+msgstr "Março"
+
+msgid "April"
+msgstr "Abril"
+
+msgid "May"
+msgstr "Maio"
+
+msgid "June"
+msgstr "Junho"
+
+msgid "July"
+msgstr "Julho"
+
+msgid "August"
+msgstr "Agosto"
+
+msgid "September"
+msgstr "Setembro"
+
+msgid "October"
+msgstr "Outubro"
+
+msgid "November"
+msgstr "Novembro"
+
+msgid "December"
+msgstr "Dezembro"
+
+msgid "General Ledger"
+msgstr "Razão contábil"
+
+msgid "Accounts Receivable"
+msgstr "Contas a receber"
+
+msgid "Stock Balance"
+msgstr "Saldo de estoque"
+
+msgid "Sales User"
+msgstr "Usuário de vendas"
+
+msgid "Sales Manager"
+msgstr "Gerente de vendas"
+
+msgid "System Manager"
+msgstr "Gerente do sistema"
+
+msgid "Posting Date"
+msgstr "Data de emissão"
+
+msgid "Due Date"
+msgstr "Data de vencimento"
+
+msgid "Grand Total"
+msgstr "Valor total"
+
+msgid "Outstanding Amount"
+msgstr "Valor em aberto"
+
+msgid "Mode of Payment"
+msgstr "Forma de pagamento"
+
+msgid "Reference No"
+msgstr "Número de referência"
+
+msgid "Reference Date"
+msgstr "Data de referência"
+
+msgid "Submit Generated Invoices"
+msgstr "Enviar faturas geradas"
+
+msgid "Follow Calendar Months"
+msgstr "Seguir meses do calendário"
+
+msgid "Cancel At End Of Period"
+msgstr "Cancelar ao final do período"
+
+msgid "Trialing"
+msgstr "Em período de teste"
+
+msgid "Grace Period"
+msgstr "Período de tolerância"
+
+msgid "Customer Name"
+msgstr "Nome do cliente"
+
+msgid "Customer Group"
+msgstr "Grupo de clientes"
+
+msgid "Territory"
+msgstr "Área de atendimento"
+
+msgid "Priority"
+msgstr "Prioridade"
+
+msgid "Subject"
+msgstr "Assunto"
+
+msgid "Opening Date"
+msgstr "Data de abertura"
+
+msgid "Resolution Date"
+msgstr "Data de resolução"
+
+msgid "Address and Contact"
+msgstr "Endereço e contato"
+
+msgid "Address & Contact"
+msgstr "Endereço e contato"
+
+msgid "Primary Address and Contact"
+msgstr "Endereço e contato principais"
+
+msgid "Select, to make the customer searchable with these fields"
+msgstr "Selecione para permitir que o cliente seja localizado por estes dados."
+
+msgid "Customer Primary Address"
+msgstr "Endereço principal do cliente"
+
+msgid "Customer Primary Contact"
+msgstr "Contato principal do cliente"
+
+msgid "Reselect, if the chosen address is edited after save"
+msgstr "Selecione novamente caso o endereço escolhido seja alterado após o salvamento."
+
+msgid "Reselect, if the chosen contact is edited after save"
+msgstr "Selecione novamente caso o contato escolhido seja alterado após o salvamento."
+
+msgid "Primary Address"
+msgstr "Endereço principal"
+
+msgid "Address HTML"
+msgstr "Endereço formatado"
+
+msgid "Contact HTML"
+msgstr "Contato formatado"
+
+msgid "Address"
+msgstr "Endereço"
+
+msgid "Address Title"
+msgstr "Identificação do endereço"
+
+msgid "Address Type"
+msgstr "Tipo de endereço"
+
+msgid "Address Line 1"
+msgstr "Logradouro e número"
+
+msgid "Address Line 2"
+msgstr "Complemento"
+
+msgid "City/Town"
+msgstr "Cidade"
+
+msgid "County"
+msgstr "Município"
+
+msgid "State/Province"
+msgstr "Estado"
+
+msgid "Country"
+msgstr "País"
+
+msgid "Postal Code"
+msgstr "CEP"
+
+msgid "Email Address"
+msgstr "Endereço de e-mail"
+
+msgid "Phone"
+msgstr "Telefone"
+
+msgid "Mobile No"
+msgstr "Telefone celular"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "Preferred Billing Address"
+msgstr "Endereço preferencial de cobrança"
+
+msgid "Preferred Shipping Address"
+msgstr "Endereço preferencial de instalação/entrega"
+
+msgid "Reference"
+msgstr "Vínculo"
+
+msgid "Links"
+msgstr "Vínculos"
+
+msgid "First Name"
+msgstr "Primeiro nome"
+
+msgid "Middle Name"
+msgstr "Nome do meio"
+
+msgid "Last Name"
+msgstr "Sobrenome"
+
+msgid "Full Name"
+msgstr "Nome completo"
+
+msgid "User Id"
+msgstr "Usuário"
+
+msgid "Salutation"
+msgstr "Tratamento"
+
+msgid "Gender"
+msgstr "Gênero"
+
+msgid "Is Primary Contact"
+msgstr "É o contato principal"
+
+msgid "Contact Numbers"
+msgstr "Telefones"
+
+msgid "Contact Details"
+msgstr "Dados do contato"
+
+msgid "More Information"
+msgstr "Mais informações"
+
+msgid "Department"
+msgstr "Departamento"
+
+msgid "Designation"
+msgstr "Cargo"
+
+msgid "Unsubscribed"
+msgstr "Não deseja receber comunicações"
+
+msgid "Company Name"
+msgstr "Nome da empresa"
+
+msgid "Buyer of Goods and Services."
+msgstr "Cliente que adquire produtos e serviços."
+
+msgid "Pre-filled on payment entries for this customer. Must be a company account."
+msgstr "Preenchida automaticamente nos recebimentos deste cliente. Deve ser uma conta da empresa."
+
+msgid "All invoices and orders for this customer will be created in this currency."
+msgstr "Todas as faturas e solicitações deste cliente serão criadas nesta moeda."
+
+msgid "Fetched automatically on sales orders and invoices for this customer."
+msgstr "Preenchida automaticamente nos pedidos e nas faturas deste cliente."
+
+msgid "Controls which tax template is auto-applied when this customer is selected on a transaction."
+msgstr "Define o modelo de impostos aplicado automaticamente nas movimentações deste cliente."
+
+msgid "Blocks this customer from being used on any new transaction."
+msgstr "Impede que este cliente seja usado em novas movimentações."
+
+msgid "Internal notes about this customer. Not visible on transactions or the portal."
+msgstr "Observações internas sobre o cliente. Não aparecem em documentos nem no portal."
+
+msgid "Defines when payment is due (e.g. Net 30, 50% advance). Applied automatically on invoices for this customer."
+msgstr "Define o vencimento do pagamento, como 30 dias ou 50% antecipado. Aplicado automaticamente nas faturas."
+
+msgid "Users listed here can log into the customer portal to view their orders, invoices, and deliveries."
+msgstr "Os usuários listados podem acessar o portal para consultar solicitações, faturas e serviços."
+
+msgid "Series"
+msgstr "Numeração"
+
+msgid "Alias"
+msgstr "Nome resumido"
+
+msgid "Image"
+msgstr "Imagem"
+
+msgid "Account Manager"
+msgstr "Responsável pela conta"
+
+msgid "Tax ID"
+msgstr "CPF/CNPJ"
+
+msgid "Tax Category"
+msgstr "Categoria fiscal"
+
+msgid "Disabled"
+msgstr "Desativado"
+
+msgid "Price List"
+msgstr "Lista de preços"
+
+msgid "Print Language"
+msgstr "Idioma de impressão"
+
+msgid "Website"
+msgstr "Site"
+
+msgid "Default Accounts"
+msgstr "Contas padrão"
+
+msgid "Payment Terms Template"
+msgstr "Modelo de condição de pagamento"
+
+msgid "Customer Details"
+msgstr "Observações do cliente"
+
+msgid "Market Segment"
+msgstr "Segmento de mercado"
+
+msgid "Industry"
+msgstr "Ramo de atividade"
+
+msgid "Loyalty Program"
+msgstr "Programa de fidelidade"
+
+msgid "Loyalty Program Tier"
+msgstr "Nível no programa de fidelidade"
+
+msgid "Loyalty Points"
+msgstr "Pontos de fidelidade"
+
+msgid "Portal Users"
+msgstr "Acesso ao portal"
+
+msgid "Customer Portal Users"
+msgstr "Usuários do portal do cliente"
+
+msgid "More Info"
+msgstr "Mais informações"
+
+msgid "Connections"
+msgstr "Relacionamentos"
+
+msgid "Defaults"
+msgstr "Valores padrão"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Accounting"
+msgstr "Financeiro"
+
+msgid "Tax"
+msgstr "Fiscal"
+
+msgid "Type of Payment"
+msgstr "Tipo de pagamento"
+
+msgid "Payment Type"
+msgstr "Tipo de pagamento"
+
+msgid "Payment From / To"
+msgstr "Pagamento de/para"
+
+msgid "Party Name"
+msgstr "Nome do cliente"
+
+msgid "Accounts"
+msgstr "Contas"
+
+msgid "Account Paid From"
+msgstr "Conta de origem"
+
+msgid "Account Paid To"
+msgstr "Conta de destino"
+
+msgid "Amount"
+msgstr "Valor"
+
+msgid "Paid Amount"
+msgstr "Valor pago"
+
+msgid "Received Amount"
+msgstr "Valor recebido"
+
+msgid "Payment References"
+msgstr "Documentos vinculados"
+
+msgid "Total Allocated Amount"
+msgstr "Total alocado"
+
+msgid "Unallocated Amount"
+msgstr "Valor não alocado"
+
+msgid "Maintenance Date"
+msgstr "Data do atendimento"
+
+msgid "Maintenance Time"
+msgstr "Horário do atendimento"
+
+msgid "Completion Status"
+msgstr "Situação da execução"
+
+msgid "Maintenance Type"
+msgstr "Tipo de atendimento"
+
+msgid "Purposes"
+msgstr "Serviços a executar"
+
+msgid "Customer Feedback"
+msgstr "Avaliação do cliente"
+
+msgid "Customer Address"
+msgstr "Endereço do cliente"
+
+msgid "Contact Person"
+msgstr "Pessoa de contato"
+
+msgid "Raised By (Email)"
+msgstr "Solicitado por (e-mail)"
+
+msgid "Issue Type"
+msgstr "Tipo de chamado"
+
+msgid "Details"
+msgstr "Detalhes"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Response By"
+msgstr "Responder até"
+
+msgid "First Responded On"
+msgstr "Primeira resposta em"
+
+msgid "Resolution Details"
+msgstr "Detalhes da resolução"
+
+msgid "Opening Time"
+msgstr "Hora de abertura"
+
+msgid "Attachment"
+msgstr "Anexo"

@@ -1,0 +1,49 @@
+{
+ "app": "sol_brasil",
+ "charts": [],
+ "content": "[{\"id\":\"sol-atendimento-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Atendimento</b></span>\",\"col\":12}},{\"id\":\"sol-atendimento-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Chamados\",\"col\":4}},{\"id\":\"sol-atendimento-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Abrir chamado\",\"col\":4}},{\"id\":\"sol-atendimento-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Garantias\",\"col\":4}}]",
+ "creation": "2026-08-17 10:28:10.377843",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "headphones",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Atendimento",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-08-17 15:33:16.452904",
+ "modified_by": "Administrator",
+ "module": "SOL Brasil",
+ "name": "Atendimento",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Chamados",
+   "link_to": "Issue",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "New",
+   "label": "Abrir chamado",
+   "link_to": "Issue",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Garantias",
+   "link_to": "Warranty Claim",
+   "type": "DocType"
+  }
+ ],
+ "title": "Atendimento",
+ "type": "Workspace"
+}
