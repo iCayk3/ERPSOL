@@ -61,8 +61,14 @@ add_to_apps_screen = [
 # include js in doctype views
 doctype_js = {
 	"Customer": "public/js/customer.js",
+	"Sales Invoice": "public/js/sales_invoice.js",
+	"Issue": "public/js/issue.js",
+	"Maintenance Visit": "public/js/maintenance_visit.js",
 	"Lead": "public/js/lead.js",
 	"Contrato Preliminar": "public/js/contrato_preliminar.js",
+	"Subscription": "public/js/subscription.js",
+	"Address": "public/js/address_contact.js",
+	"Contact": "public/js/address_contact.js",
 }
 doctype_list_js = {"Customer": "public/js/customer_list.js"}
 override_doctype_dashboards = {"Customer": "sol_brasil.customer_dashboard.get_dashboard_data"}
@@ -167,6 +173,38 @@ doc_events = {
 		"after_insert": "sol_brasil.lead.finalize_lead_conversion",
 	},
 	"Lead": {"validate": "sol_brasil.customer.validate_lead"},
+	"Issue": {
+		"validate": "sol_brasil.service.validate_issue_subject",
+		"after_insert": "sol_brasil.service.register_issue_creation",
+		"on_update": "sol_brasil.service.register_issue_update",
+	},
+	"Maintenance Visit": {
+		"validate": "sol_brasil.service.validate_service_order_links",
+		"before_submit": "sol_brasil.service.validate_service_order_completion",
+		"after_insert": "sol_brasil.service.create_or_link_issue_for_service_order",
+	},
+	"Subscription": {
+		"validate": "sol_brasil.subscription.validate_installation_address",
+		"after_insert": "sol_brasil.subscription.register_contract_creation",
+		"on_update": "sol_brasil.subscription.register_contract_update",
+		"on_trash": "sol_brasil.subscription.register_contract_deletion",
+	},
+	"Sales Invoice": {
+		"validate": "sol_brasil.subscription.validate_invoice_contract",
+		"after_insert": "sol_brasil.financial_activity.register_invoice_creation",
+		"on_update": "sol_brasil.financial_activity.register_invoice_update",
+		"on_submit": "sol_brasil.financial_activity.register_invoice_submit",
+		"on_cancel": "sol_brasil.financial_activity.register_invoice_cancel",
+		"on_trash": "sol_brasil.financial_activity.register_invoice_deletion",
+	},
+	"Payment Entry": {
+		"after_insert": "sol_brasil.financial_activity.register_payment_creation",
+		"on_submit": "sol_brasil.financial_activity.register_payment_submit",
+		"on_cancel": "sol_brasil.financial_activity.register_payment_cancel",
+		"on_trash": "sol_brasil.financial_activity.register_payment_deletion",
+	},
+	"Address": {"on_update": "sol_brasil.customer.notify_linked_customer_update"},
+	"Contact": {"on_update": "sol_brasil.customer.notify_linked_customer_update"},
 }
 
 # Scheduled Tasks

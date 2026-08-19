@@ -1,7 +1,7 @@
 {
  "app": "sol_brasil",
  "charts": [],
- "content": "[{\"id\":\"sol-configura\u00e7\u00f5es-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Configura\u00e7\u00f5es</b></span>\",\"col\":12}},{\"id\":\"sol-configura\u00e7\u00f5es-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Empresa\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Usu\u00e1rios\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Permiss\u00f5es\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do sistema\",\"col\":4}}]",
+ "content": "[{\"id\":\"sol-configura\u00e7\u00f5es-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Configura\u00e7\u00f5es</b></span>\",\"col\":12}},{\"id\":\"sol-configura\u00e7\u00f5es-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do provedor\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Empresa\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Usu\u00e1rios\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Permiss\u00f5es\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do sistema\",\"col\":4}}]",
  "creation": "2026-08-17 10:28:10.475883",
  "custom_blocks": [],
  "docstatus": 0,
@@ -14,7 +14,7 @@
  "label": "Configura\u00e7\u00f5es",
  "link_type": "DocType",
  "links": [],
- "modified": "2026-08-17 15:33:16.687164",
+ "modified": "2026-08-19 11:13:45.477203",
  "modified_by": "Administrator",
  "module": "SOL Brasil",
  "name": "Configura\u00e7\u00f5es",
@@ -25,6 +25,12 @@
  "roles": [],
  "sequence_id": 2.0,
  "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Configura\u00e7\u00f5es do provedor",
+   "link_to": "Configura\u00e7\u00f5es do Provedor",
+   "type": "DocType"
+  },
   {
    "doc_view": "List",
    "label": "Empresa",

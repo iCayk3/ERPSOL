@@ -59,13 +59,126 @@ function sol_reorder_customer_tabs(frm) {
 	}
 }
 
+function sol_watch_customer_references(frm) {
+	if (window.sol_customer_reference_listener_registered) return;
+	window.sol_customer_reference_listener_registered = true;
+	frappe.realtime.on("sol_customer_reference_updated", (message) => {
+		const activeForm = window.cur_frm;
+		if (!activeForm || activeForm.doctype !== "Customer" || activeForm.doc.name !== message.customer) return;
+		if (activeForm.is_dirty()) {
+			frappe.show_alert({
+				message: __("O endereço ou contato foi atualizado. Salve ou recarregue a ficha antes de continuar."),
+				indicator: "orange",
+			}, 8);
+			return;
+		}
+		activeForm.reload_doc().then(() => {
+			frappe.show_alert({
+				message: __("Ficha atualizada com os novos dados de endereço ou contato."),
+				indicator: "green",
+			});
+		});
+	});
+}
+
+function sol_clone_customer_doc(doc) {
+	if (doc === undefined) return undefined;
+	return JSON.parse(JSON.stringify(doc));
+}
+
+function sol_customer_values_match(left, right) {
+	return JSON.stringify(left ?? null) === JSON.stringify(right ?? null);
+}
+
+function sol_remember_customer_version(frm) {
+	if (!frm.is_new() && !frm.is_dirty()) {
+		frm.sol_last_server_doc = sol_clone_customer_doc(frm.doc);
+	}
+}
+
+async function sol_merge_latest_customer_before_save(frm) {
+	if (frm.is_new()) return;
+
+	const timestamp = await frappe.db.get_value("Customer", frm.doc.name, "modified");
+	const latest_modified = timestamp?.message?.modified;
+	if (!latest_modified || latest_modified === frm.doc.modified) return;
+
+	const response = await frappe.call({
+		method: "frappe.client.get",
+		args: { doctype: "Customer", name: frm.doc.name },
+	});
+	const latest = response.message;
+	if (!latest) return;
+
+	const baseline = frm.sol_last_server_doc || {};
+	const local = sol_clone_customer_doc(frm.doc);
+	const ignored = new Set([
+		"doctype", "name", "creation", "modified", "modified_by", "owner",
+		"docstatus", "idx", "__islocal", "__unsaved", "__onload",
+	]);
+
+	Object.keys(latest).forEach((fieldname) => {
+		if (ignored.has(fieldname)) return;
+		if (sol_customer_values_match(local[fieldname], baseline[fieldname])) {
+			frm.doc[fieldname] = sol_clone_customer_doc(latest[fieldname]);
+		}
+	});
+	frm.doc.modified = latest.modified;
+	frm.doc.modified_by = latest.modified_by;
+	frm.sol_last_server_doc = sol_clone_customer_doc(latest);
+	frappe.show_alert({
+		message: __("A ficha foi sincronizada com a versão mais recente antes de salvar."),
+		indicator: "blue",
+	});
+}
+
 function sol_money(value, currency = "BRL") {
 	return format_currency(value || 0, currency);
 }
 
 function sol_new_customer_document(frm, doctype, defaults) {
 	window.sol_customer_navigation?.start(frm.doc.name, doctype);
+	if (doctype === "Issue") {
+		frappe.model.with_doctype(doctype, () => {
+			frappe.route_options = defaults;
+			const name = frappe.model.make_new_doc_and_get_name(doctype, true);
+			frappe.set_route("Form", doctype, name);
+		});
+		return;
+	}
 	frappe.new_doc(doctype, defaults);
+}
+
+function sol_new_customer_contract(frm) {
+	frappe.call({
+		method: "sol_brasil.subscription.get_customer_addresses",
+		args: { customer: frm.doc.name },
+		callback: ({ message }) => {
+			const addresses = message || [];
+			const open_contract = (address = null) => sol_new_customer_document(frm, "Subscription", {
+				party_type: "Customer",
+				party: frm.doc.name,
+				custom_installation_address: address,
+			});
+
+			if (addresses.length <= 1) {
+				open_contract(addresses[0]?.name || null);
+				return;
+			}
+			frappe.prompt(
+				[{
+					fieldname: "address",
+					fieldtype: "Select",
+					label: __("Endereço de instalação"),
+					options: addresses.map((row) => ({ label: row.label, value: row.name })),
+					reqd: 1,
+				}],
+				(values) => open_contract(values.address),
+				__("Selecione o endereço do contrato"),
+				__("Continuar")
+			);
+		},
+	});
 }
 
 function sol_add_internal_comment(frm) {
@@ -205,7 +318,7 @@ function sol_render_customer_panel(frm, data) {
 		</div>
 		${sol_invoice_table(data.paid_invoices, false)}`);
 
-	contracts_wrapper.find(".sol-new-contract").on("click", () => sol_new_customer_document(frm, "Subscription", { party_type: "Customer", party: frm.doc.name }));
+	contracts_wrapper.find(".sol-new-contract").on("click", () => sol_new_customer_contract(frm));
 	financial_wrapper.find(".sol-new-invoice").on("click", () => sol_new_customer_document(frm, "Sales Invoice", { customer: frm.doc.name }));
 	financial_wrapper.find(".sol-financial-year").on("change", (event) => sol_load_customer_panel(frm, event.target.value));
 	financial_wrapper.find(".sol-open-invoice").on("click", (event) => frappe.set_route("Form", "Sales Invoice", event.currentTarget.dataset.name));
@@ -230,7 +343,7 @@ function sol_render_customer_panel(frm, data) {
 	service_wrapper.html(`
 		<div class="d-flex justify-content-between align-items-center mb-3">
 			<div><h4>${__("Ordens de serviço")}</h4><p class="text-muted">${__("Visitas técnicas, instalações e manutenções vinculadas ao cliente.")}</p></div>
-			<div class="btn-group"><button class="btn btn-default sol-new-issue">${__("Novo chamado")}</button><button class="btn btn-primary sol-new-service-order">${__("Nova ordem de serviço")}</button></div>
+			<div class="btn-group"><button class="btn btn-default sol-new-issue">${__("Novo atendimento")}</button><button class="btn btn-primary sol-new-service-order">${__("Nova ordem de serviço")}</button></div>
 		</div>
 		<div class="table-responsive"><table class="table table-bordered">
 			<thead><tr><th>${__("OS")}</th><th>${__("Data")}</th><th>${__("Horário")}</th><th>${__("Tipo")}</th><th>${__("Execução")}</th><th>${__("Situação")}</th><th>${__("Operações")}</th></tr></thead>
@@ -241,9 +354,9 @@ function sol_render_customer_panel(frm, data) {
 				<td><button class="btn btn-sm btn-default sol-open-service-order" data-name="${frappe.utils.escape_html(row.name)}">${__("Abrir OS")}</button></td>
 			</tr>`).join("") : `<tr><td colspan="7" class="text-muted">${__("Nenhuma ordem de serviço cadastrada.")}</td></tr>`}</tbody>
 		</table></div>
-		<h4 class="mt-5">${__("Chamados")}</h4><p class="text-muted">${__("Solicitações que podem originar uma ordem de serviço.")}</p>
+		<h4 class="mt-5">${__("Atendimentos")}</h4><p class="text-muted">${__("Solicitações que podem ou não originar uma ordem de serviço.")}</p>
 		<div class="table-responsive"><table class="table table-bordered">
-			<thead><tr><th>${__("Chamado")}</th><th>${__("Assunto")}</th><th>${__("Abertura")}</th><th>${__("Prioridade")}</th><th>${__("Status")}</th></tr></thead>
+			<thead><tr><th>${__("Atendimento")}</th><th>${__("Assunto")}</th><th>${__("Abertura")}</th><th>${__("Prioridade")}</th><th>${__("Status")}</th></tr></thead>
 			<tbody>${data.issues.length ? data.issues.map((row) => `<tr>
 				<td><a href="/desk/issue/${encodeURIComponent(row.name)}">${frappe.utils.escape_html(row.name)}</a></td><td>${frappe.utils.escape_html(row.subject)}</td>
 				<td>${frappe.datetime.str_to_user(row.opening_date)}</td><td>${__(row.priority || "Medium")}</td><td>${__(row.status)}</td>
@@ -276,11 +389,14 @@ function sol_load_customer_panel(frm, year = null) {
 
 frappe.ui.form.on("Customer", {
 	onload_post_render(frm) {
+		sol_watch_customer_references(frm);
+		sol_remember_customer_version(frm);
 		setTimeout(() => sol_load_customer_panel(frm), 100);
 		setTimeout(() => sol_reorder_customer_tabs(frm), 120);
 	},
 
 	refresh(frm) {
+		sol_remember_customer_version(frm);
 		frappe.breadcrumbs.set_doctype_module("Customer", "SOL Brasil");
 		setTimeout(() => sol_set_customer_breadcrumb(frm), 0);
 		setTimeout(() => sol_reorder_customer_tabs(frm), 100);
@@ -306,18 +422,31 @@ frappe.ui.form.on("Customer", {
 				sol_add_internal_comment(frm);
 			}, __("Operações do cliente"));
 			frm.add_custom_button(__("Novo contrato"), () => {
-				sol_new_customer_document(frm, "Subscription", { party_type: "Customer", party: frm.doc.name });
+				sol_new_customer_contract(frm);
 			}, __("Operações do cliente"));
 			frm.add_custom_button(__("Emitir fatura"), () => {
 				sol_new_customer_document(frm, "Sales Invoice", { customer: frm.doc.name });
 			}, __("Operações do cliente"));
-			frm.add_custom_button(__("Abrir chamado"), () => {
+			frm.add_custom_button(__("Novo atendimento"), () => {
 				sol_new_customer_document(frm, "Issue", { customer: frm.doc.name });
 			}, __("Operações do cliente"));
 			frm.add_custom_button(__("Vincular equipamento"), () => {
 				sol_new_customer_document(frm, "Asset", { customer: frm.doc.name });
 			}, __("Operações do cliente"));
 		}
+	},
+
+	async before_save(frm) {
+		frm.sol_customer_syncing = true;
+		try {
+			await sol_merge_latest_customer_before_save(frm);
+		} finally {
+			frm.sol_customer_syncing = false;
+		}
+	},
+
+	after_save(frm) {
+		sol_remember_customer_version(frm);
 	},
 
 	custom_change_contract(frm) {

@@ -324,12 +324,125 @@ CUSTOM_FIELDS = {
 			"label": "Bairro / região da instalação",
 			"insert_after": "custom_interest_plan",
 		},
-	]
+	],
+	"Subscription": [
+		{
+			"fieldname": "custom_installation_section",
+			"fieldtype": "Section Break",
+			"label": "Local de instalação",
+			"insert_after": "party",
+		},
+		{
+			"fieldname": "custom_installation_address",
+			"fieldtype": "Link",
+			"label": "Endereço de instalação",
+			"options": "Address",
+			"description": "Selecione um dos endereços cadastrados na ficha do cliente.",
+			"insert_after": "custom_installation_section",
+		},
+	],
+	"Issue": [
+		{
+			"fieldname": "custom_service_subject",
+			"fieldtype": "Link",
+			"label": "Assunto do atendimento",
+			"options": "Assunto de Atendimento",
+			"mandatory_depends_on": "eval:doc.customer",
+			"in_standard_filter": 1,
+			"insert_after": "subject",
+		},
+		{
+			"fieldname": "custom_generated_service_order",
+			"fieldtype": "Link",
+			"label": "Ordem de serviço gerada",
+			"options": "Maintenance Visit",
+			"read_only": 1,
+			"insert_after": "custom_service_subject",
+		},
+	],
+	"Maintenance Visit": [
+		{
+			"fieldname": "custom_service_subject",
+			"fieldtype": "Link",
+			"label": "Assunto do atendimento",
+			"options": "Assunto de Atendimento",
+			"reqd": 1,
+			"in_standard_filter": 1,
+			"insert_after": "customer",
+		},
+		{
+			"fieldname": "custom_origin_issue",
+			"fieldtype": "Link",
+			"label": "Atendimento de origem",
+			"options": "Issue",
+			"read_only": 1,
+			"insert_after": "custom_service_subject",
+		},
+	],
+	"Maintenance Visit Purpose": [
+		{
+			"fieldname": "custom_provider_service",
+			"fieldtype": "Link",
+			"label": "Serviço a executar",
+			"options": "Servico do Provedor",
+			"reqd": 1,
+			"in_list_view": 1,
+			"insert_after": "item_name",
+		},
+	],
 }
+
+
+DEFAULT_SERVICE_SUBJECTS = (
+	("Sem conexão", "Cliente sem acesso à internet."),
+	("Lentidão", "Baixa velocidade, latência ou instabilidade percebida."),
+	("Instalação", "Instalação ou ativação de novo acesso."),
+	("Mudança de endereço", "Transferência do ponto de instalação."),
+	("Troca de equipamento", "Substituição de ONU, roteador ou equipamento relacionado."),
+	("Financeiro", "Dúvidas ou solicitações relacionadas à cobrança."),
+	("Cancelamento", "Solicitação relacionada ao cancelamento do serviço."),
+	("Outros", "Assunto não classificado nas opções anteriores."),
+)
+
+DEFAULT_PROVIDER_SERVICES = (
+	("Instalação de acesso", "Instalação e ativação do acesso do cliente."),
+	("Visita técnica", "Diagnóstico técnico no endereço do cliente."),
+	("Reparo de fibra", "Correção de rompimento, conectorização ou perda óptica."),
+	("Configuração de roteador", "Configuração de Wi-Fi, roteamento e parâmetros do equipamento."),
+	("Troca de ONU/ONT", "Substituição e provisionamento da ONU/ONT."),
+	("Mudança de endereço", "Transferência física do ponto de instalação."),
+	("Retirada de equipamento", "Recolhimento de equipamentos vinculados ao acesso."),
+)
+
+
+def setup_service_subjects():
+	for title, description in DEFAULT_SERVICE_SUBJECTS:
+		if frappe.db.exists("Assunto de Atendimento", title):
+			continue
+		frappe.get_doc({
+			"doctype": "Assunto de Atendimento",
+			"assunto": title,
+			"descricao": description,
+			"ativo": 1,
+		}).insert(ignore_permissions=True)
+
+
+def setup_provider_services():
+	for title, description in DEFAULT_PROVIDER_SERVICES:
+		if frappe.db.exists("Servico do Provedor", title):
+			continue
+		frappe.get_doc({
+			"doctype": "Servico do Provedor",
+			"servico": title,
+			"descricao": description,
+			"ativo": 1,
+		}).insert(ignore_permissions=True)
 
 
 def setup_customer_fields():
 	create_custom_fields(CUSTOM_FIELDS, update=True)
+	setup_service_subjects()
+	setup_provider_services()
 	frappe.db.sql(
 		"""
 		UPDATE `tabCustomer`
@@ -344,6 +457,19 @@ def setup_customer_fields():
 	make_property_setter("Customer", "tax_id", "reqd", 0, "Check")
 	make_property_setter("Customer", "default_currency", "label", "Moeda de cobrança", "Data")
 	make_property_setter("Customer", "default_bank_account", "label", "Conta bancária da empresa", "Data")
+	make_property_setter("Address", "email_id", "hidden", 1, "Check")
+	make_property_setter("Address", "phone", "hidden", 1, "Check")
+	make_property_setter("Address", "fax", "hidden", 1, "Check")
+	make_property_setter("Maintenance Visit Purpose", "item_code", "hidden", 1, "Check")
+	make_property_setter("Maintenance Visit Purpose", "item_name", "hidden", 1, "Check")
+	make_property_setter("Maintenance Visit Purpose", "service_person", "label", "Técnico responsável", "Data")
+	make_property_setter("Maintenance Visit Purpose", "service_person", "reqd", 0, "Check")
+	make_property_setter("Maintenance Visit Purpose", "description", "label", "Descrição / orientação", "Data")
+	make_property_setter("Maintenance Visit Purpose", "description", "reqd", 0, "Check")
+	make_property_setter("Maintenance Visit Purpose", "work_done", "label", "Trabalho realizado", "Data")
+	make_property_setter("Maintenance Visit Purpose", "work_done", "reqd", 0, "Check")
+	if frappe.get_meta("Address").has_field("tax_category"):
+		make_property_setter("Address", "tax_category", "hidden", 1, "Check")
 	backfill_customer_contract_links()
 	reorder_customer_relationships_tab()
 

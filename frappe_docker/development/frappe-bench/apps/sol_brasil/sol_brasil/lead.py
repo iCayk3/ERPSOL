@@ -49,7 +49,10 @@ def get_contract_configuration():
 
 @frappe.whitelist()
 def should_return_to_customer():
-	return bool(frappe.db.get_single_value("Configurações do Provedor", "return_to_customer_after_save"))
+	value = frappe.db.get_single_value("Configurações do Provedor", "return_to_customer_after_save")
+	# Campos adicionados posteriormente a um Single DocType podem não possuir linha
+	# em tabSingles. Nesse caso, respeite o padrão do produto: retornar ao cliente.
+	return True if value is None else bool(int(value))
 
 
 def finalize_lead_conversion(doc, method=None):

@@ -235,6 +235,9 @@ Os campos estão definidos em `sol_brasil/install.py` e a interação do contrat
 ## Contratos na ficha
 
 - Aba Contratos lista os `Subscription` do cliente.
+- Cada contrato possui o campo `Endereço de instalação`, filtrado pelos endereços vinculados ao cliente.
+- Ao criar contrato pela ficha, um endereço único é preenchido automaticamente; havendo vários, o operador escolhe antes de continuar.
+- E-mail, telefone, fax e categoria fiscal foram ocultados do formulário de endereço usado pelo provedor.
 - Exibe contrato, planos, início, término, situação e mensalidade.
 - Permite criar novo contrato.
 - O painel é carregado por `sol_brasil/customer_panel.py`.
@@ -479,4 +482,3 @@ Começar pela modelagem dos cadastros de rede, nesta ordem:
 6. ONU/ONT
 
 Em seguida, trocar os campos textuais da ficha do cliente por Links para essas entidades, preservando os dados já cadastrados e mantendo uma migração compatível.
-

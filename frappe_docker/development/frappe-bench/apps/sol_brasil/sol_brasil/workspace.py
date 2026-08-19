@@ -47,8 +47,10 @@ MODULES = {
     "Atendimento": {
         "icon": "headphones",
         "shortcuts": [
-            ("Chamados", "Issue", "List"),
-            ("Abrir chamado", "Issue", "New"),
+            ("Atendimentos", "Issue", "List"),
+            ("Novo atendimento", "Issue", "New"),
+            ("Assuntos de atendimento", "Assunto de Atendimento", "List"),
+            ("Serviços do provedor", "Servico do Provedor", "List"),
             ("Garantias", "Warranty Claim", "List"),
         ],
     },

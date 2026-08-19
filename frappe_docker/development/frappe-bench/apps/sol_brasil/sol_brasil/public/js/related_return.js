@@ -18,6 +18,10 @@ window.sol_customer_navigation = window.sol_customer_navigation || {
 		frappe.call("sol_brasil.lead.should_return_to_customer").then(({ message }) => {
 			sessionStorage.removeItem(this.key);
 			if (!message) return;
+			// A ficha pode continuar em cache enquanto o contrato/fatura registra
+			// comentários no servidor. Removê-la força uma nova carga do documento
+			// e do docinfo (comentários, versões e demais itens da atividade).
+			frappe.model.clear_doc("Customer", context.customer);
 			frappe.set_route("Form", "Customer", context.customer);
 		});
 	},

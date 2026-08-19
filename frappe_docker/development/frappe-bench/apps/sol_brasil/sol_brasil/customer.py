@@ -109,6 +109,22 @@ def validate_lead(doc, method=None):
 			title=_("Contato obrigatório"),
 		)
 
+
+def notify_linked_customer_update(doc, method=None):
+	"""Atualiza fichas abertas quando endereço ou contato ligado ao cliente muda."""
+	customers = {
+		link.link_name
+		for link in (doc.get("links") or [])
+		if link.link_doctype == "Customer" and link.link_name
+	}
+	for customer in customers:
+		frappe.publish_realtime(
+			"sol_customer_reference_updated",
+			{"customer": customer, "reference_doctype": doc.doctype, "reference_name": doc.name},
+			user=frappe.session.user,
+			after_commit=True,
+		)
+
 @frappe.whitelist()
 def add_internal_comment(reference_doctype, reference_name, content):
 	if reference_doctype not in ("Customer", "Lead"):

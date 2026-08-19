@@ -390,7 +390,7 @@ msgid "City/Town"
 msgstr "Cidade"
 
 msgid "County"
-msgstr "Município"
+msgstr "Bairro"
 
 msgid "State/Province"
 msgstr "Estado"
@@ -501,7 +501,7 @@ msgid "Series"
 msgstr "Numeração"
 
 msgid "Alias"
-msgstr "Nome resumido"
+msgstr "Apelido"
 
 msgid "Image"
 msgstr "Imagem"
