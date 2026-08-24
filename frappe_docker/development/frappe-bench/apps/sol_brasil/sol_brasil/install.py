@@ -435,6 +435,7 @@ STANDARD_MASTER_RENAMES = {
 	"Item Group": {
 		"All Item Groups": "Todos os grupos de itens",
 		"Consumable": "Consumíveis",
+		"Demo Item Group": "Grupo de itens de demonstração",
 		"Products": "Produtos",
 		"Raw Material": "Matéria-prima",
 		"Services": "Serviços",
@@ -605,6 +606,272 @@ GLOBAL_DEFAULTS = {
 }
 
 
+ITEM_PORTUGUESE_LABELS = {
+	"Item": {
+		"details": "Detalhes",
+		"stock_uom": "Unidade de medida padrão",
+		"accounting": "Financeiro",
+		"uom_tab": "Unidade de Medida",
+		"tax_tab": "Fiscal",
+		"inventory_section": "Estoque",
+		"purchasing_tab": "Requisições",
+		"sales_details": "Venda",
+		"manufacturing": "Indústria",
+		"quality_tab": "Qualidade",
+		"pricing_tab": "Precificação",
+		"dashboard_tab": "Relacionamentos",
+		"item_defaults": "Configurações padrão do item",
+		"deferred_accounting_section": "Contabilidade diferida",
+		"enable_deferred_expense": "Ativar despesa diferida",
+		"enable_deferred_revenue": "Ativar receita diferida",
+		"no_of_months": "Quantidade de meses (receita)",
+		"no_of_months_exp": "Quantidade de meses (despesa)",
+		"opening_stock": "Estoque inicial",
+		"valuation_rate": "Taxa de avaliação",
+		"standard_rate": "Preço de venda padrão",
+		"include_item_in_manufacturing": "Incluir item na fabricação",
+		"asset_naming_series": "Série de numeração do ativo",
+		"shelf_life_in_days": "Vida útil em dias",
+		"end_of_life": "Fim da vida útil",
+		"default_material_request_type": "Tipo padrão de requisição de material",
+		"warranty_period": "Período de garantia (em dias)",
+		"reorder_section": "Reposição automática",
+		"reorder_levels": "Níveis de reposição por depósito",
+		"serial_nos_and_batches": "Números de série / lotes",
+		"has_batch_no": "Possui lote",
+		"create_new_batch": "Criar novo lote automaticamente",
+		"batch_number_series": "Série de numeração de lote",
+		"has_expiry_date": "Possui data de validade",
+		"retain_sample": "Reter amostra",
+		"sample_quantity": "Quantidade máxima da amostra",
+		"has_serial_no": "Possui número de série",
+		"serial_no_series": "Série do número de série",
+		"variants_section": "Variações",
+		"variant_of": "Variação de",
+		"has_variants": "Possui variações",
+		"variant_based_on": "Variação baseada em",
+		"attributes": "Características das variações",
+		"purchase_uom": "Unidade de medida padrão para compra",
+		"min_order_qty": "Quantidade mínima do pedido",
+		"lead_time_days": "Prazo de entrega em dias",
+		"supplier_details": "Dados dos fornecedores",
+		"delivered_by_supplier": "Entregue pelo fornecedor (venda direta)",
+		"supplier_items": "Itens dos fornecedores",
+		"foreign_trade_details": "Dados de comércio exterior",
+		"country_of_origin": "País de origem",
+		"sales_uom": "Unidade de medida padrão para venda",
+		"max_discount": "Desconto máximo (%)",
+		"customer_details": "Dados dos clientes",
+		"customer_items": "Itens dos clientes",
+		"inspection_required_before_purchase": "Inspeção obrigatória antes da compra",
+		"inspection_required_before_delivery": "Inspeção obrigatória antes da entrega",
+		"default_bom": "Lista de materiais padrão",
+		"is_sub_contracted_item": "Item subcontratado",
+		"customer_code": "Código do cliente",
+		"total_projected_qty": "Quantidade total projetada",
+		"purchase_tax_withholding_category": "Categoria de retenção de imposto na compra",
+		"sales_tax_withholding_category": "Categoria de retenção de imposto na venda",
+		"production_capacity": "Capacidade de produção",
+		"auto_create_assets": "Criar ativos automaticamente na compra",
+		"default_item_manufacturer": "Fabricante padrão do item",
+		"default_manufacturer_part_no": "Código de peça padrão do fabricante",
+		"grant_commission": "Conceder comissão",
+		"is_grouped_asset": "Criar ativo agrupado",
+		"inventory_settings_section": "Configurações de estoque",
+		"inventory_valuation_section": "Avaliação do estoque",
+		"stock_levels_section": "Níveis de estoque",
+		"uom_conversion_details_column": "Conversões de unidade de medida",
+		"section_break_zlmj": "Características do item",
+		"item_prices_column": "Preços do item",
+		"company_restrictions_section": "Restrições por empresa",
+		"restrict_to_companies": "Restringir às empresas",
+		"allowed_companies": "Empresas permitidas",
+	},
+	"Item Default": {
+		"company": "Empresa",
+		"default_warehouse": "Depósito padrão",
+		"default_price_list": "Lista de preços padrão",
+		"default_discount_account": "Conta de descontos padrão",
+		"default_inventory_account": "Conta de estoque padrão",
+		"inventory_account_currency": "Moeda da conta de estoque",
+		"column_break_general": "Padrão herdado",
+		"vf_default_warehouse": "Depósito",
+		"vf_default_price_list": "Lista de preços",
+		"vf_default_discount_account": "Conta de descontos",
+		"vf_default_inventory_account": "Conta de estoque",
+		"purchase_defaults": "Configurações padrão de compra",
+		"buying_cost_center": "Centro de custo de compras",
+		"default_supplier": "Fornecedor padrão",
+		"selling_cost_center": "Centro de custo de vendas",
+		"expense_account": "Conta de despesas",
+		"income_account": "Conta de receitas",
+		"default_provisional_account": "Conta provisória (serviço)",
+		"purchase_expense_account": "Conta de despesas de compra",
+		"purchase_expense_contra_account": "Contrapartida das despesas de compra",
+		"expenses_added_to_stock_account": "Conta de despesas adicionadas ao estoque",
+		"expenses_added_to_stock_contra_account": "Contrapartida das despesas adicionadas ao estoque",
+		"purchase_price_variance_account": "Conta de variação do preço de compra",
+		"manufacturing_variance_account": "Conta de variação da fabricação",
+		"vf_buying_cost_center": "Centro de custo de compras",
+		"vf_default_supplier": "Fornecedor",
+		"vf_expense_account": "Conta de despesas",
+		"vf_default_provisional_account": "Conta provisória (serviço)",
+		"vf_purchase_expense_account": "Conta de despesas de compra",
+		"vf_purchase_expense_contra_account": "Contrapartida das despesas de compra",
+		"vf_expenses_added_to_stock_account": "Despesas adicionadas ao estoque",
+		"vf_expenses_added_to_stock_contra_account": "Contrapartida das despesas de estoque",
+		"selling_defaults": "Configurações padrão de venda",
+		"vf_selling_cost_center": "Centro de custo de vendas",
+		"vf_income_account": "Conta de receitas",
+		"cost_of_good_sold_section": "Custo dos produtos vendidos",
+		"default_cogs_account": "Conta de custo dos produtos vendidos",
+		"vf_default_cogs_account": "Conta de custo dos produtos vendidos",
+		"deferred_accounting_defaults_section": "Configurações padrão da contabilidade diferida",
+		"deferred_expense_account": "Conta de despesas diferidas",
+		"deferred_revenue_account": "Conta de receitas diferidas",
+		"vf_deferred_expense_account": "Conta de despesas diferidas",
+		"vf_deferred_revenue_account": "Conta de receitas diferidas",
+		"column_break_njfg": "Substituição específica do item",
+	},
+	"Item Reorder": {
+		"warehouse_group": "Verificar disponibilidade no depósito",
+		"warehouse": "Depósito",
+		"warehouse_reorder_level": "Nível de reposição",
+		"warehouse_reorder_qty": "Quantidade para reposição",
+		"material_request_type": "Tipo de requisição de material",
+	},
+	"UOM Conversion Detail": {
+		"uom": "Unidade de medida",
+		"conversion_factor": "Fator de conversão",
+	},
+	"Item Variant Attribute": {
+		"variant_of": "Variação de",
+		"attribute": "Característica",
+		"attribute_value": "Valor da característica",
+		"numeric_values": "Valores numéricos",
+		"from_range": "Faixa inicial",
+		"to_range": "Faixa final",
+		"increment": "Incremento",
+		"disabled": "Desativado",
+	},
+	"Item Supplier": {
+		"supplier": "Fornecedor",
+		"supplier_part_no": "Código do fornecedor",
+	},
+	"Item Customer Detail": {
+		"customer_name": "Cliente",
+		"customer_group": "Grupo de clientes",
+		"ref_code": "Código de referência",
+	},
+	"Item Barcode": {"barcode": "Código de barras", "barcode_type": "Tipo de código de barras"},
+	"Item Tax": {"item_tax_template": "Modelo de imposto do item", "tax_category": "Categoria fiscal", "valid_from": "Válido a partir de", "maximum_net_rate": "Valor líquido máximo", "minimum_net_rate": "Valor líquido mínimo"},
+	"Company Restriction": {"company": "Empresa"},
+}
+
+
+ITEM_PORTUGUESE_DESCRIPTIONS = {
+	"variant_of": "Se o item for uma variação de outro, descrição, imagem, preços e impostos serão herdados do modelo, salvo quando informados explicitamente.",
+	"disabled": "Itens desativados não podem ser selecionados em transações.",
+	"enable_deferred_expense": "A despesa deste item será reconhecida ao longo de vários meses, como em seguros ou licenças anuais pagos antecipadamente.",
+	"enable_deferred_revenue": "A receita deste item será reconhecida ao longo de vários meses, em vez de integralmente, como em uma assinatura anual paga antecipadamente.",
+	"is_stock_item": "O sistema fará um lançamento no razão de estoque para cada movimentação deste item. Desmarque para serviços ou itens sem controle de estoque.",
+	"is_fixed_asset": "Marque se este item for um ativo da empresa, como máquinas, equipamentos ou móveis.",
+	"allow_alternative_item": "Permite substituir este item por outro da lista de itens alternativos quando não houver estoque.",
+	"include_item_in_manufacturing": "Marque para matérias-primas utilizadas na fabricação. Desmarque para serviços adicionais.",
+	"standard_rate": "Cria automaticamente um preço para o item ao salvá-lo.",
+	"end_of_life": "Define a data após a qual o item não poderá mais ser usado em transações ou fabricação.",
+	"reorder_levels": "Também se aplica às variações, salvo quando substituído nelas.",
+	"has_batch_no": "Controla este item por lotes. Não pode ser alterado depois que houver movimentação de estoque.",
+	"create_new_batch": "O número do lote será criado automaticamente quando não for informado na movimentação. Desmarque para sempre digitá-lo manualmente.",
+	"batch_number_series": "Define a série usada para gerar automaticamente os números dos lotes.",
+	"has_expiry_date": "O lote será controlado por data de validade, informada no cadastro do lote.",
+	"retain_sample": "Reserva uma pequena amostra de cada lote para análises futuras.",
+	"sample_quantity": "Quantidade máxima da amostra que poderá ser retida.",
+	"has_serial_no": "Controla cada unidade com um número de série exclusivo para garantia e devoluções.",
+	"serial_no_series": "Define a série usada para gerar automaticamente os números de série.",
+	"has_variants": "Quando possui variações, este item funciona como modelo e não é selecionado diretamente nas transações.",
+	"is_purchase_item": "Permite utilizar este item em transações de compra.",
+	"min_order_qty": "A quantidade mínima deve usar a unidade de medida padrão do estoque.",
+	"safety_stock": "Nível mínimo mantido como margem de segurança e utilizado no cálculo da reposição recomendada.",
+	"lead_time_days": "Tempo médio necessário para o fornecedor realizar a entrega.",
+	"last_purchase_rate": "Valor da última compra do item, atualizado automaticamente pelo sistema.",
+	"is_sales_item": "Permite utilizar este item em transações de venda.",
+	"max_discount": "Percentual máximo de desconto permitido na venda deste item.",
+	"is_customer_provided_item": "Marque quando o item for fornecido pelo cliente e recebido por uma movimentação de estoque.",
+	"delivered_by_supplier": "Trata o item como entregue diretamente pelo fornecedor por padrão nas vendas e compras.",
+	"inspection_required_before_purchase": "Exige uma inspeção de qualidade antes de gerar o recebimento da compra.",
+	"inspection_required_before_delivery": "Exige uma inspeção de qualidade antes de gerar a nota de entrega.",
+	"is_sub_contracted_item": "Marque quando um fornecedor fabricar este item para sua empresa.",
+	"taxes": "Também se aplica às variações do item.",
+	"over_delivery_receipt_allowance": "Percentual excedente permitido na entrega ou no recebimento em relação ao pedido.",
+	"over_billing_allowance": "Percentual de faturamento excedente permitido em relação ao pedido.",
+	"grant_commission": "Inclui as vendas deste item nos cálculos de comissão dos vendedores e parceiros.",
+	"is_grouped_asset": "Cria um único ativo agrupado quando várias unidades forem compradas juntas.",
+	"allow_negative_stock": "Permite que o saldo deste item fique abaixo de zero, mesmo quando o estoque negativo estiver desativado globalmente.",
+	"restrict_to_companies": "Quando marcado, o item estará disponível somente para as empresas listadas abaixo.",
+}
+
+
+ITEM_DEFAULT_PORTUGUESE_DESCRIPTIONS = {
+	"default_price_list": "Lista de preços padrão utilizada na compra ou venda deste item.",
+	"default_inventory_account": "Conta na qual o valor do estoque deste item será controlado.",
+	"buying_cost_center": "Centro de custo usado para controlar as despesas de compra deste item.",
+	"default_supplier": "Fornecedor selecionado automaticamente nas novas compras.",
+	"expense_account": "Conta debitada com o custo deste item na compra.",
+	"default_provisional_account": "Conta provisória usada para serviços antes do recebimento da fatura.",
+	"purchase_expense_account": "Conta usada para despesas adicionais da compra, como frete e tributos.",
+	"purchase_expense_contra_account": "Conta de contrapartida das despesas adicionais da compra.",
+	"expenses_added_to_stock_account": "Conta que controla valores adicionados ao estoque por movimentações e conciliações.",
+	"expenses_added_to_stock_contra_account": "Conta de contrapartida das despesas adicionadas ao estoque.",
+	"purchase_price_variance_account": "Conta que registra a diferença entre o preço de compra e o custo padrão.",
+	"manufacturing_variance_account": "Conta que registra a diferença entre o custo de fabricação e o custo padrão.",
+	"selling_cost_center": "Centro de custo usado para controlar a receita das vendas deste item.",
+	"income_account": "Conta creditada com a receita da venda deste item.",
+	"default_cogs_account": "Conta que recebe o custo dos produtos vendidos.",
+}
+
+
+def setup_item_portuguese_fields():
+	for doctype, fields in ITEM_PORTUGUESE_LABELS.items():
+		if not frappe.db.exists("DocType", doctype):
+			continue
+		meta = frappe.get_meta(doctype)
+		for fieldname, label in fields.items():
+			if meta.has_field(fieldname):
+				make_property_setter(doctype, fieldname, "label", label, "Data")
+
+	for fieldname, description in ITEM_PORTUGUESE_DESCRIPTIONS.items():
+		if frappe.get_meta("Item").has_field(fieldname):
+			make_property_setter("Item", fieldname, "description", description, "Text")
+
+	for fieldname, description in ITEM_DEFAULT_PORTUGUESE_DESCRIPTIONS.items():
+		if frappe.get_meta("Item Default").has_field(fieldname):
+			make_property_setter("Item Default", fieldname, "description", description, "Text")
+
+	if frappe.get_meta("Item Customer Detail").has_field("ref_code"):
+		make_property_setter(
+			"Item Customer Detail",
+			"ref_code",
+			"description",
+			"Informe o código usado pelo cliente para este item. Ele aparecerá nos pedidos de venda como referência.",
+			"Text",
+		)
+
+	make_property_setter("Item", "brand", "label", "Fabricante", "Data")
+	make_property_setter("Item", "brand", "allow_in_quick_entry", 1, "Check")
+	make_property_setter(
+		"Item",
+		"brand",
+		"mandatory_depends_on",
+		"eval:doc.is_stock_item || doc.is_fixed_asset",
+		"Code",
+	)
+	make_property_setter("Item", "is_stock_item", "read_only_depends_on", "", "Code")
+	make_property_setter("Item", "is_fixed_asset", "read_only_depends_on", "", "Code")
+
+	frappe.clear_cache(doctype="Item")
+
+
 def setup_service_subjects():
 	for title, description in DEFAULT_SERVICE_SUBJECTS:
 		if frappe.db.exists("Assunto de Atendimento", title):
@@ -756,6 +1023,7 @@ def after_install():
 	setup_portuguese_brazil_defaults()
 	setup_portuguese_brazil_master_data()
 	setup_customer_fields()
+	setup_item_portuguese_fields()
 	from sol_brasil.workspace import sync_provider_workspaces
 
 	sync_provider_workspaces()
@@ -765,6 +1033,7 @@ def after_migrate():
 	setup_portuguese_brazil_defaults()
 	setup_portuguese_brazil_master_data()
 	setup_customer_fields()
+	setup_item_portuguese_fields()
 	from sol_brasil.workspace import sync_provider_workspaces
 
 	sync_provider_workspaces()

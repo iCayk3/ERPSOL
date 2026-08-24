@@ -271,6 +271,9 @@ Os campos estão definidos em `sol_brasil/install.py` e a interação do contrat
 - O botão também existe em Leads.
 - Após registrar, aparece confirmação e a ficha é atualizada.
 - Endpoint: `sol_brasil.customer.add_internal_comment`.
+- A timeline da ficha exibe 10 atividades por página, com navegação **Anterior/Próxima** e contador
+  do intervalo. A paginação também é reaplicada ao alternar **Mostrar toda a atividade** ou atualizar
+  comentários, evitando que fichas antigas cresçam indefinidamente na tela.
 
 ## Retorno automático para a ficha
 
@@ -289,6 +292,10 @@ Aplica-se a:
 - Asset
 
 Pode ser ativado/desativado em Configurações do Provedor.
+
+No recebimento (`Payment Entry`) aberto pelo botão **Receber** da ficha, o formulário também exibe
+**Voltar ao cliente** enquanto estiver em rascunho. O botão usa o mesmo contexto temporário do retorno
+automático e volta diretamente à ficha que originou a operação.
 
 ## Tradução PT-BR
 
@@ -536,13 +543,25 @@ O `Subscription` atende à recorrência, mas ainda possui terminologia e regras 
 
 ## Próxima tarefa sugerida
 
-Começar pela modelagem dos cadastros de rede, nesta ordem:
+O POP foi considerado opcional para a operação atual. O cadastro próprio de `OLT` foi implementado com identificação, situação, fabricante, modelo, número de série, IP de gerenciamento validado, local de instalação e observações. O workspace `Rede e Equipamentos` possui atalhos para listar e cadastrar OLTs.
 
-1. POP
-2. OLT
-3. Slot/placa
-4. Porta PON
-5. CTO/NAP e portas
-6. ONU/ONT
+O local de instalação utiliza o DocType padrão `Location` do ERPNext 16. Não usar o nome antigo `Asset Location`, que não existe nesta versão.
+
+O cadastro de OLT também permite informar `Quantidade de slots PON` e `Portas PON por slot` diretamente na entrada rápida. Os campos aceitam somente valores iguais ou maiores que zero.
+
+Fabricante e modelo da OLT reutilizam os cadastros nativos do estoque: `Brand` para fabricante e `Item` para modelo/equipamento. O modelo é filtrado pela fabricante selecionada e o servidor impede combinações incompatíveis. Ambos aparecem na entrada rápida da OLT. O workspace de rede possui atalhos para fabricantes e modelos/itens.
+
+Foi ampliada a tradução do cadastro de Item/Estoque para português, incluindo os campos e descrições de controle de estoque, ativo imobilizado, características, compra, venda, variantes, tolerâncias e abas de estoque. O grupo padrão `Demo Item Group` é renomeado para `Grupo de itens de demonstração`.
+
+Como a tradução padrão não cobria todo o formulário do ERPNext 16, rótulos e descrições do DocType `Item` e de suas tabelas internas passaram a receber Property Setters em português no `after_migrate`. A cobertura inclui todas as abas e as tabelas de configurações por empresa, reposição, unidades de medida, características, fornecedores, clientes, códigos de barras, impostos e restrições por empresa.
+
+No cadastro de Item, `Fabricante` aparece na entrada rápida e é obrigatória quando o item controla estoque ou é ativo imobilizado. Os dois tipos são mutuamente exclusivos: ao marcar ativo imobilizado, a entrada rápida desmarca automaticamente o controle de estoque e informa o motivo. A validação também é aplicada no servidor.
+
+Continuar a modelagem dos cadastros de rede nesta ordem:
+
+1. Slot/placa vinculado à OLT
+2. Porta PON vinculada ao slot/placa
+3. CTO/NAP e portas
+4. ONU/ONT
 
 Em seguida, trocar os campos textuais da ficha do cliente por Links para essas entidades, preservando os dados já cadastrados e mantendo uma migração compatível.

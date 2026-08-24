@@ -59,6 +59,67 @@ function sol_reorder_customer_tabs(frm) {
 	}
 }
 
+function sol_paginate_customer_timeline(frm, reset_page = false) {
+	const timeline = frm.timeline;
+	const wrapper = timeline?.timeline_items_wrapper;
+	if (!wrapper?.length) return;
+
+	const page_size = 10;
+	const items = wrapper.children(".timeline-item");
+	const total = items.length;
+	const total_pages = Math.max(1, Math.ceil(total / page_size));
+	if (reset_page || !frm.sol_timeline_page) frm.sol_timeline_page = 1;
+	frm.sol_timeline_page = Math.min(frm.sol_timeline_page, total_pages);
+
+	const start = (frm.sol_timeline_page - 1) * page_size;
+	const end = Math.min(start + page_size, total);
+	items.hide().slice(start, end).show();
+
+	let pagination = timeline.timeline_wrapper.children(".sol-timeline-pagination");
+	if (!pagination.length) {
+		pagination = $(`
+			<div class="sol-timeline-pagination d-flex justify-content-between align-items-center mt-3 mb-4">
+				<span class="text-muted sol-timeline-range"></span>
+				<div class="btn-group btn-group-sm">
+					<button class="btn btn-default sol-timeline-previous">${__("Anterior")}</button>
+					<button class="btn btn-default sol-timeline-next">${__("Próxima")}</button>
+				</div>
+			</div>`);
+		timeline.timeline_wrapper.append(pagination);
+		pagination.find(".sol-timeline-previous").on("click", () => {
+			frm.sol_timeline_page -= 1;
+			sol_paginate_customer_timeline(frm);
+		});
+		pagination.find(".sol-timeline-next").on("click", () => {
+			frm.sol_timeline_page += 1;
+			sol_paginate_customer_timeline(frm);
+		});
+	}
+
+	pagination.toggle(total > page_size);
+	pagination.find(".sol-timeline-range").text(
+		__("Atividades {0}–{1} de {2}", [total ? start + 1 : 0, end, total])
+	);
+	pagination.find(".sol-timeline-previous").prop("disabled", frm.sol_timeline_page === 1);
+	pagination.find(".sol-timeline-next").prop("disabled", frm.sol_timeline_page === total_pages);
+}
+
+function sol_setup_customer_timeline_pagination(frm) {
+	const wrapper = frm.timeline?.timeline_items_wrapper?.get(0);
+	if (!wrapper) return;
+
+	if (frm.sol_timeline_observer) frm.sol_timeline_observer.disconnect();
+	frm.sol_timeline_observer = new MutationObserver(() => {
+		clearTimeout(frm.sol_timeline_pagination_timer);
+		frm.sol_timeline_pagination_timer = setTimeout(
+			() => sol_paginate_customer_timeline(frm, true),
+			0
+		);
+	});
+	frm.sol_timeline_observer.observe(wrapper, { childList: true });
+	sol_paginate_customer_timeline(frm, true);
+}
+
 function sol_watch_customer_references(frm) {
 	if (window.sol_customer_reference_listener_registered) return;
 	window.sol_customer_reference_listener_registered = true;
@@ -434,6 +495,10 @@ frappe.ui.form.on("Customer", {
 				sol_new_customer_document(frm, "Asset", { customer: frm.doc.name });
 			}, __("Operações do cliente"));
 		}
+	},
+
+	timeline_refresh(frm) {
+		sol_setup_customer_timeline_pagination(frm);
 	},
 
 	async before_save(frm) {

@@ -1138,3 +1138,91 @@ msgstr "Manual"
 
 msgid "Successful"
 msgstr "Bem-sucedido"
+
+# Cadastro de itens e estoque
+msgid "Default Unit of Measure"
+msgstr "Unidade de medida padrão"
+
+msgid "Maintain Stock"
+msgstr "Controlar estoque"
+
+msgid "ERPNext will make a stock ledger entry for each transaction of this item. Keep unchecked for non-stock or service items."
+msgstr "O sistema fará um lançamento no razão de estoque para cada movimentação deste item. Desmarque para serviços ou itens sem controle de estoque."
+
+msgid "Is Fixed Asset"
+msgstr "É um ativo imobilizado"
+
+msgid "Enable if this item is a company asset like machinery or furniture."
+msgstr "Marque se este item for um ativo da empresa, como máquinas, equipamentos ou móveis."
+
+msgid "Item Attributes"
+msgstr "Características do item"
+
+msgid "Allow Sales"
+msgstr "Permitir venda"
+
+msgid "Allow this item to be used in sales transactions."
+msgstr "Permite utilizar este item em transações de venda."
+
+msgid "Allow Purchase"
+msgstr "Permitir compra"
+
+msgid "Allow this item to be used in purchase transactions."
+msgstr "Permite utilizar este item em transações de compra."
+
+msgid "Allow Alternative Item"
+msgstr "Permitir item alternativo"
+
+msgid "Allow substituting this item with an alternative from the Item Alternative list when stock is unavailable."
+msgstr "Permite substituir este item por outro da lista de itens alternativos quando não houver estoque."
+
+msgid "Has Variants"
+msgstr "Possui variações"
+
+msgid "If this item has variants, then it cannot be selected in sales orders etc."
+msgstr "Quando este item possui variações, ele não pode ser selecionado diretamente em pedidos de venda e outras transações."
+
+msgid "Is Customer Provided Item"
+msgstr "Item fornecido pelo cliente"
+
+msgid "Enable if this item is provided by a customer and received via Stock Entry."
+msgstr "Marque quando o item for fornecido pelo cliente e recebido por uma movimentação de estoque."
+
+msgid "Over Delivery/Receipt Allowance (%)"
+msgstr "Tolerância de entrega/recebimento excedente (%)"
+
+msgid "Percentage by which over-delivery or over-receipt is allowed against a Sales/Purchase Order for this item. If not set, value from Stock Settings will be used."
+msgstr "Percentual excedente permitido na entrega ou no recebimento deste item em relação ao pedido. Se não informado, será usada a configuração do estoque."
+
+msgid "Over Billing Allowance (%)"
+msgstr "Tolerância de faturamento excedente (%)"
+
+msgid "Percentage by which over-billing is allowed against a Sales/Purchase Order for this item. If not set, value from Accounts Settings will be used."
+msgstr "Percentual de faturamento excedente permitido para este item em relação ao pedido. Se não informado, será usada a configuração financeira."
+
+msgid "Inventory"
+msgstr "Estoque"
+
+msgid "Inventory Settings"
+msgstr "Configurações de estoque"
+
+msgid "Inventory Valuation"
+msgstr "Avaliação do estoque"
+
+msgid "Opening Stock"
+msgstr "Estoque inicial"
+
+msgid "Valuation Rate"
+msgstr "Taxa de avaliação"
+
+msgid "Standard Selling Rate"
+msgstr "Preço de venda padrão"
+
+msgid "Auto re-order"
+msgstr "Reposição automática"
+
+msgid "Serial Nos / Batches"
+msgstr "Números de série / lotes"
+
+msgid "Allow Negative Stock"
+msgstr "Permitir estoque negativo"

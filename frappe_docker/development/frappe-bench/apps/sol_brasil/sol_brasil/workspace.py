@@ -58,10 +58,14 @@ MODULES = {
         "route": "rede-e-equipamentos",
         "icon": "server",
         "shortcuts": [
+            ("OLTs", "OLT", "List"),
+            ("Cadastrar OLT", "OLT", "New"),
+            ("Fabricantes", "Brand", "List"),
+            ("Modelos e itens", "Item", "List"),
             ("Equipamentos", "Asset", "List"),
             ("Cadastrar equipamento", "Asset", "New"),
             ("Números de série", "Serial No", "List"),
-            ("Locais de instalação", "Asset Location", "List"),
+            ("Locais de instalação", "Location", "List"),
         ],
     },
     "Estoque": {

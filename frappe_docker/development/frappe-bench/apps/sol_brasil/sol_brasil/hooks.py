@@ -9,6 +9,8 @@ app_logo_url = "/assets/sol_brasil/images/sol-provedor-logo.svg"
 app_home = "/desk/sol-provedor"
 app_include_js = [
 	"/assets/sol_brasil/js/customer_quick_entry.js",
+	"/assets/sol_brasil/js/item_quick_entry.js",
+	"/assets/sol_brasil/js/olt_quick_entry.js",
 	"/assets/sol_brasil/js/related_return.js",
 ]
 
@@ -169,6 +171,7 @@ after_migrate = ["sol_brasil.install.after_migrate"]
 # Hook on document methods and events
 
 doc_events = {
+	"Item": {"validate": "sol_brasil.inventory.validate_item_manufacturer"},
 	"Customer": {
 		"validate": "sol_brasil.customer.validate_customer",
 		"after_insert": "sol_brasil.lead.finalize_lead_conversion",
