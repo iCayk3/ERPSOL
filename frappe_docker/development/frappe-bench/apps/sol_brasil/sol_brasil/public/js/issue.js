@@ -96,11 +96,4 @@ frappe.ui.form.on("Issue", {
 	status(frm) {
 		sol_configure_service_answer(frm);
 	},
-	custom_service_subject(frm) {
-		if (!frm.doc.custom_service_subject) return;
-		frappe.db.get_value("Assunto de Atendimento", frm.doc.custom_service_subject, "assunto")
-			.then(({ message }) => {
-				if (message?.assunto) frm.set_value("subject", message.assunto);
-			});
-	},
 });

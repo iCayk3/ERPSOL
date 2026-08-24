@@ -306,6 +306,7 @@ Pode ser ativado/desativado em Configurações do Provedor.
   - configurações e histórico.
 - A aba Endereço e contato foi validada visualmente após a correção.
 - Não alterar estilos para traduzir; usar catálogo PO, rótulos de Custom Fields ou Property Setters.
+- Foi feita uma varredura das opções `Select` dos fluxos centrais do provedor. As lacunas de ordens de serviço, tarefas, Leads, chamados/SLA, financeiro e equipamentos foram cobertas no catálogo próprio, preservando os valores técnicos internos exigidos pelo ERPNext.
 
 ## API
 
@@ -355,6 +356,9 @@ O contrato foi validado como vinculado ao cliente de demonstração.
 - `sol_brasil/lead.py`
 - `sol_brasil/customer_panel.py`
 - `sol_brasil/customer_dashboard.py`
+- `sol_brasil/subscription.py`
+- `sol_brasil/financial_activity.py`
+- `sol_brasil/service.py`
 - `sol_brasil/demo.py`
 - `sol_brasil/locale/pt_BR.po`
 - `sol_brasil/public/js/customer.js`
@@ -363,6 +367,66 @@ O contrato foi validado como vinculado ao cliente de demonstração.
 - `sol_brasil/public/js/lead.js`
 - `sol_brasil/public/js/contrato_preliminar.js`
 - `sol_brasil/public/js/related_return.js`
+- `sol_brasil/public/js/subscription.js`
+- `sol_brasil/public/js/sales_invoice.js`
+- `sol_brasil/public/js/issue.js`
+- `sol_brasil/public/js/maintenance_visit.js`
+
+## Alterações recentes — contratos, financeiro e atendimento
+
+### Concorrência e salvamento do cliente
+
+- A ficha do cliente faz verificação otimista da versão antes de salvar.
+- Quando outra operação altera o cliente, os dados mais recentes são incorporados sem perder os campos editados localmente.
+- Valores vazios devem permanecer `null`; nunca convertê-los para `{}`, pois campos escalares do MariaDB rejeitam dicionários.
+- Alterações em Endereço e Contato notificam fichas abertas e atualizam o documento quando ele estiver limpo.
+
+### Contratos e faturamento
+
+- Operações de criação, alteração e exclusão de `Subscription` geram atividade na ficha do cliente.
+- Faturas e recebimentos geram atividade no cliente em criação, emissão/confirmação, cancelamento/estorno e exclusão.
+- O retorno de documentos relacionados invalida o cache do cliente antes de abrir a ficha, para atualizar comentários e atividade sem `F5`.
+- Em `Sales Invoice`, **Obter Itens De → Contrato** usa o campo nativo `subscription` como vínculo permanente.
+- O mapeamento do contrato preenche cliente, plano/item, preço, período e vencimento e valida que contrato e cliente correspondem.
+- Ao salvar documento criado pela ficha, o sistema retorna ao cliente quando a configuração do provedor estiver ativa; ausência da linha do Single DocType assume o padrão ativo.
+
+### Atendimento e ordem de serviço
+
+- `Issue` é apresentado como **Atendimento** nos fluxos próprios da SOL.
+- O botão **Novo atendimento** da ficha abre o formulário completo, evitando o Quick Entry nativo que exigia digitação livre do assunto.
+- DocType **Assunto de Atendimento** contém assuntos configuráveis e editáveis.
+- Assuntos iniciais: Sem conexão, Lentidão, Instalação, Mudança de endereço, Troca de equipamento, Financeiro, Cancelamento e Outros.
+- **Resumo do atendimento** e **Assunto do atendimento** são campos independentes; selecionar ou trocar o assunto não altera o resumo digitado pelo operador.
+- O atendimento pode existir sem OS e possui botão direto **Gerar OS**.
+- Quando vinculado, o atendimento possui botão direto **Abrir OS**.
+- A OS possui `custom_origin_issue` e botão direto **Abrir atendimento**.
+- Uma OS criada diretamente gera automaticamente o atendimento de origem e vincula os dois documentos.
+- Atendimento e OS possuem botão direto **Voltar ao cliente**.
+- Ao fechar ou resolver atendimento, `resolution_details` é exibido como **Resposta/conclusão do atendimento** e é obrigatório, mesmo quando a conclusão informa que não houve solução.
+- O botão nativo de fechamento foi substituído por fechamento controlado para evitar mostrar **Reabrir** quando o servidor recusar o salvamento.
+- A conclusão do atendimento também é registrada na atividade do cliente.
+- Um atendimento não pode ser marcado como **Resolvido** ou **Fechado** enquanto existir qualquer OS vinculada em rascunho, reaberta, parcialmente concluída ou não enviada. Todas as versões ativas devem estar enviadas com **Situação da execução = Totalmente concluído**.
+- Tarefas vinculadas ao atendimento usam a aba **Dependências** como checklist operacional: cada linha possui **Concluído** e **Abrir tarefa**.
+- Ao marcar uma dependência como concluída e salvar a tarefa principal, a tarefa vinculada também é concluída; assim, a validação nativa de dependências continua sendo respeitada sem exigir que o operador abra cada item.
+
+### Catálogo de serviços da OS
+
+- O identificador técnico do DocType é **Servico do Provedor** sem acento, pois o Query Builder do Frappe 16 rejeita acentos em nomes de tabelas usados na busca Link.
+- Os rótulos visuais permanecem acentuados em português: **Serviço do Provedor** e **Serviço a executar**.
+- Nunca voltar a usar `Serviço do Provedor` como nome técnico do DocType.
+- A tabela `Maintenance Visit Purpose` usa `custom_provider_service` em vez de Item/Plano.
+- `item_code` e `item_name` ficam ocultos no fluxo da SOL.
+- `service_person` foi renomeado para **Técnico responsável** e deixou de ser obrigatório.
+- `description` foi renomeado para **Descrição/orientação** e é opcional.
+- `work_done` foi renomeado para **Descrição**. É opcional no rascunho e em execução parcial, mas obrigatório em cada serviço ao enviar uma OS com **Situação da execução = Totalmente concluído**.
+- Uma OS enviada possui o botão **Reabrir OS**. Para preservar a auditoria, a versão concluída é cancelada e uma retificação em rascunho é criada automaticamente, vinculada por `amended_from` e aberta para edição.
+- Uma OS reaberta inicia como **Parcialmente concluído / Rascunho** e não pode ser enviada nesse estado. O operador usa **Salvar** enquanto trabalha; para enviar e bloquear novamente, deve selecionar **Totalmente concluído** e preencher a descrição do realizado.
+- Serviços iniciais: Instalação de acesso, Visita técnica, Reparo de fibra, Configuração de roteador, Troca de ONU/ONT, Mudança de endereço e Retirada de equipamento.
+- O catálogo é acessível em **Atendimento → Serviços do provedor**.
+
+## Regra de manutenção deste arquivo
+
+Após qualquer alteração funcional, técnica, de dados, fluxo, instalação ou planejamento, atualizar este arquivo âncora no mesmo trabalho. Registrar especialmente novos DocTypes, campos, hooks, scripts, comandos de migração, decisões arquiteturais, limitações e próximos passos.
 
 ## Cuidados técnicos
 

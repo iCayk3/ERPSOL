@@ -390,6 +390,22 @@ CUSTOM_FIELDS = {
 			"insert_after": "item_name",
 		},
 	],
+	"Task Depends On": [
+		{
+			"fieldname": "custom_completed",
+			"fieldtype": "Check",
+			"label": "Concluído",
+			"default": 0,
+			"in_list_view": 1,
+			"insert_after": "subject",
+		},
+		{
+			"fieldname": "custom_open_task",
+			"fieldtype": "Button",
+			"label": "Abrir tarefa",
+			"insert_after": "custom_completed",
+		},
+	],
 }
 
 
@@ -640,7 +656,7 @@ def setup_customer_fields():
 	make_property_setter("Maintenance Visit Purpose", "service_person", "reqd", 0, "Check")
 	make_property_setter("Maintenance Visit Purpose", "description", "label", "Descrição / orientação", "Data")
 	make_property_setter("Maintenance Visit Purpose", "description", "reqd", 0, "Check")
-	make_property_setter("Maintenance Visit Purpose", "work_done", "label", "Trabalho realizado", "Data")
+	make_property_setter("Maintenance Visit Purpose", "work_done", "label", "Descrição", "Data")
 	make_property_setter("Maintenance Visit Purpose", "work_done", "reqd", 0, "Check")
 	if frappe.get_meta("Address").has_field("tax_category"):
 		make_property_setter("Address", "tax_category", "hidden", 1, "Check")

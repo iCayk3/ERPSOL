@@ -17,6 +17,22 @@ frappe.ui.form.on("Maintenance Visit", {
 				frappe.set_route("Form", "Issue", frm.doc.custom_origin_issue);
 			});
 		}
+		if (frm.doc.docstatus === 1) {
+			frm.add_custom_button(__("Reabrir OS"), () => {
+				frappe.confirm(
+					__("A OS concluída será cancelada e uma nova versão em rascunho será criada. Deseja continuar?"),
+					async () => {
+						const { message } = await frappe.call({
+							method: "sol_brasil.service.reopen_service_order",
+							args: { name: frm.doc.name },
+							freeze: true,
+							freeze_message: __("Reabrindo ordem de serviço..."),
+						});
+						if (message) frappe.set_route("Form", "Maintenance Visit", message);
+					}
+				);
+			});
+		}
 	},
 });
 

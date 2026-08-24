@@ -1021,3 +1021,120 @@ msgstr "Semana"
 
 msgid "Year"
 msgstr "Ano"
+
+# Opções de ordens de serviço
+msgid "Unscheduled"
+msgstr "Não agendado"
+
+msgid "Breakdown"
+msgstr "Avaria"
+
+msgid "Partially Completed"
+msgstr "Parcialmente concluído"
+
+msgid "Fully Completed"
+msgstr "Totalmente concluído"
+
+# Opções de tarefas
+msgid "Working"
+msgstr "Em andamento"
+
+msgid "Pending Review"
+msgstr "Aguardando revisão"
+
+msgid "Urgent"
+msgstr "Urgente"
+
+msgid "Dependent Tasks"
+msgstr "Checklist de tarefas"
+
+msgid "Depends on Tasks"
+msgstr "Tarefas do checklist"
+
+msgid "Parent Task"
+msgstr "Tarefa principal"
+
+msgid "Completed By"
+msgstr "Concluído por"
+
+msgid "Completed On"
+msgstr "Concluído em"
+
+msgid "Is Template"
+msgstr "É um modelo"
+
+msgid "Task Description"
+msgstr "Descrição da tarefa"
+
+msgid "Actual Time in Hours (via Timesheet)"
+msgstr "Tempo realizado em horas"
+
+msgid "Costing"
+msgstr "Custos"
+
+# Opções de Leads
+msgid "Product Enquiry"
+msgstr "Consulta sobre produto ou serviço"
+
+msgid "Request for Information"
+msgstr "Solicitação de informações"
+
+msgid "Suggestions"
+msgstr "Sugestões"
+
+# Opções de chamados e SLA
+msgid "First Response Due"
+msgstr "Primeira resposta pendente"
+
+msgid "Resolution Due"
+msgstr "Resolução pendente"
+
+msgid "Fulfilled"
+msgstr "Cumprido"
+
+# Opções financeiras
+msgid "Partly Paid"
+msgstr "Parcialmente pago"
+
+msgid "Partly Paid and Discounted"
+msgstr "Parcialmente pago e descontado"
+
+msgid "Unpaid and Discounted"
+msgstr "Não pago e descontado"
+
+msgid "Overdue and Discounted"
+msgstr "Vencido e descontado"
+
+msgid "Pay"
+msgstr "Pagar"
+
+msgid "Receive"
+msgstr "Receber"
+
+msgid "Payment Ordered"
+msgstr "Pagamento ordenado"
+
+# Opções de equipamentos e ativos
+msgid "Capitalized"
+msgstr "Capitalizado"
+
+msgid "Composite Asset"
+msgstr "Equipamento composto"
+
+msgid "Composite Component"
+msgstr "Componente de equipamento"
+
+msgid "Straight Line"
+msgstr "Linha reta"
+
+msgid "Double Declining Balance"
+msgstr "Saldo decrescente duplo"
+
+msgid "Written Down Value"
+msgstr "Valor contábil reduzido"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "Successful"
+msgstr "Bem-sucedido"

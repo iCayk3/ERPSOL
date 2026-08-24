@@ -69,6 +69,7 @@ doctype_js = {
 	"Subscription": "public/js/subscription.js",
 	"Address": "public/js/address_contact.js",
 	"Contact": "public/js/address_contact.js",
+	"Task": "public/js/task.js",
 }
 doctype_list_js = {"Customer": "public/js/customer_list.js"}
 override_doctype_dashboards = {"Customer": "sol_brasil.customer_dashboard.get_dashboard_data"}
@@ -205,6 +206,7 @@ doc_events = {
 	},
 	"Address": {"on_update": "sol_brasil.customer.notify_linked_customer_update"},
 	"Contact": {"on_update": "sol_brasil.customer.notify_linked_customer_update"},
+	"Task": {"before_validate": "sol_brasil.task.complete_checked_dependencies"},
 }
 
 # Scheduled Tasks

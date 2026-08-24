@@ -15,6 +15,7 @@ def _add_customer_activity(customer, text):
 
 def validate_issue_subject(doc, method=None):
 	if doc.status in ("Resolved", "Closed"):
+		validate_issue_service_orders_completed(doc)
 		answer = strip_html(doc.resolution_details or "").strip()
 		if not answer:
 			frappe.throw(
@@ -30,6 +31,30 @@ def validate_issue_subject(doc, method=None):
 		frappe.throw(_("O assunto de atendimento selecionado não existe."))
 	if not doc.subject:
 		doc.subject = title
+
+
+def validate_issue_service_orders_completed(doc):
+	if doc.is_new():
+		return
+
+	service_orders = frappe.get_all(
+		"Maintenance Visit",
+		filters={"custom_origin_issue": doc.name, "docstatus": ["<", 2]},
+		fields=["name", "docstatus", "completion_status"],
+		order_by="creation asc",
+	)
+	pending = [
+		row.name
+		for row in service_orders
+		if row.docstatus != 1 or row.completion_status != "Fully Completed"
+	]
+	if pending:
+		frappe.throw(
+			_("Conclua todas as ordens de serviço antes de fechar o atendimento. OS pendentes: {0}.").format(
+				", ".join(frappe.bold(name) for name in pending)
+			),
+			title=_("Ordens de serviço pendentes"),
+		)
 
 
 def register_issue_creation(doc, method=None):
@@ -76,13 +101,19 @@ def validate_service_order_links(doc, method=None):
 
 
 def validate_service_order_completion(doc, method=None):
+	if doc.completion_status != "Fully Completed":
+		frappe.throw(
+			_("Uma ordem de serviço parcialmente concluída deve permanecer em rascunho. Use Salvar para continuar depois; selecione Totalmente concluído somente quando for enviar e fechar a OS."),
+			title=_("OS ainda em execução"),
+		)
+
 	missing = [row.idx for row in (doc.get("purposes") or []) if not strip_html(row.work_done or "").strip()]
 	if missing:
 		frappe.throw(
-			_("Informe o trabalho realizado antes de concluir a ordem de serviço. Linhas pendentes: {0}.").format(
+			_("Informe a descrição do que foi realizado antes de concluir a ordem de serviço. Linhas pendentes: {0}.").format(
 				", ".join(str(index) for index in missing)
 			),
-			title=_("Trabalho realizado obrigatório"),
+			title=_("Descrição obrigatória na conclusão"),
 		)
 
 
@@ -113,3 +144,22 @@ def create_or_link_issue_for_service_order(doc, method=None):
 			get_link_to_form("Issue", issue_name, issue_name),
 		),
 	)
+
+
+@frappe.whitelist()
+def reopen_service_order(name):
+	doc = frappe.get_doc("Maintenance Visit", name)
+	doc.check_permission("cancel")
+	if doc.docstatus != 1:
+		frappe.throw(_("Somente uma ordem de serviço enviada pode ser reaberta."))
+	if frappe.db.exists("Maintenance Visit", {"amended_from": doc.name}):
+		frappe.throw(_("Esta ordem de serviço já possui uma versão reaberta."))
+
+	doc.cancel()
+	amendment = frappe.copy_doc(doc)
+	amendment.docstatus = 0
+	amendment.amended_from = doc.name
+	amendment.completion_status = "Partially Completed"
+	amendment.status = "Draft"
+	amendment.insert()
+	return amendment.name

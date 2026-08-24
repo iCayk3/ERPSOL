@@ -144,6 +144,22 @@ DESKTOP_GROUPS = {
         "idx": 4,
         "items": ("Financeiro", "Relatórios", "Configurações"),
     },
+    "Configurações do Sistema": {
+        "icon": "settings",
+        "bg_color": "gray",
+        "idx": 5,
+        "items": (
+            "Automation",
+            "Build",
+            "Data",
+            "Email",
+            "Integrations",
+            "Printing",
+            "System",
+            "Users",
+            "Website",
+        ),
+    },
 }
 
 
@@ -229,7 +245,7 @@ def _sync_desktop_icons():
                 "link_type": "Workspace Sidebar",
                 "idx": group["idx"],
                 "icon": group["icon"],
-                "bg_color": "blue",
+                "bg_color": group.get("bg_color", "blue"),
                 "hidden": 0,
                 "standard": 0,
                 "parent_icon": None,
