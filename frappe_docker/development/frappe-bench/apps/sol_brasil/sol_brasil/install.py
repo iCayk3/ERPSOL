@@ -415,6 +415,180 @@ DEFAULT_PROVIDER_SERVICES = (
 )
 
 
+STANDARD_MASTER_RENAMES = {
+	"Item Group": {
+		"All Item Groups": "Todos os grupos de itens",
+		"Consumable": "Consumíveis",
+		"Products": "Produtos",
+		"Raw Material": "Matéria-prima",
+		"Services": "Serviços",
+		"Sub Assemblies": "Subconjuntos",
+	},
+	"Customer Group": {
+		"All Customer Groups": "Todos os grupos de clientes",
+		"Commercial": "Comercial",
+		"Government": "Governo",
+		"Individual": "Pessoa física",
+		"Non Profit": "Sem fins lucrativos",
+	},
+	"Supplier Group": {
+		"All Supplier Groups": "Todos os grupos de fornecedores",
+		"Distributor": "Distribuidor",
+		"Electrical": "Elétrico",
+		"Hardware": "Equipamentos",
+		"Local": "Local",
+		"Pharmaceutical": "Farmacêutico",
+		"Raw Material": "Matéria-prima",
+		"Services": "Serviços",
+	},
+	"Territory": {
+		"All Territories": "Todas as áreas de atendimento",
+		"Brazil": "Brasil",
+		"Rest Of The World": "Fora do Brasil",
+	},
+	"Sales Person": {
+		"Sales Team": "Equipe comercial",
+	},
+	"Mode of Payment": {
+		"Bank Draft": "Transferência bancária",
+		"Cash": "Dinheiro",
+		"Cheque": "Cheque",
+		"Credit Card": "Cartão de crédito",
+		"Wire Transfer": "Transferência eletrônica",
+	},
+	"Warehouse Type": {
+		"Transit": "Trânsito",
+	},
+	"Price List": {
+		"Standard Buying": "Compra padrão",
+		"Standard Selling": "Venda padrão",
+	},
+	"Opportunity Type": {
+		"Maintenance": "Manutenção",
+		"Sales": "Venda",
+		"Support": "Suporte",
+	},
+	"Market Segment": {
+		"Lower Income": "Baixa renda",
+		"Middle Income": "Média renda",
+		"Upper Income": "Alta renda",
+	},
+	"Print Heading": {
+		"Credit Note": "Nota de crédito",
+		"Debit Note": "Nota de débito",
+	},
+	"Letter Head": {
+		"Company Letterhead": "Papel timbrado da empresa",
+		"Company Letterhead - Grey": "Papel timbrado da empresa - Cinza",
+	},
+	"Industry Type": {
+		"Accounting": "Contabilidade",
+		"Advertising": "Publicidade",
+		"Aerospace": "Aeroespacial",
+		"Agriculture": "Agricultura",
+		"Airline": "Companhia aérea",
+		"Apparel & Accessories": "Vestuário e acessórios",
+		"Automotive": "Automotivo",
+		"Banking": "Bancário",
+		"Biotechnology": "Biotecnologia",
+		"Broadcasting": "Radiodifusão",
+		"Brokerage": "Corretagem",
+		"Chemical": "Químico",
+		"Computer": "Informática",
+		"Consulting": "Consultoria",
+		"Consumer Products": "Produtos de consumo",
+		"Cosmetics": "Cosméticos",
+		"Defense": "Defesa",
+		"Department Stores": "Lojas de departamento",
+		"Education": "Educação",
+		"Electronics": "Eletrônicos",
+		"Energy": "Energia",
+		"Entertainment & Leisure": "Entretenimento e lazer",
+		"Executive Search": "Recrutamento executivo",
+		"Financial Services": "Serviços financeiros",
+		"Food, Beverage & Tobacco": "Alimentos, bebidas e tabaco",
+		"Grocery": "Mercearia",
+		"Health Care": "Saúde",
+		"Internet Publishing": "Publicação na internet",
+		"Investment Banking": "Banco de investimento",
+		"Legal": "Jurídico",
+		"Manufacturing": "Indústria",
+		"Motion Picture & Video": "Cinema e vídeo",
+		"Music": "Música",
+		"Newspaper Publishers": "Editoras de jornais",
+		"Online Auctions": "Leilões online",
+		"Pension Funds": "Fundos de pensão",
+		"Pharmaceuticals": "Farmacêuticos",
+		"Private Equity": "Capital privado",
+		"Publishing": "Publicação",
+		"Real Estate": "Imobiliário",
+		"Retail & Wholesale": "Varejo e atacado",
+		"Securities & Commodity Exchanges": "Bolsa de valores e mercadorias",
+		"Service": "Serviço",
+		"Soap & Detergent": "Sabões e detergentes",
+		"Software": "Software",
+		"Sports": "Esportes",
+		"Technology": "Tecnologia",
+		"Telecommunications": "Telecomunicações",
+		"Television": "Televisão",
+		"Transportation": "Transporte",
+		"Venture Capital": "Capital de risco",
+	},
+	"Activity Type": {
+		"Communication": "Comunicação",
+		"Execution": "Execução",
+		"Planning": "Planejamento",
+		"Proposal Writing": "Elaboração de proposta",
+		"Research": "Pesquisa",
+	},
+	"UOM": {
+		"Box": "Caixa",
+		"Centimeter": "Centímetro",
+		"Day": "Dia",
+		"Dozen": "Dúzia",
+		"Foot": "Pé",
+		"Gram": "Grama",
+		"Hour": "Hora",
+		"Inch": "Polegada",
+		"Kilogram": "Quilograma",
+		"Kilometer": "Quilômetro",
+		"Liter": "Litro",
+		"Meter": "Metro",
+		"Minute": "Minuto",
+		"Month": "Mês",
+		"Nos": "Un",
+		"Pair": "Par",
+		"Second": "Segundo",
+		"Set": "Conjunto",
+		"Square Centimeter": "Centímetro quadrado",
+		"Square Foot": "Pé quadrado",
+		"Square Inch": "Polegada quadrada",
+		"Square Meter": "Metro quadrado",
+		"Unit": "Unidade",
+		"Week": "Semana",
+		"Year": "Ano",
+	},
+}
+
+SYSTEM_SETTINGS_DEFAULTS = {
+	"country": "Brazil",
+	"language": "pt-BR",
+	"time_zone": "America/Sao_Paulo",
+	"currency": "BRL",
+	"date_format": "dd/mm/yyyy",
+	"time_format": "HH:mm:ss",
+	"number_format": "#.###,##",
+	"use_number_format_from_currency": 0,
+	"first_day_of_the_week": "Sunday",
+	"app_name": "SOL Provedor",
+}
+
+GLOBAL_DEFAULTS = {
+	"country": "Brazil",
+	"default_currency": "BRL",
+}
+
+
 def setup_service_subjects():
 	for title, description in DEFAULT_SERVICE_SUBJECTS:
 		if frappe.db.exists("Assunto de Atendimento", title):
@@ -528,15 +702,53 @@ def reorder_customer_relationships_tab():
 	frappe.clear_cache(doctype="Customer")
 
 
-def after_install():
-    setup_customer_fields()
-    from sol_brasil.workspace import sync_provider_workspaces
+def setup_portuguese_brazil_defaults():
+	frappe.db.set_default("lang", "pt-BR")
+	system_settings = frappe.get_meta("System Settings")
+	for fieldname, value in SYSTEM_SETTINGS_DEFAULTS.items():
+		if system_settings.has_field(fieldname):
+			frappe.db.set_value("System Settings", "System Settings", fieldname, value)
+	global_defaults = frappe.get_meta("Global Defaults")
+	for fieldname, value in GLOBAL_DEFAULTS.items():
+		if global_defaults.has_field(fieldname):
+			frappe.db.set_value("Global Defaults", "Global Defaults", fieldname, value)
+	if frappe.db.exists("User", "Administrator"):
+		frappe.db.set_value("User", "Administrator", "language", "pt-BR")
 
-    sync_provider_workspaces()
+
+def setup_portuguese_brazil_master_data():
+	for doctype, renames in STANDARD_MASTER_RENAMES.items():
+		if not frappe.db.table_exists(doctype):
+			continue
+		for old_name, new_name in renames.items():
+			if old_name == new_name:
+				continue
+			if not frappe.db.exists(doctype, old_name):
+				continue
+			frappe.rename_doc(
+				doctype,
+				old_name,
+				new_name,
+				force=True,
+				merge=frappe.db.exists(doctype, new_name),
+				show_alert=False,
+				rebuild_search=False,
+			)
+
+
+def after_install():
+	setup_portuguese_brazil_defaults()
+	setup_portuguese_brazil_master_data()
+	setup_customer_fields()
+	from sol_brasil.workspace import sync_provider_workspaces
+
+	sync_provider_workspaces()
 
 
 def after_migrate():
-    setup_customer_fields()
-    from sol_brasil.workspace import sync_provider_workspaces
+	setup_portuguese_brazil_defaults()
+	setup_portuguese_brazil_master_data()
+	setup_customer_fields()
+	from sol_brasil.workspace import sync_provider_workspaces
 
-    sync_provider_workspaces()
+	sync_provider_workspaces()

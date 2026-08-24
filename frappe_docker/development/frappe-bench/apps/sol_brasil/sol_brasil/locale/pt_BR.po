@@ -664,3 +664,360 @@ msgstr "Hora de abertura"
 
 msgid "Attachment"
 msgstr "Anexo"
+
+msgid "All Item Groups"
+msgstr "Todos os grupos de itens"
+
+msgid "Consumable"
+msgstr "Consumíveis"
+
+msgid "Products"
+msgstr "Produtos"
+
+msgid "Raw Material"
+msgstr "Matéria-prima"
+
+msgid "Services"
+msgstr "Serviços"
+
+msgid "Sub Assemblies"
+msgstr "Subconjuntos"
+
+msgid "All Customer Groups"
+msgstr "Todos os grupos de clientes"
+
+msgid "Commercial"
+msgstr "Comercial"
+
+msgid "Government"
+msgstr "Governo"
+
+msgid "Individual"
+msgstr "Pessoa física"
+
+msgid "Non Profit"
+msgstr "Sem fins lucrativos"
+
+msgid "All Supplier Groups"
+msgstr "Todos os grupos de fornecedores"
+
+msgid "Distributor"
+msgstr "Distribuidor"
+
+msgid "Electrical"
+msgstr "Elétrico"
+
+msgid "Hardware"
+msgstr "Equipamentos"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Pharmaceutical"
+msgstr "Farmacêutico"
+
+msgid "All Territories"
+msgstr "Todas as áreas de atendimento"
+
+msgid "Brazil"
+msgstr "Brasil"
+
+msgid "Rest Of The World"
+msgstr "Fora do Brasil"
+
+msgid "Sales Team"
+msgstr "Equipe comercial"
+
+msgid "Bank Draft"
+msgstr "Transferência bancária"
+
+msgid "Cash"
+msgstr "Dinheiro"
+
+msgid "Cheque"
+msgstr "Cheque"
+
+msgid "Credit Card"
+msgstr "Cartão de crédito"
+
+msgid "Wire Transfer"
+msgstr "Transferência eletrônica"
+
+msgid "Transit"
+msgstr "Trânsito"
+
+msgid "Standard Buying"
+msgstr "Compra padrão"
+
+msgid "Standard Selling"
+msgstr "Venda padrão"
+
+msgid "Maintenance"
+msgstr "Manutenção"
+
+msgid "Sales"
+msgstr "Venda"
+
+msgid "Support"
+msgstr "Suporte"
+
+msgid "Lower Income"
+msgstr "Baixa renda"
+
+msgid "Middle Income"
+msgstr "Média renda"
+
+msgid "Upper Income"
+msgstr "Alta renda"
+
+msgid "Credit Note"
+msgstr "Nota de crédito"
+
+msgid "Debit Note"
+msgstr "Nota de débito"
+
+msgid "Company Letterhead"
+msgstr "Papel timbrado da empresa"
+
+msgid "Company Letterhead - Grey"
+msgstr "Papel timbrado da empresa - Cinza"
+
+msgid "Advertising"
+msgstr "Publicidade"
+
+msgid "Aerospace"
+msgstr "Aeroespacial"
+
+msgid "Agriculture"
+msgstr "Agricultura"
+
+msgid "Airline"
+msgstr "Companhia aérea"
+
+msgid "Apparel & Accessories"
+msgstr "Vestuário e acessórios"
+
+msgid "Automotive"
+msgstr "Automotivo"
+
+msgid "Banking"
+msgstr "Bancário"
+
+msgid "Biotechnology"
+msgstr "Biotecnologia"
+
+msgid "Broadcasting"
+msgstr "Radiodifusão"
+
+msgid "Brokerage"
+msgstr "Corretagem"
+
+msgid "Chemical"
+msgstr "Químico"
+
+msgid "Computer"
+msgstr "Informática"
+
+msgid "Consulting"
+msgstr "Consultoria"
+
+msgid "Consumer Products"
+msgstr "Produtos de consumo"
+
+msgid "Cosmetics"
+msgstr "Cosméticos"
+
+msgid "Defense"
+msgstr "Defesa"
+
+msgid "Department Stores"
+msgstr "Lojas de departamento"
+
+msgid "Education"
+msgstr "Educação"
+
+msgid "Electronics"
+msgstr "Eletrônicos"
+
+msgid "Energy"
+msgstr "Energia"
+
+msgid "Entertainment & Leisure"
+msgstr "Entretenimento e lazer"
+
+msgid "Executive Search"
+msgstr "Recrutamento executivo"
+
+msgid "Financial Services"
+msgstr "Serviços financeiros"
+
+msgid "Food, Beverage & Tobacco"
+msgstr "Alimentos, bebidas e tabaco"
+
+msgid "Grocery"
+msgstr "Mercearia"
+
+msgid "Health Care"
+msgstr "Saúde"
+
+msgid "Internet Publishing"
+msgstr "Publicação na internet"
+
+msgid "Investment Banking"
+msgstr "Banco de investimento"
+
+msgid "Legal"
+msgstr "Jurídico"
+
+msgid "Manufacturing"
+msgstr "Indústria"
+
+msgid "Motion Picture & Video"
+msgstr "Cinema e vídeo"
+
+msgid "Music"
+msgstr "Música"
+
+msgid "Newspaper Publishers"
+msgstr "Editoras de jornais"
+
+msgid "Online Auctions"
+msgstr "Leilões online"
+
+msgid "Pension Funds"
+msgstr "Fundos de pensão"
+
+msgid "Pharmaceuticals"
+msgstr "Farmacêuticos"
+
+msgid "Private Equity"
+msgstr "Capital privado"
+
+msgid "Publishing"
+msgstr "Publicação"
+
+msgid "Real Estate"
+msgstr "Imobiliário"
+
+msgid "Retail & Wholesale"
+msgstr "Varejo e atacado"
+
+msgid "Securities & Commodity Exchanges"
+msgstr "Bolsa de valores e mercadorias"
+
+msgid "Service"
+msgstr "Serviço"
+
+msgid "Soap & Detergent"
+msgstr "Sabões e detergentes"
+
+msgid "Software"
+msgstr "Software"
+
+msgid "Sports"
+msgstr "Esportes"
+
+msgid "Technology"
+msgstr "Tecnologia"
+
+msgid "Telecommunications"
+msgstr "Telecomunicações"
+
+msgid "Television"
+msgstr "Televisão"
+
+msgid "Transportation"
+msgstr "Transporte"
+
+msgid "Venture Capital"
+msgstr "Capital de risco"
+
+msgid "Communication"
+msgstr "Comunicação"
+
+msgid "Execution"
+msgstr "Execução"
+
+msgid "Planning"
+msgstr "Planejamento"
+
+msgid "Proposal Writing"
+msgstr "Elaboração de proposta"
+
+msgid "Research"
+msgstr "Pesquisa"
+
+msgid "Box"
+msgstr "Caixa"
+
+msgid "Centimeter"
+msgstr "Centímetro"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Dozen"
+msgstr "Dúzia"
+
+msgid "Foot"
+msgstr "Pé"
+
+msgid "Gram"
+msgstr "Grama"
+
+msgid "Hour"
+msgstr "Hora"
+
+msgid "Inch"
+msgstr "Polegada"
+
+msgid "Kilogram"
+msgstr "Quilograma"
+
+msgid "Kilometer"
+msgstr "Quilômetro"
+
+msgid "Liter"
+msgstr "Litro"
+
+msgid "Meter"
+msgstr "Metro"
+
+msgid "Minute"
+msgstr "Minuto"
+
+msgid "Month"
+msgstr "Mês"
+
+msgid "Nos"
+msgstr "Un"
+
+msgid "Pair"
+msgstr "Par"
+
+msgid "Second"
+msgstr "Segundo"
+
+msgid "Set"
+msgstr "Conjunto"
+
+msgid "Square Centimeter"
+msgstr "Centímetro quadrado"
+
+msgid "Square Foot"
+msgstr "Pé quadrado"
+
+msgid "Square Inch"
+msgstr "Polegada quadrada"
+
+msgid "Square Meter"
+msgstr "Metro quadrado"
+
+msgid "Unit"
+msgstr "Unidade"
+
+msgid "Week"
+msgstr "Semana"
+
+msgid "Year"
+msgstr "Ano"
