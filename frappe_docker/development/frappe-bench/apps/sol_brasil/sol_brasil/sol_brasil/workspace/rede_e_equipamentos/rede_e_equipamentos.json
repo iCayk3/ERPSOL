@@ -1,7 +1,7 @@
 {
  "app": "sol_brasil",
  "charts": [],
- "content": "[{\"id\":\"sol-rede_e_equipamentos-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Rede e Equipamentos</b></span>\",\"col\":12}},{\"id\":\"sol-rede_e_equipamentos-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"OLTs\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cadastrar OLT\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Fabricantes\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Modelos e itens\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Equipamentos\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cadastrar equipamento\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"N\u00fameros de s\u00e9rie\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Locais de instala\u00e7\u00e3o\",\"col\":4}}]",
+ "content": "[{\"id\":\"sol-rede_e_equipamentos-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Rede e Equipamentos</b></span>\",\"col\":12}},{\"id\":\"sol-rede_e_equipamentos-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Servidores NAS\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"OLTs\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cadastrar OLT\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Opera\u00e7\u00f5es FiberHome\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Fabricantes\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Modelos e itens\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Equipamentos\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cadastrar equipamento\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"N\u00fameros de s\u00e9rie\",\"col\":4}},{\"id\":\"sol-rede_e_equipamentos-10\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Locais de instala\u00e7\u00e3o\",\"col\":4}}]",
  "creation": "2026-08-17 10:28:10.400886",
  "custom_blocks": [],
  "docstatus": 0,
@@ -14,7 +14,7 @@
  "label": "Rede e Equipamentos",
  "link_type": "DocType",
  "links": [],
- "modified": "2026-08-24 16:15:47.500603",
+ "modified": "2026-08-25 17:28:01.707434",
  "modified_by": "Administrator",
  "module": "SOL Brasil",
  "name": "Rede e Equipamentos",
@@ -27,6 +27,12 @@
  "shortcuts": [
   {
    "doc_view": "List",
+   "label": "Servidores NAS",
+   "link_to": "NAS RADIUS",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
    "label": "OLTs",
    "link_to": "OLT",
    "type": "DocType"
@@ -35,6 +41,12 @@
    "doc_view": "New",
    "label": "Cadastrar OLT",
    "link_to": "OLT",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Opera\u00e7\u00f5es FiberHome",
+   "link_to": "Opera\u00e7\u00e3o FiberHome",
    "type": "DocType"
   },
   {

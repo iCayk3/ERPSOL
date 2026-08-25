@@ -232,6 +232,44 @@ Clientes que já possuíam contrato foram vinculados automaticamente.
 
 Os campos estão definidos em `sol_brasil/install.py` e a interação do contrato em `sol_brasil/public/js/customer.js`.
 
+## Gestão RADIUS e acesso PPPoE
+
+O cadastro PPPoE possui uma única fonte visível: os campos da seção `Acesso PPPoE e contrato` na aba Provedor do cliente. A tabela adicional de acessos foi removida para não duplicar usuário, contrato, plano, situação e IP.
+
+O `Perfil RADIUS` também não faz parte do fluxo operacional. Os parâmetros técnicos ficam diretamente no `Subscription Plan`, pois o plano é a entidade que receberá outras características do serviço no futuro.
+
+Campos técnicos adicionados ao plano:
+
+- download e upload em Mbps;
+- limite de sessões simultâneas;
+- intervalo de accounting;
+- pool IPv4 e pool IPv6;
+- `Filter-Id`;
+- `Mikrotik-Rate-Limit` gerado automaticamente;
+- atributos RADIUS adicionais em JSON sanitizado.
+
+Os DocTypes `Acesso PPPoE` e `Perfil RADIUS` permanecem somente como legado técnico temporário e não possuem atalhos no fluxo. Não devem ser usados para novos cadastros. `NAS RADIUS` permanece para concentradores e `Evento de Provisionamento RADIUS` será aproveitado pela integração futura.
+
+Arquivos principais:
+
+- `sol_brasil/sol_brasil/doctype/acesso_pppoe`;
+- `sol_brasil/sol_brasil/doctype/perfil_radius`;
+- `sol_brasil/sol_brasil/doctype/nas_radius`;
+- `sol_brasil/sol_brasil/doctype/evento_de_provisionamento_radius`;
+- `sol_brasil/radius_provisioning.py`;
+- `sol_brasil/public/js/acesso_pppoe.js`;
+- `sol_brasil/tests/test_radius_models.py`.
+
+Decisões aplicadas:
+
+- existe um único conjunto de credenciais PPPoE por ficha de cliente;
+- o contrato precisa pertencer ao mesmo cliente;
+- o plano é obtido do contrato e concentra toda a configuração técnica;
+- usuários PPPoE permanecem únicos;
+- senhas e segredos usam campos protegidos;
+- atributos adicionais do plano não aceitam chaves de senha ou segredo;
+- o worker e o banco operacional FreeRADIUS ainda não foram implementados, pois pertencem aos Passos 3 e 4.
+
 ## Contratos na ficha
 
 - Aba Contratos lista os `Subscription` do cliente.

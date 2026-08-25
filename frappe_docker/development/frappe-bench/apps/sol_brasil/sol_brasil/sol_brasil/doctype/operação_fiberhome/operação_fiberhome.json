@@ -1,0 +1,30 @@
+{
+ "doctype": "DocType",
+ "name": "Operação FiberHome",
+ "module": "SOL Brasil",
+ "engine": "InnoDB",
+ "track_changes": 1,
+ "autoname": "hash",
+ "field_order": ["operation", "status", "customer", "ctag", "requested_by", "started_at", "finished_at", "details_section", "command_summary", "response_summary", "error_message"],
+ "fields": [
+  {"fieldname": "operation", "fieldtype": "Select", "label": "Operação", "options": "Consultar sinal\nAutorizar ONU\nDesautorizar ONU", "reqd": 1, "in_list_view": 1, "in_standard_filter": 1},
+  {"fieldname": "status", "fieldtype": "Select", "label": "Situação", "options": "Em andamento\nConcluída\nFalhou", "reqd": 1, "in_list_view": 1, "in_standard_filter": 1},
+  {"fieldname": "customer", "fieldtype": "Link", "label": "Cliente", "options": "Customer", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "ctag", "fieldtype": "Data", "label": "CTAG", "read_only": 1, "unique": 1},
+  {"fieldname": "requested_by", "fieldtype": "Link", "label": "Solicitado por", "options": "User", "read_only": 1},
+  {"fieldname": "started_at", "fieldtype": "Datetime", "label": "Início", "read_only": 1},
+  {"fieldname": "finished_at", "fieldtype": "Datetime", "label": "Término", "read_only": 1},
+  {"fieldname": "details_section", "fieldtype": "Section Break", "label": "Detalhes sanitizados"},
+  {"fieldname": "command_summary", "fieldtype": "Code", "label": "Comando", "read_only": 1},
+  {"fieldname": "response_summary", "fieldtype": "Code", "label": "Resposta", "read_only": 1},
+  {"fieldname": "error_message", "fieldtype": "Small Text", "label": "Erro", "read_only": 1}
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "report": 1, "export": 1},
+  {"role": "Administração FiberHome", "read": 1, "report": 1, "export": 1},
+  {"role": "Operação de Rede FiberHome", "read": 1, "report": 1},
+  {"role": "Consulta de Rede FiberHome", "read": 1, "report": 1}
+ ],
+ "sort_field": "started_at",
+ "sort_order": "DESC"
+}

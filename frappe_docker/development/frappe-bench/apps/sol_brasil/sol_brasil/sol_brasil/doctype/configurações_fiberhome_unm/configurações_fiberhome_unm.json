@@ -1,0 +1,24 @@
+{
+ "doctype": "DocType",
+ "name": "Configurações FiberHome UNM",
+ "module": "SOL Brasil",
+ "issingle": 1,
+ "engine": "InnoDB",
+ "field_order": ["connection_section", "enabled", "host", "port", "column_break_connection", "username", "password", "timeout_seconds", "security_section", "security_warning"],
+ "fields": [
+  {"fieldname": "connection_section", "fieldtype": "Section Break", "label": "Conexão TL1 com o UNM"},
+  {"fieldname": "enabled", "fieldtype": "Check", "label": "Integração habilitada", "default": "0"},
+  {"fieldname": "host", "fieldtype": "Data", "label": "Endereço IP do UNM", "description": "Use o endereço privado assim que estiver disponível. Não inclua protocolo ou porta."},
+  {"fieldname": "port", "fieldtype": "Int", "label": "Porta TL1", "default": "3337", "reqd": 1},
+  {"fieldname": "column_break_connection", "fieldtype": "Column Break"},
+  {"fieldname": "username", "fieldtype": "Data", "label": "Usuário TL1", "reqd": 1},
+  {"fieldname": "password", "fieldtype": "Password", "label": "Senha TL1", "reqd": 1},
+  {"fieldname": "timeout_seconds", "fieldtype": "Int", "label": "Timeout em segundos", "default": "8", "reqd": 1},
+  {"fieldname": "security_section", "fieldtype": "Section Break", "label": "Segurança"},
+  {"fieldname": "security_warning", "fieldtype": "HTML", "options": "<div class='alert alert-warning'>O TL1 descrito pelo fabricante não usa TLS. Restrinja a porta no firewall ao IP de saída do servidor e migre para o endereço privado assim que possível.</div>"}
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1},
+  {"role": "Administração FiberHome", "read": 1, "write": 1, "create": 1}
+ ]
+}

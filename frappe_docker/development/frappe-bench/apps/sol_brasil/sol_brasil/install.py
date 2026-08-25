@@ -201,8 +201,9 @@ CUSTOM_FIELDS = {
 		},
 		{
 			"fieldname": "custom_olt",
-			"fieldtype": "Data",
+			"fieldtype": "Link",
 			"label": "OLT",
+			"options": "OLT",
 			"insert_after": "custom_provider_network_column",
 		},
 		{
@@ -236,10 +237,40 @@ CUSTOM_FIELDS = {
 			"insert_after": "custom_onu_serial",
 		},
 		{
+			"fieldname": "custom_onu_id_type",
+			"fieldtype": "Select",
+			"label": "Tipo de identificador",
+			"options": "MAC\nLOID\nONU_NUMBER\nONU_NAME",
+			"default": "MAC",
+			"insert_after": "custom_onu_id",
+		},
+		{
+			"fieldname": "custom_onu_auth_type",
+			"fieldtype": "Select",
+			"label": "Autenticação da ONU",
+			"options": "MAC\nLOID\nLOIDONCEON",
+			"default": "MAC",
+			"insert_after": "custom_onu_id_type",
+		},
+		{
+			"fieldname": "custom_onu_auth_password",
+			"fieldtype": "Password",
+			"label": "Senha LOID",
+			"depends_on": "eval:doc.custom_onu_auth_type != 'MAC'",
+			"insert_after": "custom_onu_auth_type",
+		},
+		{
+			"fieldname": "custom_onu_number",
+			"fieldtype": "Int",
+			"label": "Número da ONU na PON",
+			"description": "Código ONUNO entre 1 e 512.",
+			"insert_after": "custom_onu_auth_password",
+		},
+		{
 			"fieldname": "custom_onu_model",
 			"fieldtype": "Data",
 			"label": "Modelo da ONU/ONT",
-			"insert_after": "custom_onu_id",
+			"insert_after": "custom_onu_number",
 		},
 		{
 			"fieldname": "custom_onu_rx_signal",
@@ -256,10 +287,24 @@ CUSTOM_FIELDS = {
 			"insert_after": "custom_onu_rx_signal",
 		},
 		{
+			"fieldname": "custom_onu_signal_status",
+			"fieldtype": "Data",
+			"label": "Classificação do sinal",
+			"read_only": 1,
+			"insert_after": "custom_onu_tx_signal",
+		},
+		{
+			"fieldname": "custom_onu_signal_checked_at",
+			"fieldtype": "Datetime",
+			"label": "Última consulta de sinal",
+			"read_only": 1,
+			"insert_after": "custom_onu_signal_status",
+		},
+		{
 			"fieldname": "custom_network_notes",
 			"fieldtype": "Small Text",
 			"label": "Observações técnicas da rede",
-			"insert_after": "custom_onu_tx_signal",
+			"insert_after": "custom_onu_signal_checked_at",
 		},
 		{
 			"fieldname": "custom_contracts_tab",
@@ -324,6 +369,21 @@ CUSTOM_FIELDS = {
 			"label": "Bairro / região da instalação",
 			"insert_after": "custom_interest_plan",
 		},
+	],
+	"Subscription Plan": [
+		{"fieldname": "custom_access_configuration_section", "fieldtype": "Section Break", "label": "Configuração técnica do acesso", "insert_after": "billing_interval_count"},
+		{"fieldname": "custom_download_mbps", "fieldtype": "Int", "label": "Download (Mbps)", "non_negative": 1, "insert_after": "custom_access_configuration_section"},
+		{"fieldname": "custom_upload_mbps", "fieldtype": "Int", "label": "Upload (Mbps)", "non_negative": 1, "insert_after": "custom_download_mbps"},
+		{"fieldname": "custom_access_configuration_column", "fieldtype": "Column Break", "insert_after": "custom_upload_mbps"},
+		{"fieldname": "custom_session_limit", "fieldtype": "Int", "label": "Limite de sessões simultâneas", "default": "1", "insert_after": "custom_access_configuration_column"},
+		{"fieldname": "custom_accounting_interval", "fieldtype": "Int", "label": "Intervalo de accounting (s)", "default": "300", "description": "Intervalo entre atualizações de consumo enviadas pelo concentrador.", "insert_after": "custom_session_limit"},
+		{"fieldname": "custom_radius_network_section", "fieldtype": "Section Break", "label": "Endereçamento e políticas RADIUS", "insert_after": "custom_accounting_interval"},
+		{"fieldname": "custom_ipv4_pool", "fieldtype": "Data", "label": "Pool IPv4", "insert_after": "custom_radius_network_section"},
+		{"fieldname": "custom_ipv6_pool", "fieldtype": "Data", "label": "Pool IPv6", "insert_after": "custom_ipv4_pool"},
+		{"fieldname": "custom_radius_network_column", "fieldtype": "Column Break", "insert_after": "custom_ipv6_pool"},
+		{"fieldname": "custom_filter_id", "fieldtype": "Data", "label": "Filter-Id", "insert_after": "custom_radius_network_column"},
+		{"fieldname": "custom_mikrotik_rate_limit", "fieldtype": "Data", "label": "Mikrotik-Rate-Limit", "read_only": 1, "description": "Gerado automaticamente a partir de upload e download.", "insert_after": "custom_filter_id"},
+		{"fieldname": "custom_radius_attributes", "fieldtype": "Code", "label": "Atributos RADIUS adicionais", "options": "JSON", "description": "JSON com atributos técnicos adicionais. Não inclua senhas ou segredos.", "insert_after": "custom_mikrotik_rate_limit"},
 	],
 	"Subscription": [
 		{
@@ -897,7 +957,9 @@ def setup_provider_services():
 
 
 def setup_customer_fields():
+	migrate_customer_olt_link()
 	create_custom_fields(CUSTOM_FIELDS, update=True)
+	remove_obsolete_radius_fields()
 	setup_service_subjects()
 	setup_provider_services()
 	frappe.db.sql(
@@ -931,6 +993,25 @@ def setup_customer_fields():
 	reorder_customer_relationships_tab()
 
 
+def migrate_customer_olt_link():
+	field_name = frappe.db.get_value(
+		"Custom Field", {"dt": "Customer", "fieldname": "custom_olt"}, "name"
+	)
+	if not field_name:
+		return
+	fieldtype = frappe.db.get_value("Custom Field", field_name, "fieldtype")
+	if fieldtype == "Data":
+		# Data e Link usam a mesma coluna textual. Alterar somente os metadados
+		# preserva os valores existentes e permite que o Frappe valide o vínculo.
+		frappe.db.set_value(
+			"Custom Field",
+			field_name,
+			{"fieldtype": "Link", "options": "OLT"},
+			update_modified=False,
+		)
+		frappe.clear_cache(doctype="Customer")
+
+
 def backfill_customer_contract_links():
 	customers = frappe.get_all(
 		"Subscription",
@@ -951,6 +1032,20 @@ def backfill_customer_contract_links():
 
 def reorder_customer_relationships_tab():
 	"""Move o bloco completo de Relacionamentos para depois de Atendimentos."""
+	frappe.clear_cache(doctype="Customer")
+
+
+def remove_obsolete_radius_fields():
+	for fieldname in (
+		"custom_radius_profile",
+		"custom_pppoe_accesses_section",
+		"custom_pppoe_accesses_panel",
+	):
+		name = frappe.db.get_value(
+			"Custom Field", {"dt": "Customer", "fieldname": fieldname}, "name"
+		)
+		if name:
+			frappe.delete_doc("Custom Field", name, ignore_permissions=True, force=True)
 	frappe.clear_cache(doctype="Customer")
 	fields = list(frappe.get_meta("Customer").fields)
 	fieldnames = [field.fieldname for field in fields]
@@ -983,6 +1078,16 @@ def reorder_customer_relationships_tab():
 	make_property_setter("Customer", "more_info_tab", "label", "Mais informações", "Data")
 	make_property_setter("Customer", "connections_tab", "label", "Relacionamentos", "Data")
 	frappe.clear_cache(doctype="Customer")
+
+
+def setup_fiberhome_roles():
+	for role_name in (
+		"Consulta de Rede FiberHome",
+		"Operação de Rede FiberHome",
+		"Administração FiberHome",
+	):
+		if not frappe.db.exists("Role", role_name):
+			frappe.get_doc({"doctype": "Role", "role_name": role_name}).insert(ignore_permissions=True)
 
 
 def setup_portuguese_brazil_defaults():
@@ -1024,6 +1129,7 @@ def after_install():
 	setup_portuguese_brazil_master_data()
 	setup_customer_fields()
 	setup_item_portuguese_fields()
+	setup_fiberhome_roles()
 	from sol_brasil.workspace import sync_provider_workspaces
 
 	sync_provider_workspaces()
@@ -1034,6 +1140,7 @@ def after_migrate():
 	setup_portuguese_brazil_master_data()
 	setup_customer_fields()
 	setup_item_portuguese_fields()
+	setup_fiberhome_roles()
 	from sol_brasil.workspace import sync_provider_workspaces
 
 	sync_provider_workspaces()

@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "autoname": "field:codigo",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["identificacao_section", "codigo", "nome_perfil", "plano", "tipo_perfil", "ativo", "velocidade_section", "download_mbps", "upload_mbps", "column_break_velocidade", "mikrotik_rate_limit", "limite_sessoes", "acct_interim_interval", "rede_section", "pool_ipv4", "pool_ipv6", "column_break_rede", "filter_id", "atributos_adicionais", "observacoes"],
+ "fields": [
+  {"fieldname": "identificacao_section", "fieldtype": "Section Break", "label": "Identificação"},
+  {"description": "Código técnico imutável usado na integração.", "fieldname": "codigo", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Código", "reqd": 1, "unique": 1},
+  {"fieldname": "nome_perfil", "fieldtype": "Data", "in_list_view": 1, "label": "Nome do perfil", "reqd": 1},
+  {"description": "Cada plano de internet possui exatamente um perfil RADIUS.", "fieldname": "plano", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "Plano de internet", "options": "Subscription Plan", "reqd": 1, "unique": 1},
+  {"default": "Normal", "fieldname": "tipo_perfil", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Tipo de perfil", "options": "Normal\nBloqueio", "reqd": 1},
+  {"default": "1", "fieldname": "ativo", "fieldtype": "Check", "in_list_view": 1, "in_standard_filter": 1, "label": "Ativo"},
+  {"fieldname": "velocidade_section", "fieldtype": "Section Break", "label": "Velocidade e sessão"},
+  {"fieldname": "download_mbps", "fieldtype": "Int", "label": "Download (Mbps)", "non_negative": 1, "reqd": 1},
+  {"fieldname": "upload_mbps", "fieldtype": "Int", "label": "Upload (Mbps)", "non_negative": 1, "reqd": 1},
+  {"fieldname": "column_break_velocidade", "fieldtype": "Column Break"},
+  {"description": "Gerado como upload/download para o atributo Mikrotik-Rate-Limit.", "fieldname": "mikrotik_rate_limit", "fieldtype": "Data", "label": "Mikrotik-Rate-Limit", "read_only": 1},
+  {"default": "1", "fieldname": "limite_sessoes", "fieldtype": "Int", "label": "Limite de sessões", "reqd": 1},
+  {"default": "300", "description": "Intervalo entre atualizações de accounting, em segundos.", "fieldname": "acct_interim_interval", "fieldtype": "Int", "label": "Intervalo de accounting (s)", "reqd": 1},
+  {"fieldname": "rede_section", "fieldtype": "Section Break", "label": "Rede e atributos"},
+  {"fieldname": "pool_ipv4", "fieldtype": "Data", "label": "Pool IPv4"},
+  {"fieldname": "pool_ipv6", "fieldtype": "Data", "label": "Pool IPv6"},
+  {"fieldname": "column_break_rede", "fieldtype": "Column Break"},
+  {"fieldname": "filter_id", "fieldtype": "Data", "label": "Filter-Id"},
+  {"description": "JSON com atributos permitidos. Não inclua senhas ou segredos.", "fieldname": "atributos_adicionais", "fieldtype": "Code", "label": "Atributos adicionais", "options": "JSON"},
+  {"fieldname": "observacoes", "fieldtype": "Small Text", "label": "Observações"}
+ ],
+ "index_web_pages_for_search": 1,
+ "module": "SOL Brasil",
+ "name": "Perfil RADIUS",
+ "permissions": [
+  {"create": 1, "delete": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1},
+  {"export": 1, "print": 1, "read": 1, "report": 1, "role": "Support Team"}
+ ],
+ "search_fields": "codigo,nome_perfil,plano",
+ "sort_field": "nome_perfil",
+ "sort_order": "ASC",
+ "title_field": "nome_perfil",
+ "track_changes": 1
+}

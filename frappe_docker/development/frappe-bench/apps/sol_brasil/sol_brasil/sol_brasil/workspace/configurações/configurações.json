@@ -1,7 +1,7 @@
 {
  "app": "sol_brasil",
  "charts": [],
- "content": "[{\"id\":\"sol-configura\u00e7\u00f5es-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Configura\u00e7\u00f5es</b></span>\",\"col\":12}},{\"id\":\"sol-configura\u00e7\u00f5es-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do provedor\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Empresa\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Usu\u00e1rios\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Permiss\u00f5es\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do sistema\",\"col\":4}}]",
+ "content": "[{\"id\":\"sol-configura\u00e7\u00f5es-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Configura\u00e7\u00f5es</b></span>\",\"col\":12}},{\"id\":\"sol-configura\u00e7\u00f5es-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do provedor\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Integra\u00e7\u00e3o FiberHome UNM\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Empresa\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Usu\u00e1rios\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Permiss\u00f5es\",\"col\":4}},{\"id\":\"sol-configura\u00e7\u00f5es-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configura\u00e7\u00f5es do sistema\",\"col\":4}}]",
  "creation": "2026-08-17 10:28:10.475883",
  "custom_blocks": [],
  "docstatus": 0,
@@ -14,7 +14,7 @@
  "label": "Configura\u00e7\u00f5es",
  "link_type": "DocType",
  "links": [],
- "modified": "2026-08-24 16:15:47.618288",
+ "modified": "2026-08-25 17:28:02.468919",
  "modified_by": "Administrator",
  "module": "SOL Brasil",
  "name": "Configura\u00e7\u00f5es",
@@ -33,6 +33,12 @@
   },
   {
    "doc_view": "List",
+   "label": "Integra\u00e7\u00e3o FiberHome UNM",
+   "link_to": "Configura\u00e7\u00f5es FiberHome UNM",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
    "label": "Empresa",
    "link_to": "Company",
    "type": "DocType"
@@ -44,10 +50,10 @@
    "type": "DocType"
   },
   {
-   "doc_view": "List",
+   "doc_view": "",
    "label": "Permiss\u00f5es",
-   "link_to": "Role Permission Manager",
-   "type": "DocType"
+   "type": "URL",
+   "url": "/app/permission-manager"
   },
   {
    "doc_view": "List",

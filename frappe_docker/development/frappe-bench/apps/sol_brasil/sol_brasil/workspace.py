@@ -58,8 +58,10 @@ MODULES = {
         "route": "rede-e-equipamentos",
         "icon": "server",
         "shortcuts": [
+			("Servidores NAS", "NAS RADIUS", "List"),
             ("OLTs", "OLT", "List"),
             ("Cadastrar OLT", "OLT", "New"),
+			("Operações FiberHome", "Operação FiberHome", "List"),
             ("Fabricantes", "Brand", "List"),
             ("Modelos e itens", "Item", "List"),
             ("Equipamentos", "Asset", "List"),
@@ -89,9 +91,10 @@ MODULES = {
         "icon": "settings",
         "shortcuts": [
 			("Configurações do provedor", "Configurações do Provedor", "List"),
+			("Integração FiberHome UNM", "Configurações FiberHome UNM", "List"),
             ("Empresa", "Company", "List"),
             ("Usuários", "User", "List"),
-            ("Permissões", "Role Permission Manager", "List"),
+			("Permissões", "/app/permission-manager"),
             ("Configurações do sistema", "System Settings", "List"),
         ],
     },

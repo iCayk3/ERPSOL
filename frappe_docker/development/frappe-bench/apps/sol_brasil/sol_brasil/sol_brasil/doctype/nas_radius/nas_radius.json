@@ -1,0 +1,34 @@
+{
+ "actions": [],
+ "autoname": "field:identificacao",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["identificacao_section", "identificacao", "endereco_ip", "nas_identifier", "column_break_identificacao", "fabricante", "ativo", "seguranca_section", "segredo_compartilhado", "rede_confiavel", "column_break_seguranca", "suporta_coa", "porta_coa", "observacoes"],
+ "fields": [
+  {"fieldname": "identificacao_section", "fieldtype": "Section Break", "label": "Identificação"},
+  {"fieldname": "identificacao", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Identificação", "reqd": 1, "unique": 1},
+  {"fieldname": "endereco_ip", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Endereço IP", "reqd": 1, "unique": 1},
+  {"description": "Valor esperado no atributo NAS-Identifier.", "fieldname": "nas_identifier", "fieldtype": "Data", "in_standard_filter": 1, "label": "NAS-Identifier", "unique": 1},
+  {"fieldname": "column_break_identificacao", "fieldtype": "Column Break"},
+  {"default": "MikroTik", "fieldname": "fabricante", "fieldtype": "Select", "in_list_view": 1, "label": "Fabricante", "options": "MikroTik\nJuniper\nHuawei\nCisco\nOutro", "reqd": 1},
+  {"default": "1", "fieldname": "ativo", "fieldtype": "Check", "in_list_view": 1, "in_standard_filter": 1, "label": "Ativo"},
+  {"fieldname": "seguranca_section", "fieldtype": "Section Break", "label": "Segurança e CoA"},
+  {"fieldname": "segredo_compartilhado", "fieldtype": "Password", "label": "Segredo compartilhado", "reqd": 1},
+  {"description": "Rede de origem permitida para este NAS, em notação CIDR.", "fieldname": "rede_confiavel", "fieldtype": "Data", "label": "Rede confiável"},
+  {"fieldname": "column_break_seguranca", "fieldtype": "Column Break"},
+  {"default": "1", "fieldname": "suporta_coa", "fieldtype": "Check", "label": "Suporta CoA/Disconnect"},
+  {"default": "1700", "depends_on": "suporta_coa", "fieldname": "porta_coa", "fieldtype": "Int", "label": "Porta CoA/Disconnect"},
+  {"fieldname": "observacoes", "fieldtype": "Small Text", "label": "Observações"}
+ ],
+ "index_web_pages_for_search": 1,
+ "module": "SOL Brasil",
+ "name": "NAS RADIUS",
+ "permissions": [
+  {"create": 1, "delete": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "search_fields": "identificacao,endereco_ip,nas_identifier",
+ "sort_field": "identificacao",
+ "sort_order": "ASC",
+ "title_field": "identificacao",
+ "track_changes": 1
+}

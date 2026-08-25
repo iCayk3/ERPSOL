@@ -3,7 +3,7 @@
  "autoname": "field:identificacao",
  "doctype": "DocType",
  "engine": "InnoDB",
- "field_order": ["identificacao", "situacao", "quantidade_slots_pon", "pons_por_slot", "column_break_identificacao", "fabricante", "modelo", "detalhes_tecnicos_section", "numero_serie", "ip_gerenciamento", "column_break_detalhes", "local_instalacao", "observacoes"],
+ "field_order": ["identificacao", "situacao", "quantidade_slots_pon", "pons_por_slot", "column_break_identificacao", "fabricante", "modelo", "detalhes_tecnicos_section", "numero_serie", "ip_gerenciamento", "tl1_olt_id", "column_break_detalhes", "local_instalacao", "observacoes"],
  "fields": [
   {"fieldname": "identificacao", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Identificação", "reqd": 1, "unique": 1},
   {"default": "Ativa", "fieldname": "situacao", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Situação", "options": "Ativa\nEm manutenção\nInativa", "reqd": 1},
@@ -15,6 +15,7 @@
   {"fieldname": "detalhes_tecnicos_section", "fieldtype": "Section Break", "label": "Detalhes técnicos"},
   {"fieldname": "numero_serie", "fieldtype": "Data", "in_standard_filter": 1, "label": "Número de série", "unique": 1},
   {"description": "Endereço utilizado para administrar a OLT.", "fieldname": "ip_gerenciamento", "fieldtype": "Data", "in_standard_filter": 1, "label": "IP de gerenciamento", "unique": 1},
+  {"description": "Endereço, nome ou ID pelo qual o UNM identifica esta OLT. Se vazio, será usado o IP de gerenciamento.", "fieldname": "tl1_olt_id", "fieldtype": "Data", "label": "Identificador TL1 no UNM"},
   {"fieldname": "column_break_detalhes", "fieldtype": "Column Break"},
   {"fieldname": "local_instalacao", "fieldtype": "Link", "label": "Local de instalação", "options": "Location"},
   {"fieldname": "observacoes", "fieldtype": "Small Text", "label": "Observações"}

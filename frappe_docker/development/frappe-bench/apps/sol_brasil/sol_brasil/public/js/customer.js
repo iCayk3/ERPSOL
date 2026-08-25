@@ -448,6 +448,54 @@ function sol_load_customer_panel(frm, year = null) {
 	});
 }
 
+function sol_query_fiberhome_signal(frm) {
+	frappe.call({
+		method: "sol_brasil.fiberhome_tl1.query_signal",
+		args: { customer: frm.doc.name },
+		freeze: true,
+		freeze_message: __("Consultando potência óptica no UNM..."),
+	}).then(({ message }) => {
+		frm.reload_doc();
+		frappe.show_alert({
+			message: __(`Sinal atualizado: RX ${message.rx_power} dBm / TX ${message.tx_power} dBm`),
+			indicator: message.rx_status === "Normal" ? "green" : "orange",
+		});
+	});
+}
+
+function sol_authorize_fiberhome_onu(frm) {
+	frappe.confirm(
+		__("Autorizar esta ONU no UNM usando os dados ópticos cadastrados no cliente?"),
+		() => frappe.call({
+			method: "sol_brasil.fiberhome_tl1.authorize_onu",
+			args: { customer: frm.doc.name },
+			freeze: true,
+			freeze_message: __("Autorizando ONU no UNM..."),
+		}).then(() => frappe.show_alert({ message: __("ONU autorizada com sucesso."), indicator: "green" }))
+	);
+}
+
+function sol_deauthorize_fiberhome_onu(frm) {
+	const dialog = new frappe.ui.Dialog({
+		title: __("Confirmar desautorização da ONU"),
+		fields: [
+			{ fieldtype: "HTML", options: `<div class="alert alert-danger">${__("Esta ação também pode remover os serviços associados à ONU. Para confirmar, digite exatamente o identificador do cliente:")} <b>${frappe.utils.escape_html(frm.doc.name)}</b></div>` },
+			{ fieldname: "confirmation", fieldtype: "Data", label: __("Confirmação"), reqd: 1 },
+		],
+		primary_action_label: __("Desautorizar ONU"),
+		primary_action(values) {
+			dialog.hide();
+			frappe.call({
+				method: "sol_brasil.fiberhome_tl1.deauthorize_onu",
+				args: { customer: frm.doc.name, confirmation: values.confirmation },
+				freeze: true,
+				freeze_message: __("Desautorizando ONU no UNM..."),
+			}).then(() => frappe.show_alert({ message: __("ONU desautorizada."), indicator: "orange" }));
+		},
+	});
+	dialog.show();
+}
+
 frappe.ui.form.on("Customer", {
 	onload_post_render(frm) {
 		sol_watch_customer_references(frm);
@@ -479,6 +527,16 @@ frappe.ui.form.on("Customer", {
 				() => setTimeout(() => sol_load_customer_panel(frm), 50)
 			);
 		if (!frm.is_new()) {
+			const roles = frappe.user_roles || [];
+			const can_query_fiberhome = roles.some((role) => ["Consulta de Rede FiberHome", "Operação de Rede FiberHome", "Administração FiberHome", "System Manager"].includes(role));
+			const can_operate_fiberhome = roles.some((role) => ["Operação de Rede FiberHome", "Administração FiberHome", "System Manager"].includes(role));
+			if (can_query_fiberhome) {
+				frm.add_custom_button(__("Consultar sinal da ONU"), () => sol_query_fiberhome_signal(frm), __("FiberHome"));
+			}
+			if (can_operate_fiberhome) {
+				frm.add_custom_button(__("Autorizar ONU"), () => sol_authorize_fiberhome_onu(frm), __("FiberHome"));
+				frm.add_custom_button(__("Desautorizar ONU"), () => sol_deauthorize_fiberhome_onu(frm), __("FiberHome"));
+			}
 			frm.add_custom_button(__("Registrar comentário interno"), () => {
 				sol_add_internal_comment(frm);
 			}, __("Operações do cliente"));

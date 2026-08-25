@@ -99,7 +99,6 @@ def validate_customer(doc, method=None):
 		if plan:
 			doc.custom_subscription_plan = plan
 
-
 def validate_lead(doc, method=None):
 	if not (doc.first_name or doc.lead_name or doc.company_name):
 		frappe.throw(_("Informe o nome do futuro cliente."), title=_("Nome obrigatório"))

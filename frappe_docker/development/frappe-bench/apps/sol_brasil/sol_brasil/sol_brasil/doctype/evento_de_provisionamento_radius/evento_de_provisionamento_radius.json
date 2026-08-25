@@ -1,0 +1,32 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["evento_section", "id_evento", "operacao", "acesso_pppoe", "versao", "column_break_evento", "estado", "tentativas", "proxima_tentativa", "processamento_section", "conteudo", "mensagem_erro", "processado_em"],
+ "fields": [
+  {"fieldname": "evento_section", "fieldtype": "Section Break", "label": "Evento"},
+  {"fieldname": "id_evento", "fieldtype": "Data", "in_list_view": 1, "label": "ID do evento", "read_only": 1, "reqd": 1, "unique": 1},
+  {"fieldname": "operacao", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Operação", "options": "Criar\nAtualizar\nBloquear\nDesbloquear\nCancelar\nRemover", "read_only": 1, "reqd": 1},
+  {"description": "Nome do acesso. Mantido como texto para preservar o histórico após remoção.", "fieldname": "acesso_pppoe", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Acesso PPPoE", "read_only": 1, "reqd": 1},
+  {"fieldname": "versao", "fieldtype": "Int", "label": "Versão", "read_only": 1, "reqd": 1},
+  {"fieldname": "column_break_evento", "fieldtype": "Column Break"},
+  {"default": "Pendente", "fieldname": "estado", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Estado", "options": "Pendente\nProcessando\nConcluído\nErro", "read_only": 1, "reqd": 1},
+  {"default": "0", "fieldname": "tentativas", "fieldtype": "Int", "label": "Tentativas", "read_only": 1},
+  {"fieldname": "proxima_tentativa", "fieldtype": "Datetime", "label": "Próxima tentativa", "read_only": 1},
+  {"fieldname": "processamento_section", "fieldtype": "Section Break", "label": "Conteúdo sanitizado"},
+  {"fieldname": "conteudo", "fieldtype": "Code", "label": "Conteúdo", "options": "JSON", "read_only": 1},
+  {"fieldname": "mensagem_erro", "fieldtype": "Small Text", "label": "Mensagem de erro", "read_only": 1},
+  {"fieldname": "processado_em", "fieldtype": "Datetime", "label": "Processado em", "read_only": 1}
+ ],
+ "module": "SOL Brasil",
+ "name": "Evento de Provisionamento RADIUS",
+ "permissions": [
+  {"export": 1, "read": 1, "report": 1, "role": "System Manager"},
+  {"read": 1, "report": 1, "role": "Support Team"}
+ ],
+ "search_fields": "id_evento,acesso_pppoe,operacao",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "track_changes": 0
+}
