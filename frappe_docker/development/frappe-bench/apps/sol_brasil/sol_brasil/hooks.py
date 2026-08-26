@@ -196,40 +196,65 @@ doc_events = {
 	},
 	"Subscription": {
 		"validate": "sol_brasil.subscription.validate_installation_address",
-		"after_insert": "sol_brasil.subscription.register_contract_creation",
-		"on_update": "sol_brasil.subscription.register_contract_update",
+		"after_insert": [
+			"sol_brasil.subscription.register_contract_creation",
+			"sol_brasil.business_rules.recalculate_contract_status",
+		],
+		"on_update": [
+			"sol_brasil.subscription.register_contract_update",
+			"sol_brasil.business_rules.recalculate_contract_status",
+		],
 		"on_trash": "sol_brasil.subscription.register_contract_deletion",
 	},
 	"Sales Invoice": {
 		"validate": "sol_brasil.subscription.validate_invoice_contract",
 		"after_insert": "sol_brasil.financial_activity.register_invoice_creation",
-		"on_update": "sol_brasil.financial_activity.register_invoice_update",
-		"on_submit": "sol_brasil.financial_activity.register_invoice_submit",
-		"on_cancel": "sol_brasil.financial_activity.register_invoice_cancel",
+		"on_update": [
+			"sol_brasil.financial_activity.register_invoice_update",
+			"sol_brasil.business_rules.refresh_from_invoice",
+		],
+		"on_submit": [
+			"sol_brasil.financial_activity.register_invoice_submit",
+			"sol_brasil.business_rules.refresh_from_invoice",
+		],
+		"on_cancel": [
+			"sol_brasil.financial_activity.register_invoice_cancel",
+			"sol_brasil.business_rules.refresh_from_invoice",
+		],
 		"on_trash": "sol_brasil.financial_activity.register_invoice_deletion",
+		"after_delete": "sol_brasil.business_rules.refresh_from_invoice",
 	},
 	"Payment Entry": {
 		"after_insert": "sol_brasil.financial_activity.register_payment_creation",
-		"on_submit": "sol_brasil.financial_activity.register_payment_submit",
-		"on_cancel": "sol_brasil.financial_activity.register_payment_cancel",
+		"on_submit": [
+			"sol_brasil.financial_activity.register_payment_submit",
+			"sol_brasil.business_rules.refresh_from_payment",
+		],
+		"on_cancel": [
+			"sol_brasil.financial_activity.register_payment_cancel",
+			"sol_brasil.business_rules.refresh_from_payment",
+		],
 		"on_trash": "sol_brasil.financial_activity.register_payment_deletion",
 	},
 	"Address": {"on_update": "sol_brasil.customer.notify_linked_customer_update"},
 	"Contact": {"on_update": "sol_brasil.customer.notify_linked_customer_update"},
 	"Task": {"before_validate": "sol_brasil.task.complete_checked_dependencies"},
-	"Subscription Plan": {"validate": "sol_brasil.internet_plan.validate_internet_plan"},
+	"Subscription Plan": {
+		"validate": "sol_brasil.internet_plan.validate_internet_plan",
+		"on_update": "sol_brasil.business_rules.refresh_from_plan",
+	},
 }
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"sol_brasil.tasks.all"
 # 	],
-# 	"daily": [
-# 		"sol_brasil.tasks.daily"
-# 	],
+	"daily": [
+		"sol_brasil.business_rules.recalculate_all_contract_statuses"
+	],
 # 	"hourly": [
 # 		"sol_brasil.tasks.hourly"
 # 	],
@@ -239,7 +264,7 @@ doc_events = {
 # 	"monthly": [
 # 		"sol_brasil.tasks.monthly"
 # 	],
-# }
+}
 
 # Testing
 # -------

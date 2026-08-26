@@ -142,6 +142,28 @@ frappe.ui.form.on("Subscription", {
 		sol_load_available_cto_ports(frm);
 		setTimeout(() => sol_reorder_subscription_tabs(frm), 0);
 		if (!frm.is_new() && frm.doc.party_type === "Customer") {
+			if (frm.doc.custom_connection_status === "Cancelado") {
+				frm.add_custom_button(__("Reativar contrato"), () => {
+					frappe.call({
+						method: "sol_brasil.business_rules.reactivate_contract",
+						args: { subscription: frm.doc.name },
+						freeze: true,
+						callback: () => frm.reload_doc(),
+					});
+				});
+			} else {
+				frm.add_custom_button(__("Cancelar contrato"), () => {
+					frappe.confirm(
+						__("O cancelamento é manual e interrompe este ponto. Deseja continuar?"),
+						() => frappe.call({
+							method: "sol_brasil.business_rules.cancel_contract",
+							args: { subscription: frm.doc.name },
+							freeze: true,
+							callback: () => frm.reload_doc(),
+						})
+					);
+				});
+			}
 			const roles = frappe.user_roles || [];
 			const can_query = roles.some((role) => ["Consulta de Rede FiberHome", "Operação de Rede FiberHome", "Administração FiberHome", "System Manager"].includes(role));
 			const can_operate = roles.some((role) => ["Operação de Rede FiberHome", "Administração FiberHome", "System Manager"].includes(role));

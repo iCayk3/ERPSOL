@@ -1,0 +1,37 @@
+{
+ "app": "sol_brasil",
+ "charts": [],
+ "content": "[{\"id\":\"sol-regras_de_neg\u00f3cio-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Regras de neg\u00f3cio</b></span>\",\"col\":12}},{\"id\":\"sol-regras_de_neg\u00f3cio-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Configurar regras dos contratos\",\"col\":4}}]",
+ "creation": "2026-08-26 15:30:57.508634",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "sliders",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Regras de neg\u00f3cio",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-08-26 15:30:57.508634",
+ "modified_by": "Administrator",
+ "module": "SOL Brasil",
+ "name": "Regras de neg\u00f3cio",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Configurar regras dos contratos",
+   "link_to": "Regras de Negocio",
+   "type": "DocType"
+  }
+ ],
+ "title": "Regras de neg\u00f3cio",
+ "type": "Workspace"
+}

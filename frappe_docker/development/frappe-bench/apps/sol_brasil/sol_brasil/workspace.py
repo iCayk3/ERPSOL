@@ -89,6 +89,7 @@ MODULES = {
     "Configurações": {
         "icon": "settings",
         "shortcuts": [
+			("Regras de negócio", "Regras de Negocio", "List"),
 			("Configurações do provedor", "Configurações do Provedor", "List"),
 			("Integração FiberHome UNM", "Configurações FiberHome UNM", "List"),
             ("Empresa", "Company", "List"),
@@ -97,6 +98,13 @@ MODULES = {
             ("Configurações do sistema", "System Settings", "List"),
         ],
     },
+	"Regras de negócio": {
+		"route": "regras-de-negocio",
+		"icon": "sliders",
+		"shortcuts": [
+			("Configurar regras dos contratos", "Regras de Negocio", "List"),
+		],
+	},
 }
 
 
@@ -162,6 +170,7 @@ DESKTOP_GROUPS = {
             "Integrations",
             "Printing",
             "System",
+			"Regras de negócio",
             "Users",
             "Website",
         ),

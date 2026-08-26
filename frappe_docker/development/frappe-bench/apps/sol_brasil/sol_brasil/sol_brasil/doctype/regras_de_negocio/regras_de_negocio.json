@@ -1,0 +1,22 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["contract_rules_section", "enabled", "block_after_days", "column_break_rules", "suspend_after_days", "explanation"],
+ "fields": [
+  {"fieldname": "contract_rules_section", "fieldtype": "Section Break", "label": "Situação automática dos contratos"},
+  {"default": "1", "description": "Recalcula contratos conforme os boletos vencidos e não pagos.", "fieldname": "enabled", "fieldtype": "Check", "label": "Ativar regras automáticas"},
+  {"default": "5", "description": "Quantidade de dias após o vencimento para bloquear o contrato.", "fieldname": "block_after_days", "fieldtype": "Int", "label": "Bloquear após quantos dias de atraso", "reqd": 1},
+  {"fieldname": "column_break_rules", "fieldtype": "Column Break"},
+  {"default": "15", "description": "Quantidade de dias após o vencimento para suspender o contrato.", "fieldname": "suspend_after_days", "fieldtype": "Int", "label": "Suspender após quantos dias de atraso", "reqd": 1},
+  {"fieldname": "explanation", "fieldtype": "HTML", "options": "<div class='alert alert-info'>A redução de banda é configurada individualmente em cada plano de internet. Aqui ficam apenas os prazos gerais de bloqueio e suspensão. O cancelamento nunca é automático. Quando um cliente possui vários contratos, sua ficha permanece ativa enquanto pelo menos um deles estiver ativo.</div>"}
+ ],
+ "issingle": 1,
+ "module": "SOL Brasil",
+ "name": "Regras de Negocio",
+ "permissions": [
+  {"create": 1, "read": 1, "role": "System Manager", "write": 1},
+  {"read": 1, "role": "Support Team"}
+ ],
+ "track_changes": 1
+}

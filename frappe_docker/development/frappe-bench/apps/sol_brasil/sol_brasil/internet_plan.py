@@ -17,6 +17,20 @@ def validate_internet_plan(doc, method=None):
 		frappe.throw(_("O limite de sessões simultâneas deve ser pelo menos 1."))
 	if cint(doc.get("custom_accounting_interval")) < 60:
 		frappe.throw(_("O intervalo de accounting deve ser de pelo menos 60 segundos."))
+	if doc.get("custom_enable_overdue_reduction"):
+		reduce_days = cint(doc.get("custom_reduce_after_days"))
+		if reduce_days < 1:
+			frappe.throw(_("A redução de banda deve ocorrer após pelo menos um dia de atraso."))
+		block_days = cint(frappe.get_single("Regras de Negocio").block_after_days or 5)
+		if reduce_days > block_days:
+			frappe.throw(_("O dia da redução não pode ser posterior ao dia do bloqueio."))
+		for fieldname, label in (
+			("custom_download_reduction_percent", _("redução do download")),
+			("custom_upload_reduction_percent", _("redução do upload")),
+		):
+			value = float(doc.get(fieldname) or 0)
+			if value <= 0 or value >= 100:
+				frappe.throw(_("A {0} deve ser maior que 0% e menor que 100%.").format(label))
 
 	upload = cint(doc.get("custom_upload_mbps"))
 	download = cint(doc.get("custom_download_mbps"))
