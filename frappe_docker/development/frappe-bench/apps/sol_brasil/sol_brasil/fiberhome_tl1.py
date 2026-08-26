@@ -171,18 +171,25 @@ def test_connection():
 	return {"connected": True, "latency_ms": round((time.monotonic() - started) * 1000)}
 
 
-def _customer_context(customer):
-	frappe.has_permission("Customer", "read", customer, throw=True)
-	doc = frappe.get_doc("Customer", customer)
+def _access_context(subscription=None, customer=None):
+	if subscription:
+		frappe.has_permission("Subscription", "read", subscription, throw=True)
+		doc = frappe.get_doc("Subscription", subscription)
+		if doc.party_type != "Customer" or not doc.party:
+			frappe.throw(_("O contrato precisa pertencer a um cliente."))
+		customer = doc.party
+	else:
+		frappe.has_permission("Customer", "read", customer, throw=True)
+		doc = frappe.get_doc("Customer", customer)
 	if not doc.custom_olt:
-		frappe.throw(_("Vincule uma OLT ao cliente."))
+		frappe.throw(_("Vincule uma OLT ao ponto de internet."))
 	olt = frappe.get_doc("OLT", doc.custom_olt)
 	olt_id = _safe(olt.tl1_olt_id or olt.ip_gerenciamento, _("Identificador TL1 da OLT"))
 	slot = _safe(doc.custom_olt_slot, _("Slot"), pattern=re.compile(r"^\d+$"), maximum=3)
 	pon = _safe(doc.custom_pon_port or doc.custom_pon, _("Porta PON"), pattern=re.compile(r"^\d+$"), maximum=3)
 	pon_id = f"NA-NA-{slot}-{pon}"
 	_safe(pon_id, _("PONID"), pattern=PON_VALUE)
-	return doc, olt_id, pon_id
+	return doc, customer, olt_id, pon_id
 
 
 def _onu_identity(doc):
@@ -197,10 +204,11 @@ def _onu_identity(doc):
 	return id_type, identifier
 
 
-def _new_log(customer, operation, command, ctag, status="Em andamento"):
+def _new_log(customer, operation, command, ctag, status="Em andamento", subscription=None):
 	return frappe.get_doc({
 		"doctype": LOG_DOCTYPE,
 		"customer": customer,
+		"subscription": subscription,
 		"operation": operation,
 		"ctag": ctag,
 		"status": status,
@@ -219,8 +227,8 @@ def _finish_log(log_name, status, response="", error=""):
 	}, update_modified=False)
 
 
-def _run_logged(customer, operation, command, ctag):
-	log = _new_log(customer, operation, command, ctag)
+def _run_logged(customer, operation, command, ctag, subscription=None):
+	log = _new_log(customer, operation, command, ctag, subscription=subscription)
 	try:
 		with _client() as client:
 			response = client.execute(command)
@@ -247,16 +255,16 @@ def _parse_optical_power(response):
 
 @frappe.whitelist()
 @rate_limit(limit=30, seconds=60, methods="POST")
-def query_signal(customer):
+def query_signal(subscription=None, customer=None):
 	_require_post()
 	_require_role(QUERY_ROLES)
-	doc, olt_id, pon_id = _customer_context(customer)
+	doc, customer, olt_id, pon_id = _access_context(subscription, customer)
 	id_type, identifier = _onu_identity(doc)
 	ctag = _ctag()
 	command = f"LST-OMDDM::OLTID={olt_id},PONID={pon_id},ONUIDTYPE={id_type},ONUID={identifier}:{ctag}::;"
-	result, operation = _run_logged(customer, "Consultar sinal", command, ctag)
+	result, operation = _run_logged(customer, "Consultar sinal", command, ctag, subscription)
 	power = _parse_optical_power(result.response)
-	frappe.db.set_value("Customer", customer, {
+	frappe.db.set_value("Subscription" if subscription else "Customer", subscription or customer, {
 		"custom_onu_rx_signal": power["rx_power"],
 		"custom_onu_tx_signal": power["tx_power"],
 		"custom_onu_signal_status": f"RX {power['rx_status']} / TX {power['tx_status']}",
@@ -267,10 +275,10 @@ def query_signal(customer):
 
 @frappe.whitelist()
 @rate_limit(limit=10, seconds=60, methods="POST")
-def authorize_onu(customer):
+def authorize_onu(subscription=None, customer=None):
 	_require_post()
 	_require_role(OPERATE_ROLES)
-	doc, olt_id, pon_id = _customer_context(customer)
+	doc, customer, olt_id, pon_id = _access_context(subscription, customer)
 	auth_type = (doc.custom_onu_auth_type or "MAC").upper()
 	if auth_type not in AUTH_TYPES:
 		frappe.throw(_("Modo de autenticação inválido."))
@@ -287,20 +295,20 @@ def authorize_onu(customer):
 		params.append(f"PWD={_safe_secret(password, _('Senha LOID'))}")
 	params.extend([f"ONUNO={onu_number}", f"NAME=ONU{onu_number}", f"ONUTYPE={model}"])
 	command = f"ADD-ONU::OLTID={olt_id},PONID={pon_id}:{ctag}::" + ",".join(params) + ";"
-	result, operation = _run_logged(customer, "Autorizar ONU", command, ctag)
+	result, operation = _run_logged(customer, "Autorizar ONU", command, ctag, subscription)
 	return {"operation": operation, "ctag": result.ctag}
 
 
 @frappe.whitelist()
 @rate_limit(limit=5, seconds=60, methods="POST")
-def deauthorize_onu(customer, confirmation):
+def deauthorize_onu(confirmation, subscription=None, customer=None):
 	_require_post()
 	_require_role(OPERATE_ROLES)
-	if confirmation != customer:
-		frappe.throw(_("A confirmação da desautorização não confere com o cliente."))
-	doc, olt_id, pon_id = _customer_context(customer)
+	if confirmation != (subscription or customer):
+		frappe.throw(_("A confirmação da desautorização não confere com o ponto selecionado."))
+	doc, customer, olt_id, pon_id = _access_context(subscription, customer)
 	id_type, identifier = _onu_identity(doc)
 	ctag = _ctag()
 	command = f"DEL-ONU::OLTID={olt_id},PONID={pon_id}:{ctag}::ONUIDTYPE={id_type},ONUID={identifier};"
-	result, operation = _run_logged(customer, "Desautorizar ONU", command, ctag)
+	result, operation = _run_logged(customer, "Desautorizar ONU", command, ctag, subscription)
 	return {"operation": operation, "ctag": result.ctag}

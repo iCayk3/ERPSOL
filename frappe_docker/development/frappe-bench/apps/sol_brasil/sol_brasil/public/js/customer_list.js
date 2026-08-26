@@ -4,6 +4,9 @@ const sol_customer_previous_onload = frappe.listview_settings["Customer"].onload
 
 frappe.listview_settings["Customer"].onload = function (listview) {
 	frappe.breadcrumbs.set_doctype_module("Customer", "SOL Brasil");
+	if (frappe.app?.sidebar?.sidebar_title !== "Clientes") {
+		frappe.app?.sidebar?.setup("Clientes");
+	}
 	listview.page.set_primary_action(__("Cadastro completo"), () => {
 		frappe.model.with_doctype("Customer", () => {
 			const customer = frappe.model.get_new_doc("Customer");

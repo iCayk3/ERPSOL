@@ -100,6 +100,12 @@ CUSTOM_FIELDS = {
 			"fieldname": "custom_provider_access_section",
 			"fieldtype": "Section Break",
 			"label": "Acesso PPPoE e contrato",
+			"insert_after": "custom_internet_points_panel",
+		},
+		{
+			"fieldname": "custom_internet_points_panel",
+			"fieldtype": "HTML",
+			"label": "Pontos de internet",
 			"insert_after": "custom_provider_tab",
 		},
 		{
@@ -400,6 +406,37 @@ CUSTOM_FIELDS = {
 			"description": "Selecione um dos endereços cadastrados na ficha do cliente.",
 			"insert_after": "custom_installation_section",
 		},
+		{"fieldname": "custom_provider_tab", "fieldtype": "Tab Break", "label": "Provedor", "insert_after": "plans"},
+		{"fieldname": "custom_access_section", "fieldtype": "Section Break", "label": "Ponto e acesso PPPoE", "insert_after": "custom_provider_tab"},
+		{"fieldname": "custom_internet_plan", "fieldtype": "Link", "label": "Plano de internet", "options": "Subscription Plan", "read_only": 1, "insert_after": "custom_access_section"},
+		{"fieldname": "custom_pppoe_username", "fieldtype": "Data", "label": "Usuário PPPoE", "unique": 1, "in_standard_filter": 1, "insert_after": "custom_internet_plan"},
+		{"fieldname": "custom_pppoe_password", "fieldtype": "Password", "label": "Senha PPPoE", "insert_after": "custom_pppoe_username"},
+		{"fieldname": "custom_access_column", "fieldtype": "Column Break", "insert_after": "custom_pppoe_password"},
+		{"fieldname": "custom_connection_status", "fieldtype": "Select", "label": "Situação da conexão", "options": "Aguardando instalação\nAtivo\nSuspenso\nBloqueado\nCancelado", "default": "Aguardando instalação", "in_list_view": 1, "in_standard_filter": 1, "insert_after": "custom_access_column"},
+		{"fieldname": "custom_activation_date", "fieldtype": "Date", "label": "Data de ativação", "insert_after": "custom_connection_status"},
+		{"fieldname": "custom_network_section", "fieldtype": "Section Break", "label": "Equipamentos e rede óptica", "insert_after": "custom_activation_date"},
+		{"fieldname": "custom_ipv4_address", "fieldtype": "Data", "label": "Endereço IPv4", "insert_after": "custom_network_section"},
+		{"fieldname": "custom_mac_address", "fieldtype": "Data", "label": "Endereço MAC", "insert_after": "custom_ipv4_address"},
+		{"fieldname": "custom_vlan_id", "fieldtype": "Int", "label": "VLAN", "insert_after": "custom_mac_address"},
+		{"fieldname": "custom_optical_splitter", "fieldtype": "Data", "label": "Splitter óptico", "insert_after": "custom_vlan_id"},
+		{"fieldname": "custom_installation_box", "fieldtype": "Data", "label": "Caixa de atendimento (CTO/NAP)", "insert_after": "custom_optical_splitter"},
+		{"fieldname": "custom_network_column", "fieldtype": "Column Break", "insert_after": "custom_installation_box"},
+		{"fieldname": "custom_olt", "fieldtype": "Link", "label": "OLT", "options": "OLT", "insert_after": "custom_network_column"},
+		{"fieldname": "custom_olt_slot", "fieldtype": "Data", "label": "Slot da OLT", "insert_after": "custom_olt"},
+		{"fieldname": "custom_pon", "fieldtype": "Data", "label": "PON", "insert_after": "custom_olt_slot"},
+		{"fieldname": "custom_pon_port", "fieldtype": "Data", "label": "Porta PON", "insert_after": "custom_pon"},
+		{"fieldname": "custom_onu_serial", "fieldtype": "Data", "label": "ONU / número de série", "insert_after": "custom_pon_port"},
+		{"fieldname": "custom_onu_id", "fieldtype": "Data", "label": "ID da ONU/ONT", "insert_after": "custom_onu_serial"},
+		{"fieldname": "custom_onu_id_type", "fieldtype": "Select", "label": "Tipo de identificador", "options": "MAC\nLOID\nONU_NUMBER\nONU_NAME", "default": "MAC", "insert_after": "custom_onu_id"},
+		{"fieldname": "custom_onu_auth_type", "fieldtype": "Select", "label": "Autenticação da ONU", "options": "MAC\nLOID\nLOIDONCEON", "default": "MAC", "insert_after": "custom_onu_id_type"},
+		{"fieldname": "custom_onu_auth_password", "fieldtype": "Password", "label": "Senha LOID", "depends_on": "eval:doc.custom_onu_auth_type != 'MAC'", "insert_after": "custom_onu_auth_type"},
+		{"fieldname": "custom_onu_number", "fieldtype": "Int", "label": "Número da ONU na PON", "description": "Código ONUNO entre 1 e 512.", "insert_after": "custom_onu_auth_password"},
+		{"fieldname": "custom_onu_model", "fieldtype": "Data", "label": "Modelo da ONU/ONT", "insert_after": "custom_onu_number"},
+		{"fieldname": "custom_onu_rx_signal", "fieldtype": "Float", "label": "Sinal RX (dBm)", "precision": "2", "read_only": 1, "insert_after": "custom_onu_model"},
+		{"fieldname": "custom_onu_tx_signal", "fieldtype": "Float", "label": "Sinal TX (dBm)", "precision": "2", "read_only": 1, "insert_after": "custom_onu_rx_signal"},
+		{"fieldname": "custom_onu_signal_status", "fieldtype": "Data", "label": "Classificação do sinal", "read_only": 1, "insert_after": "custom_onu_tx_signal"},
+		{"fieldname": "custom_onu_signal_checked_at", "fieldtype": "Datetime", "label": "Última consulta de sinal", "read_only": 1, "insert_after": "custom_onu_signal_status"},
+		{"fieldname": "custom_network_notes", "fieldtype": "Small Text", "label": "Observações técnicas da rede", "insert_after": "custom_onu_signal_checked_at"},
 	],
 	"Issue": [
 		{
@@ -960,6 +997,10 @@ def setup_customer_fields():
 	migrate_customer_olt_link()
 	create_custom_fields(CUSTOM_FIELDS, update=True)
 	remove_obsolete_radius_fields()
+	hide_legacy_customer_access_fields()
+	backfill_customer_contract_links()
+	backfill_subscription_internet_plans()
+	migrate_customer_access_to_subscriptions()
 	setup_service_subjects()
 	setup_provider_services()
 	frappe.db.sql(
@@ -1033,20 +1074,6 @@ def backfill_customer_contract_links():
 def reorder_customer_relationships_tab():
 	"""Move o bloco completo de Relacionamentos para depois de Atendimentos."""
 	frappe.clear_cache(doctype="Customer")
-
-
-def remove_obsolete_radius_fields():
-	for fieldname in (
-		"custom_radius_profile",
-		"custom_pppoe_accesses_section",
-		"custom_pppoe_accesses_panel",
-	):
-		name = frappe.db.get_value(
-			"Custom Field", {"dt": "Customer", "fieldname": fieldname}, "name"
-		)
-		if name:
-			frappe.delete_doc("Custom Field", name, ignore_permissions=True, force=True)
-	frappe.clear_cache(doctype="Customer")
 	fields = list(frappe.get_meta("Customer").fields)
 	fieldnames = [field.fieldname for field in fields]
 	if "connections_tab" not in fieldnames or "custom_service_panel" not in fieldnames:
@@ -1078,6 +1105,87 @@ def remove_obsolete_radius_fields():
 	make_property_setter("Customer", "more_info_tab", "label", "Mais informações", "Data")
 	make_property_setter("Customer", "connections_tab", "label", "Relacionamentos", "Data")
 	frappe.clear_cache(doctype="Customer")
+
+
+def remove_obsolete_radius_fields():
+	for fieldname in (
+		"custom_radius_profile",
+		"custom_pppoe_accesses_section",
+		"custom_pppoe_accesses_panel",
+	):
+		name = frappe.db.get_value(
+			"Custom Field", {"dt": "Customer", "fieldname": fieldname}, "name"
+		)
+		if name:
+			frappe.delete_doc("Custom Field", name, ignore_permissions=True, force=True)
+	frappe.clear_cache(doctype="Customer")
+
+
+LEGACY_CUSTOMER_ACCESS_FIELDS = (
+	"custom_provider_access_section", "custom_pppoe_username", "custom_pppoe_password",
+	"custom_linked_subscription", "custom_change_contract", "custom_provider_access_column",
+	"custom_connection_status", "custom_subscription_plan", "custom_activation_date",
+	"custom_provider_network_section", "custom_ipv4_address", "custom_mac_address",
+	"custom_vlan_id", "custom_optical_splitter", "custom_installation_box",
+	"custom_provider_network_column", "custom_olt", "custom_olt_slot", "custom_pon",
+	"custom_pon_port", "custom_onu_serial", "custom_onu_id", "custom_onu_id_type",
+	"custom_onu_auth_type", "custom_onu_auth_password", "custom_onu_number",
+	"custom_onu_model", "custom_onu_rx_signal", "custom_onu_tx_signal",
+	"custom_onu_signal_status", "custom_onu_signal_checked_at", "custom_network_notes",
+)
+
+
+def hide_legacy_customer_access_fields():
+	for fieldname in LEGACY_CUSTOMER_ACCESS_FIELDS:
+		name = frappe.db.get_value("Custom Field", {"dt": "Customer", "fieldname": fieldname}, "name")
+		if name:
+			frappe.db.set_value("Custom Field", name, "hidden", 1, update_modified=False)
+	frappe.clear_cache(doctype="Customer")
+
+
+def migrate_customer_access_to_subscriptions():
+	if not frappe.db.table_exists("Subscription") or not frappe.get_meta("Subscription").has_field("custom_pppoe_username"):
+		return
+	fields = [field for field in LEGACY_CUSTOMER_ACCESS_FIELDS if field not in {
+		"custom_provider_access_section", "custom_linked_subscription", "custom_change_contract",
+		"custom_provider_access_column", "custom_subscription_plan", "custom_provider_network_section",
+		"custom_provider_network_column",
+	}]
+	for customer_name in frappe.get_all("Customer", filters={"custom_linked_subscription": ["is", "set"]}, pluck="name"):
+		customer = frappe.get_doc("Customer", customer_name)
+		if not frappe.db.exists("Subscription", customer.custom_linked_subscription):
+			continue
+		contract = frappe.get_doc("Subscription", customer.custom_linked_subscription)
+		changed = False
+		for fieldname in fields:
+			if not contract.meta.has_field(fieldname):
+				continue
+			value = customer.get(fieldname)
+			if customer.meta.get_field(fieldname).fieldtype == "Password" and value:
+				value = customer.get_password(fieldname, raise_exception=False)
+			target_has_value = contract.get(fieldname) not in (None, "")
+			if fieldname == "custom_connection_status" and contract.get(fieldname) == "Aguardando instalação":
+				target_has_value = False
+			if target_has_value:
+				continue
+			if value not in (None, ""):
+				contract.set(fieldname, value)
+				changed = True
+		if changed:
+			contract.flags.ignore_validate_update_after_submit = True
+			contract.flags.in_access_migration = True
+			contract.flags.ignore_links = True
+			contract.save(ignore_permissions=True)
+
+
+def backfill_subscription_internet_plans():
+	for row in frappe.get_all("Subscription Plan Detail", fields=["parent", "plan"], order_by="parent, idx asc"):
+		if not row.parent or not row.plan:
+			continue
+		if not frappe.db.get_value("Subscription", row.parent, "custom_internet_plan"):
+			frappe.db.set_value(
+				"Subscription", row.parent, "custom_internet_plan", row.plan, update_modified=False
+			)
 
 
 def setup_fiberhome_roles():

@@ -8,9 +8,24 @@ from frappe.tests import IntegrationTestCase
 
 from sol_brasil.radius_provisioning import create_provisioning_event
 from sol_brasil.internet_plan import validate_internet_plan
+from sol_brasil.subscription import _validate_pppoe_and_network
 
 
 class TestRadiusModels(IntegrationTestCase):
+	def test_contract_owns_and_normalizes_its_pppoe(self):
+		contract = frappe._dict(
+			custom_pppoe_username=" Ponto.Empresa ",
+			custom_pppoe_password="senha",
+			custom_ipv4_address="100.64.10.20",
+			custom_mac_address="aa-bb-cc-dd-ee-ff",
+			custom_vlan_id=100,
+			custom_onu_number=10,
+		)
+		_validate_pppoe_and_network(contract)
+		self.assertEqual(contract.custom_pppoe_username, "ponto.empresa")
+		self.assertEqual(contract.custom_mac_address, "AA:BB:CC:DD:EE:FF")
+		self.assertEqual(contract.custom_ipv4_address, "100.64.10.20")
+
 	def test_plan_contains_radius_configuration_directly(self):
 		plan = frappe._dict(
 			custom_download_mbps=500,

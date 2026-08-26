@@ -35,7 +35,11 @@ def _contracts(customer):
 	rows = frappe.get_all(
 		"Subscription",
 		filters={"party_type": "Customer", "party": customer},
-		fields=["name", "status", "start_date", "end_date"],
+		fields=[
+			"name", "status", "start_date", "end_date", "custom_installation_address",
+			"custom_internet_plan", "custom_pppoe_username", "custom_connection_status",
+			"custom_ipv4_address", "custom_mac_address",
+		],
 		order_by="start_date desc",
 	)
 
@@ -51,7 +55,22 @@ def _contracts(customer):
 			flt(frappe.db.get_value("Subscription Plan", plan.plan, "cost")) * (plan.qty or 1)
 			for plan in plans
 		)
+		row.internet_plan = row.custom_internet_plan or (plans[0].plan if plans else None)
+		row.installation_address = _address_label(row.custom_installation_address)
 	return rows
+
+
+def _address_label(address_name):
+	if not address_name:
+		return _("Sem endereço")
+	address = frappe.db.get_value(
+		"Address", address_name, ["address_line1", "address_line2", "city", "state"], as_dict=True
+	)
+	if not address:
+		return address_name
+	street = ", ".join(filter(None, [address.address_line1, address.address_line2]))
+	city = " / ".join(filter(None, [address.city, address.state]))
+	return " — ".join(filter(None, [street, city])) or address_name
 
 
 def _open_invoices(customer):

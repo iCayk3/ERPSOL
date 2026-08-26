@@ -43,7 +43,7 @@ ERPNext / SOL Brasil
 5. As credenciais nunca devem aparecer em logs, mensagens de erro ou histórico de eventos.
 6. Contrato, situação financeira, provisionamento e estado da conexão são estados distintos.
 
-> **Decisão de produto atualizada em 25/08/2026:** o sistema utiliza somente os campos PPPoE da ficha do cliente. `Perfil RADIUS` e a tabela separada `Acesso PPPoE` não fazem parte da interface operacional. Velocidade, sessões, pools, filtros, accounting e atributos adicionais ficam diretamente no `Plano de internet` (`Subscription Plan`). As descrições abaixo que mencionam esses DocTypes representam o desenho inicial e ficam preservadas apenas como histórico arquitetural.
+> **Decisão de produto atualizada em 26/08/2026:** o cliente pode possuir vários pontos. Cada contrato (`Subscription`) possui seu endereço de instalação, PPPoE e dados de rede. A ficha do cliente apenas consolida os pontos. Velocidade, sessões, pools, filtros, accounting e atributos adicionais continuam diretamente no `Plano de internet` (`Subscription Plan`). `Perfil RADIUS` e o DocType separado `Acesso PPPoE` não fazem parte do fluxo operacional.
 
 ---
 
@@ -134,8 +134,10 @@ Campos mínimos:
 
 ### Implementação realizada — desenho vigente
 
-- Os campos PPPoE existentes na ficha do cliente foram mantidos como fonte única.
-- A tabela duplicada de acessos e o campo explícito de Perfil RADIUS foram removidos da interface.
+- Os campos PPPoE e de rede foram movidos da ficha do cliente para cada contrato/ponto.
+- A ficha do cliente recebeu uma tabela consolidada de pontos de internet.
+- Cada ponto combina cliente, contrato, endereço, plano e credencial PPPoE.
+- A tabela separada de acessos e o campo explícito de Perfil RADIUS não fazem parte da interface.
 - Download, upload, sessões, accounting, pools, filtros e atributos RADIUS foram adicionados diretamente ao Plano de internet.
 - `Mikrotik-Rate-Limit` é gerado automaticamente pelo plano.
 - Senha PPPoE e segredo do NAS armazenados em campos `Password`.

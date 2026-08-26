@@ -73,32 +73,6 @@ def validate_customer(doc, method=None):
 			title=_("CPF/CNPJ duplicado"),
 		)
 
-	if doc.get("custom_linked_subscription"):
-		contract = frappe.db.get_value(
-			"Subscription",
-			doc.custom_linked_subscription,
-			["party_type", "party", "status"],
-			as_dict=True,
-		)
-		if not contract or contract.party_type != "Customer" or contract.party != doc.name:
-			frappe.throw(
-				_("O contrato selecionado não pertence a este cliente."),
-				title=_("Contrato inválido"),
-			)
-		if contract.status in ("Cancelled", "Completed"):
-			frappe.throw(
-				_("Selecione um contrato ativo ou disponível para este cliente."),
-				title=_("Contrato indisponível"),
-			)
-		plan = frappe.db.get_value(
-			"Subscription Plan Detail",
-			{"parent": doc.custom_linked_subscription, "parenttype": "Subscription"},
-			"plan",
-			order_by="idx asc",
-		)
-		if plan:
-			doc.custom_subscription_plan = plan
-
 def validate_lead(doc, method=None):
 	if not (doc.first_name or doc.lead_name or doc.company_name):
 		frappe.throw(_("Informe o nome do futuro cliente."), title=_("Nome obrigatório"))

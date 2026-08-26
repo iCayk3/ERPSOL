@@ -1,4 +1,6 @@
 import json
+import re
+from ipaddress import ip_address
 
 import frappe
 from frappe import _
@@ -146,13 +148,62 @@ def address_query(doctype, txt, searchfield, start, page_len, filters):
 
 
 def validate_installation_address(doc, method=None):
-	if doc.party_type != "Customer" or not doc.custom_installation_address:
+	if doc.party_type != "Customer":
+		return
+	plans = [row.plan for row in (doc.get("plans") or []) if row.plan]
+	doc.custom_internet_plan = plans[0] if plans else None
+	if not doc.custom_installation_address:
+		_validate_pppoe_and_network(doc)
+		requires_address = bool(doc.get("custom_pppoe_username")) or doc.get("custom_connection_status") in (
+			"Ativo", "Suspenso", "Bloqueado",
+		)
+		if requires_address and not doc.flags.get("in_access_migration"):
+			frappe.throw(
+				_("Selecione o endereço de instalação deste contrato."),
+				title=_("Endereço obrigatório"),
+			)
 		return
 	if doc.custom_installation_address not in _customer_address_names(doc.party):
 		frappe.throw(
 			_("O endereço de instalação selecionado não pertence a este cliente."),
 			title=_("Endereço inválido"),
 		)
+	_validate_pppoe_and_network(doc)
+
+
+def _validate_pppoe_and_network(doc):
+	username = (doc.get("custom_pppoe_username") or "").strip().lower()
+	doc.custom_pppoe_username = username
+	if username and any(character.isspace() for character in username):
+		frappe.throw(_("O usuário PPPoE não pode conter espaços."))
+	if username and not doc.get("custom_pppoe_password"):
+		frappe.throw(_("Informe a senha PPPoE deste contrato."))
+	if doc.get("custom_pppoe_password") and not username:
+		frappe.throw(_("Informe o usuário PPPoE deste contrato."))
+
+	if doc.get("custom_ipv4_address"):
+		try:
+			address = ip_address(doc.custom_ipv4_address.strip())
+		except ValueError:
+			frappe.throw(_("Informe um endereço IPv4 válido."))
+		if address.version != 4:
+			frappe.throw(_("O campo Endereço IPv4 aceita somente IPv4."))
+		doc.custom_ipv4_address = str(address)
+
+	if doc.get("custom_mac_address"):
+		hexadecimal = re.sub(r"[^0-9A-Fa-f]", "", doc.custom_mac_address)
+		if len(hexadecimal) != 12:
+			frappe.throw(_("Informe um endereço MAC válido."))
+		doc.custom_mac_address = ":".join(
+			hexadecimal[index : index + 2].upper() for index in range(0, 12, 2)
+		)
+
+	vlan = cint(doc.get("custom_vlan_id"))
+	if vlan and not 1 <= vlan <= 4094:
+		frappe.throw(_("A VLAN deve estar entre 1 e 4094."))
+	onu_number = cint(doc.get("custom_onu_number"))
+	if onu_number and not 1 <= onu_number <= 512:
+		frappe.throw(_("O número da ONU deve estar entre 1 e 512."))
 
 
 @frappe.whitelist()

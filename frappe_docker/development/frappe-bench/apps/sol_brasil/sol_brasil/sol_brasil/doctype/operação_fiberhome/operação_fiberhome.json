@@ -5,11 +5,12 @@
  "engine": "InnoDB",
  "track_changes": 1,
  "autoname": "hash",
- "field_order": ["operation", "status", "customer", "ctag", "requested_by", "started_at", "finished_at", "details_section", "command_summary", "response_summary", "error_message"],
+ "field_order": ["operation", "status", "customer", "subscription", "ctag", "requested_by", "started_at", "finished_at", "details_section", "command_summary", "response_summary", "error_message"],
  "fields": [
   {"fieldname": "operation", "fieldtype": "Select", "label": "Operação", "options": "Consultar sinal\nAutorizar ONU\nDesautorizar ONU", "reqd": 1, "in_list_view": 1, "in_standard_filter": 1},
   {"fieldname": "status", "fieldtype": "Select", "label": "Situação", "options": "Em andamento\nConcluída\nFalhou", "reqd": 1, "in_list_view": 1, "in_standard_filter": 1},
   {"fieldname": "customer", "fieldtype": "Link", "label": "Cliente", "options": "Customer", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "subscription", "fieldtype": "Link", "label": "Contrato / ponto", "options": "Subscription", "read_only": 1, "in_list_view": 1},
   {"fieldname": "ctag", "fieldtype": "Data", "label": "CTAG", "read_only": 1, "unique": 1},
   {"fieldname": "requested_by", "fieldtype": "Link", "label": "Solicitado por", "options": "User", "read_only": 1},
   {"fieldname": "started_at", "fieldtype": "Datetime", "label": "Início", "read_only": 1},

@@ -349,7 +349,28 @@ function sol_render_customer_panel(frm, data) {
 	const contracts_wrapper = frm.fields_dict.custom_contracts_panel?.$wrapper;
 	const financial_wrapper = frm.fields_dict.custom_financial_panel?.$wrapper;
 	const service_wrapper = frm.fields_dict.custom_service_panel?.$wrapper;
+	const points_wrapper = frm.fields_dict.custom_internet_points_panel?.$wrapper;
 	if (!contracts_wrapper || !financial_wrapper || !service_wrapper) return;
+
+	if (points_wrapper) {
+		points_wrapper.html(`
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<div><h4>${__("Pontos de internet")}</h4><p class="text-muted">${__("Cada ponto possui endereço, contrato, plano e credencial PPPoE próprios.")}</p></div>
+				<button class="btn btn-primary sol-new-internet-point">${__("Novo ponto")}</button>
+			</div>
+			<div class="table-responsive"><table class="table table-bordered">
+				<thead><tr><th>${__("Endereço")}</th><th>${__("Contrato")}</th><th>${__("Plano")}</th><th>${__("Usuário PPPoE")}</th><th>${__("Conexão")}</th><th>${__("IPv4")}</th></tr></thead>
+				<tbody>${data.contracts.length ? data.contracts.map((row) => `<tr>
+					<td>${frappe.utils.escape_html(row.installation_address || "—")}</td>
+					<td><a href="/desk/subscription/${encodeURIComponent(row.name)}">${frappe.utils.escape_html(row.name)}</a></td>
+					<td>${frappe.utils.escape_html(row.internet_plan || row.plans || "—")}</td>
+					<td>${frappe.utils.escape_html(row.custom_pppoe_username || "Aguardando cadastro")}</td>
+					<td>${__(row.custom_connection_status || "Aguardando instalação")}</td>
+					<td>${frappe.utils.escape_html(row.custom_ipv4_address || "—")}</td>
+				</tr>`).join("") : `<tr><td colspan="6" class="text-muted">${__("Nenhum ponto de internet cadastrado.")}</td></tr>`}</tbody>
+			</table></div>`);
+		points_wrapper.find(".sol-new-internet-point").on("click", () => sol_new_customer_contract(frm));
+	}
 
 	contracts_wrapper.html(`
 		<div class="d-flex justify-content-between align-items-center mb-3">
@@ -433,9 +454,11 @@ function sol_load_customer_panel(frm, year = null) {
 	const contracts_wrapper = frm.fields_dict.custom_contracts_panel?.$wrapper;
 	const financial_wrapper = frm.fields_dict.custom_financial_panel?.$wrapper;
 	const service_wrapper = frm.fields_dict.custom_service_panel?.$wrapper;
+	const points_wrapper = frm.fields_dict.custom_internet_points_panel?.$wrapper;
 	contracts_wrapper?.html(`<div class="text-muted py-4">${__("Carregando contratos...")}</div>`);
 	financial_wrapper?.html(`<div class="text-muted py-4">${__("Carregando financeiro...")}</div>`);
 	service_wrapper?.html(`<div class="text-muted py-4">${__("Carregando atendimentos...")}</div>`);
+	points_wrapper?.html(`<div class="text-muted py-4">${__("Carregando pontos de internet...")}</div>`);
 	frappe.call({
 		method: "sol_brasil.customer_panel.get_customer_panel",
 		args: { customer: frm.doc.name, year },
@@ -444,6 +467,7 @@ function sol_load_customer_panel(frm, year = null) {
 			contracts_wrapper?.html(`<div class="text-danger py-4">${__("Não foi possível carregar os contratos.")}</div>`);
 			financial_wrapper?.html(`<div class="text-danger py-4">${__("Não foi possível carregar os boletos.")}</div>`);
 			service_wrapper?.html(`<div class="text-danger py-4">${__("Não foi possível carregar os atendimentos.")}</div>`);
+			points_wrapper?.html(`<div class="text-danger py-4">${__("Não foi possível carregar os pontos de internet.")}</div>`);
 		},
 	});
 }
@@ -507,6 +531,9 @@ frappe.ui.form.on("Customer", {
 	refresh(frm) {
 		sol_remember_customer_version(frm);
 		frappe.breadcrumbs.set_doctype_module("Customer", "SOL Brasil");
+		if (frappe.app?.sidebar?.sidebar_title !== "Clientes") {
+			frappe.app?.sidebar?.setup("Clientes");
+		}
 		setTimeout(() => sol_set_customer_breadcrumb(frm), 0);
 		setTimeout(() => sol_reorder_customer_tabs(frm), 100);
 		sol_refresh_customer_tax_fields(frm);
@@ -527,16 +554,6 @@ frappe.ui.form.on("Customer", {
 				() => setTimeout(() => sol_load_customer_panel(frm), 50)
 			);
 		if (!frm.is_new()) {
-			const roles = frappe.user_roles || [];
-			const can_query_fiberhome = roles.some((role) => ["Consulta de Rede FiberHome", "Operação de Rede FiberHome", "Administração FiberHome", "System Manager"].includes(role));
-			const can_operate_fiberhome = roles.some((role) => ["Operação de Rede FiberHome", "Administração FiberHome", "System Manager"].includes(role));
-			if (can_query_fiberhome) {
-				frm.add_custom_button(__("Consultar sinal da ONU"), () => sol_query_fiberhome_signal(frm), __("FiberHome"));
-			}
-			if (can_operate_fiberhome) {
-				frm.add_custom_button(__("Autorizar ONU"), () => sol_authorize_fiberhome_onu(frm), __("FiberHome"));
-				frm.add_custom_button(__("Desautorizar ONU"), () => sol_deauthorize_fiberhome_onu(frm), __("FiberHome"));
-			}
 			frm.add_custom_button(__("Registrar comentário interno"), () => {
 				sol_add_internal_comment(frm);
 			}, __("Operações do cliente"));

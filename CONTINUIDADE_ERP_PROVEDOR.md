@@ -232,9 +232,19 @@ Clientes que já possuíam contrato foram vinculados automaticamente.
 
 Os campos estão definidos em `sol_brasil/install.py` e a interação do contrato em `sol_brasil/public/js/customer.js`.
 
-## Gestão RADIUS e acesso PPPoE
+## Gestão RADIUS e acesso PPPoE multiponto
 
-O cadastro PPPoE possui uma única fonte visível: os campos da seção `Acesso PPPoE e contrato` na aba Provedor do cliente. A tabela adicional de acessos foi removida para não duplicar usuário, contrato, plano, situação e IP.
+O cliente é o titular e pode possuir vários pontos. Cada `Subscription` representa um ponto contratado e concentra:
+
+- endereço de instalação;
+- primeiro plano da tabela de planos;
+- usuário e senha PPPoE exclusivos;
+- situação e data de ativação;
+- IPv4, MAC e VLAN;
+- OLT, slot, PON, porta, CTO/NAP e splitter;
+- identificação, autenticação, modelo e sinais da ONU/ONT.
+
+A aba Provedor do cliente mostra uma tabela consolidada `Pontos de internet`, com uma linha por contrato. O botão `Novo ponto` cria outro contrato para o mesmo cliente. Os campos PPPoE e ópticos antigos do `Customer` permanecem ocultos somente para preservação/migração e não são mais a fonte operacional.
 
 O `Perfil RADIUS` também não faz parte do fluxo operacional. Os parâmetros técnicos ficam diretamente no `Subscription Plan`, pois o plano é a entidade que receberá outras características do serviço no futuro.
 
@@ -262,13 +272,23 @@ Arquivos principais:
 
 Decisões aplicadas:
 
-- existe um único conjunto de credenciais PPPoE por ficha de cliente;
-- o contrato precisa pertencer ao mesmo cliente;
-- o plano é obtido do contrato e concentra toda a configuração técnica;
-- usuários PPPoE permanecem únicos;
+- cada contrato possui exatamente um ponto, um endereço e um conjunto PPPoE;
+- um cliente pode possuir quantos contratos/pontos forem necessários;
+- o contrato precisa pertencer ao mesmo cliente do endereço;
+- o plano é obtido do contrato e concentra toda a configuração técnica RADIUS;
+- usuários PPPoE são únicos entre todos os contratos;
 - senhas e segredos usam campos protegidos;
 - atributos adicionais do plano não aceitam chaves de senha ou segredo;
+- operações FiberHome agora são executadas a partir do contrato/ponto e registram o contrato no log;
 - o worker e o banco operacional FreeRADIUS ainda não foram implementados, pois pertencem aos Passos 3 e 4.
+
+Migração aplicada:
+
+- dados PPPoE e de rede do cliente foram copiados para o contrato anteriormente vinculado;
+- campos já preenchidos no contrato não são sobrescritos;
+- todos os contratos existentes receberam o primeiro plano em `custom_internet_plan`;
+- valores OLT legados sem cadastro correspondente foram preservados para correção manual;
+- pontos ativos migrados sem endereço aparecem como `Sem endereço` e exigirão endereço válido na próxima edição.
 
 ## Contratos na ficha
 
