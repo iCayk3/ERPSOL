@@ -74,7 +74,10 @@ doctype_js = {
 	"Task": "public/js/task.js",
 	"Acesso PPPoE": "public/js/acesso_pppoe.js",
 }
-doctype_list_js = {"Customer": "public/js/customer_list.js"}
+doctype_list_js = {
+	"Customer": "public/js/customer_list.js",
+	"Caixa de Atendimento": "public/js/caixa_de_atendimento_list.js",
+}
 override_doctype_dashboards = {"Customer": "sol_brasil.customer_dashboard.get_dashboard_data"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -175,7 +178,10 @@ doc_events = {
 	"Item": {"validate": "sol_brasil.inventory.validate_item_manufacturer"},
 	"Customer": {
 		"validate": "sol_brasil.customer.validate_customer",
-		"after_insert": "sol_brasil.lead.finalize_lead_conversion",
+		"after_insert": [
+			"sol_brasil.customer.assign_numeric_customer_code",
+			"sol_brasil.lead.finalize_lead_conversion",
+		],
 	},
 	"Lead": {"validate": "sol_brasil.customer.validate_lead"},
 	"Issue": {

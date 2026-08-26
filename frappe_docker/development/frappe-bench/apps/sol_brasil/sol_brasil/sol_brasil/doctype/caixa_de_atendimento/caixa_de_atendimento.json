@@ -1,0 +1,36 @@
+{
+ "actions": [],
+ "autoname": "field:identificacao",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["identificacao", "situacao", "capacidade", "column_break_identificacao", "olt", "slot", "pon", "occupants_section", "occupants_panel", "localizacao_section", "endereco_referencia", "observacoes"],
+ "fields": [
+  {"fieldname": "identificacao", "fieldtype": "Data", "in_list_view": 1, "in_standard_filter": 1, "label": "Identificação da CTO", "reqd": 1, "unique": 1},
+  {"default": "Ativa", "fieldname": "situacao", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "Situação", "options": "Ativa\nEm manutenção\nInativa", "reqd": 1},
+  {"default": "8", "fieldname": "capacidade", "fieldtype": "Int", "label": "Quantidade de portas"},
+  {"fieldname": "column_break_identificacao", "fieldtype": "Column Break"},
+  {"fieldname": "olt", "fieldtype": "Link", "in_list_view": 1, "in_standard_filter": 1, "label": "OLT", "options": "OLT", "reqd": 1},
+  {"fieldname": "slot", "fieldtype": "Select", "in_list_view": 1, "label": "Slot da OLT", "reqd": 1},
+  {"fieldname": "pon", "fieldtype": "Select", "in_list_view": 1, "in_standard_filter": 1, "label": "PON", "reqd": 1},
+  {"fieldname": "occupants_section", "fieldtype": "Section Break", "label": "Clientes ocupantes"},
+  {"fieldname": "occupants_panel", "fieldtype": "HTML"},
+  {"fieldname": "localizacao_section", "fieldtype": "Section Break", "label": "Localização"},
+  {"fieldname": "endereco_referencia", "fieldtype": "Small Text", "label": "Endereço ou ponto de referência"},
+  {"fieldname": "observacoes", "fieldtype": "Small Text", "label": "Observações"}
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "module": "SOL Brasil",
+ "name": "Caixa de Atendimento",
+ "naming_rule": "By fieldname",
+ "permissions": [
+  {"create": 1, "delete": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1},
+  {"create": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "Support Team", "share": 1, "write": 1}
+ ],
+ "quick_entry": 0,
+ "search_fields": "identificacao,olt,slot,pon,endereco_referencia",
+ "sort_field": "identificacao",
+ "sort_order": "ASC",
+ "title_field": "identificacao",
+ "track_changes": 1
+}

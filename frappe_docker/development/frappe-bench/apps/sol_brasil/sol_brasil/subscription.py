@@ -147,6 +147,33 @@ def address_query(doctype, txt, searchfield, start, page_len, filters):
 	)
 
 
+@frappe.whitelist()
+def get_available_cto_ports(cto, subscription=None):
+	frappe.has_permission("Caixa de Atendimento", "read", cto, throw=True)
+	capacity = cint(frappe.db.get_value("Caixa de Atendimento", cto, "capacidade"))
+	if capacity < 1:
+		return {"capacity": capacity, "available": [], "occupied": []}
+
+	filters = {
+		"custom_installation_box_link": cto,
+		"custom_pppoe_username": ["is", "set"],
+		"custom_connection_status": ["!=", "Cancelado"],
+		"custom_cto_port": ["is", "set"],
+	}
+	if subscription and not str(subscription).startswith("new-"):
+		filters["name"] = ["!=", subscription]
+	occupied = {
+		cint(port)
+		for port in frappe.get_all("Subscription", filters=filters, pluck="custom_cto_port")
+		if cint(port)
+	}
+	return {
+		"capacity": capacity,
+		"occupied": sorted(occupied),
+		"available": [port for port in range(1, capacity + 1) if port not in occupied],
+	}
+
+
 def validate_installation_address(doc, method=None):
 	if doc.party_type != "Customer":
 		return
@@ -204,6 +231,75 @@ def _validate_pppoe_and_network(doc):
 	onu_number = cint(doc.get("custom_onu_number"))
 	if onu_number and not 1 <= onu_number <= 512:
 		frappe.throw(_("O número da ONU deve estar entre 1 e 512."))
+
+	_validate_optical_topology(doc)
+
+
+def _validate_optical_topology(doc):
+	olt = doc.get("custom_olt")
+	slot = cint(doc.get("custom_olt_slot_select") or doc.get("custom_olt_slot"))
+	pon = cint(doc.get("custom_pon_select") or doc.get("custom_pon_port") or doc.get("custom_pon"))
+	box = doc.get("custom_installation_box_link") or doc.get("custom_installation_box")
+	cto_port = cint(doc.get("custom_cto_port"))
+	if not any((olt, slot, pon, box, cto_port)):
+		return
+	if not olt:
+		frappe.throw(_("Selecione a OLT antes do Slot, PON ou CTO."))
+	if pon and not slot:
+		frappe.throw(_("Selecione o Slot antes da PON."))
+	if box and (not slot or not pon):
+		frappe.throw(_("Selecione o Slot e a PON antes da CTO."))
+	if cto_port and not box:
+		frappe.throw(_("Selecione a CTO antes da porta."))
+
+	capacity = frappe.db.get_value(
+		"OLT", olt, ["quantidade_slots_pon", "pons_por_slot"], as_dict=True
+	)
+	if not capacity:
+		frappe.throw(_("Selecione uma OLT válida."))
+	if slot and (slot < 1 or slot > cint(capacity.quantidade_slots_pon)):
+		frappe.throw(_("O slot selecionado não existe nesta OLT."))
+	if pon and (pon < 1 or pon > cint(capacity.pons_por_slot)):
+		frappe.throw(_("A PON selecionada não existe nesta OLT."))
+
+	if box:
+		box_topology = frappe.db.get_value(
+			"Caixa de Atendimento", box, ["olt", "slot", "pon", "capacidade"], as_dict=True
+		)
+		if not box_topology or (
+			box_topology.olt != olt
+			or cint(box_topology.slot) != slot
+			or cint(box_topology.pon) != pon
+		):
+			frappe.throw(_("A CTO selecionada não pertence à OLT, Slot e PON informados."))
+		if doc.get("custom_pppoe_username") and not cto_port:
+			frappe.throw(_("Selecione uma porta disponível da CTO para este PPPoE."))
+		if cto_port:
+			if not doc.get("custom_pppoe_username"):
+				frappe.throw(_("A porta da CTO somente pode ser ocupada por um acesso PPPoE."))
+			if cto_port < 1 or cto_port > cint(box_topology.capacidade):
+				frappe.throw(_("A porta selecionada não existe nesta CTO."))
+			occupied_by = frappe.db.get_value(
+				"Subscription",
+				{
+					"name": ["!=", doc.name],
+					"custom_installation_box_link": box,
+					"custom_cto_port": str(cto_port),
+					"custom_pppoe_username": ["is", "set"],
+					"custom_connection_status": ["!=", "Cancelado"],
+				},
+				"name",
+			)
+			if occupied_by:
+				frappe.throw(
+					_("A porta {0} desta CTO já está ocupada pelo contrato {1}.").format(
+						cto_port, occupied_by
+					)
+				)
+	doc.custom_olt_slot = str(slot) if slot else ""
+	doc.custom_pon = str(pon) if pon else ""
+	doc.custom_pon_port = str(pon) if pon else ""
+	doc.custom_installation_box = box or ""
 
 
 @frappe.whitelist()

@@ -98,6 +98,22 @@ def notify_linked_customer_update(doc, method=None):
 			after_commit=True,
 		)
 
+
+def assign_numeric_customer_code(doc, method=None):
+	"""Mirror the numeric document ID into the visible customer code column."""
+	if doc.get("custom_customer_code"):
+		return
+	code = doc.name if str(doc.name).isdigit() else None
+	if not code:
+		# Compatibility fallback for records created by imports with another naming rule.
+		from sol_brasil.install import backfill_customer_numeric_codes
+
+		backfill_customer_numeric_codes()
+		return
+	frappe.db.set_value(
+		"Customer", doc.name, "custom_customer_code", str(code).zfill(6), update_modified=False
+	)
+
 @frappe.whitelist()
 def add_internal_comment(reference_doctype, reference_name, content):
 	if reference_doctype not in ("Customer", "Lead"):

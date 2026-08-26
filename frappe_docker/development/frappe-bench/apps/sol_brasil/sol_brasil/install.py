@@ -8,6 +8,16 @@ from frappe.custom.doctype.property_setter.property_setter import make_property_
 CUSTOM_FIELDS = {
 	"Customer": [
 		{
+			"fieldname": "custom_customer_code",
+			"fieldtype": "Data",
+			"label": "Código",
+			"read_only": 1,
+			"unique": 1,
+			"in_list_view": 1,
+			"in_standard_filter": 1,
+			"insert_after": "customer_name",
+		},
+		{
 			"fieldname": "custom_brazilian_tax_section",
 			"fieldtype": "Section Break",
 			"label": "Documentos e identificação",
@@ -419,12 +429,16 @@ CUSTOM_FIELDS = {
 		{"fieldname": "custom_mac_address", "fieldtype": "Data", "label": "Endereço MAC", "insert_after": "custom_ipv4_address"},
 		{"fieldname": "custom_vlan_id", "fieldtype": "Int", "label": "VLAN", "insert_after": "custom_mac_address"},
 		{"fieldname": "custom_optical_splitter", "fieldtype": "Data", "label": "Splitter óptico", "insert_after": "custom_vlan_id"},
-		{"fieldname": "custom_installation_box", "fieldtype": "Data", "label": "Caixa de atendimento (CTO/NAP)", "insert_after": "custom_optical_splitter"},
+		{"fieldname": "custom_installation_box", "fieldtype": "Data", "label": "Caixa de atendimento (legado)", "hidden": 1, "insert_after": "custom_optical_splitter"},
 		{"fieldname": "custom_network_column", "fieldtype": "Column Break", "insert_after": "custom_installation_box"},
 		{"fieldname": "custom_olt", "fieldtype": "Link", "label": "OLT", "options": "OLT", "insert_after": "custom_network_column"},
-		{"fieldname": "custom_olt_slot", "fieldtype": "Data", "label": "Slot da OLT", "insert_after": "custom_olt"},
-		{"fieldname": "custom_pon", "fieldtype": "Data", "label": "PON", "insert_after": "custom_olt_slot"},
-		{"fieldname": "custom_pon_port", "fieldtype": "Data", "label": "Porta PON", "insert_after": "custom_pon"},
+		{"fieldname": "custom_olt_slot", "fieldtype": "Data", "label": "Slot da OLT (legado)", "hidden": 1, "insert_after": "custom_olt"},
+		{"fieldname": "custom_olt_slot_select", "fieldtype": "Select", "label": "Slot da OLT", "insert_after": "custom_olt_slot"},
+		{"fieldname": "custom_pon", "fieldtype": "Data", "label": "PON (legado)", "hidden": 1, "insert_after": "custom_olt_slot_select"},
+		{"fieldname": "custom_pon_select", "fieldtype": "Select", "label": "PON", "insert_after": "custom_pon"},
+		{"fieldname": "custom_installation_box_link", "fieldtype": "Link", "label": "Caixa de atendimento (CTO/NAP)", "options": "Caixa de Atendimento", "insert_after": "custom_pon_select"},
+		{"fieldname": "custom_cto_port", "fieldtype": "Select", "label": "Porta da CTO", "description": "Somente portas disponíveis desta CTO são exibidas.", "insert_after": "custom_installation_box_link"},
+		{"fieldname": "custom_pon_port", "fieldtype": "Data", "label": "Porta PON", "hidden": 1, "insert_after": "custom_cto_port"},
 		{"fieldname": "custom_onu_serial", "fieldtype": "Data", "label": "ONU / número de série", "insert_after": "custom_pon_port"},
 		{"fieldname": "custom_onu_id", "fieldtype": "Data", "label": "ID da ONU/ONT", "insert_after": "custom_onu_serial"},
 		{"fieldname": "custom_onu_id_type", "fieldtype": "Select", "label": "Tipo de identificador", "options": "MAC\nLOID\nONU_NUMBER\nONU_NAME", "default": "MAC", "insert_after": "custom_onu_id"},
@@ -437,6 +451,7 @@ CUSTOM_FIELDS = {
 		{"fieldname": "custom_onu_signal_status", "fieldtype": "Data", "label": "Classificação do sinal", "read_only": 1, "insert_after": "custom_onu_tx_signal"},
 		{"fieldname": "custom_onu_signal_checked_at", "fieldtype": "Datetime", "label": "Última consulta de sinal", "read_only": 1, "insert_after": "custom_onu_signal_status"},
 		{"fieldname": "custom_network_notes", "fieldtype": "Small Text", "label": "Observações técnicas da rede", "insert_after": "custom_onu_signal_checked_at"},
+		{"fieldname": "custom_details_tab", "fieldtype": "Tab Break", "label": "Detalhes", "insert_after": "custom_network_notes"},
 	],
 	"Issue": [
 		{
@@ -996,11 +1011,14 @@ def setup_provider_services():
 def setup_customer_fields():
 	migrate_customer_olt_link()
 	create_custom_fields(CUSTOM_FIELDS, update=True)
+	setup_customer_numeric_naming()
+	backfill_customer_numeric_codes()
 	remove_obsolete_radius_fields()
 	hide_legacy_customer_access_fields()
 	backfill_customer_contract_links()
 	backfill_subscription_internet_plans()
 	migrate_customer_access_to_subscriptions()
+	reorder_subscription_tabs()
 	setup_service_subjects()
 	setup_provider_services()
 	frappe.db.sql(
@@ -1107,6 +1125,47 @@ def reorder_customer_relationships_tab():
 	frappe.clear_cache(doctype="Customer")
 
 
+def setup_customer_numeric_naming():
+	"""Name new customers with numeric-only sequential IDs such as 000001."""
+	frappe.defaults.set_global_default("cust_master_name", "Naming Series")
+	make_property_setter("Customer", "naming_series", "options", "0", "Text")
+	make_property_setter("Customer", "naming_series", "default", "0", "Text")
+	make_property_setter("Customer", "naming_series", "hidden", 1, "Check")
+	make_property_setter("Customer", "naming_series", "reqd", 0, "Check")
+	frappe.clear_cache(doctype="Customer")
+
+
+def backfill_customer_numeric_codes():
+	"""Give legacy customers a numeric code and continue new IDs after that range."""
+	existing_codes = [
+		int(code)
+		for code in frappe.get_all(
+			"Customer", filters={"custom_customer_code": ["is", "set"]}, pluck="custom_customer_code"
+		)
+		if str(code).isdigit()
+	]
+	next_code = max(existing_codes, default=0)
+	for customer in frappe.get_all(
+		"Customer",
+		filters={"custom_customer_code": ["is", "not set"]},
+		pluck="name",
+		order_by="creation asc",
+	):
+		next_code += 1
+		frappe.db.set_value(
+			"Customer", customer, "custom_customer_code", f"{next_code:06d}", update_modified=False
+		)
+
+	frappe.db.sql(
+		"""
+		INSERT INTO `tabSeries` (`name`, `current`)
+		VALUES (%s, %s)
+		ON DUPLICATE KEY UPDATE `current` = GREATEST(`current`, VALUES(`current`))
+		""",
+		("0", next_code),
+	)
+
+
 def remove_obsolete_radius_fields():
 	for fieldname in (
 		"custom_radius_profile",
@@ -1186,6 +1245,36 @@ def backfill_subscription_internet_plans():
 			frappe.db.set_value(
 				"Subscription", row.parent, "custom_internet_plan", row.plan, update_modified=False
 			)
+
+
+def reorder_subscription_tabs():
+	"""Make Provedor the primary Subscription tab and Detalhes the second tab."""
+	frappe.clear_cache(doctype="Subscription")
+	fieldnames = [field.fieldname for field in frappe.get_meta("Subscription").fields]
+	provider_fields = [
+		"custom_provider_tab", "custom_access_section", "custom_internet_plan",
+		"custom_pppoe_username", "custom_pppoe_password", "custom_access_column",
+		"custom_connection_status", "custom_activation_date", "custom_network_section",
+		"custom_ipv4_address", "custom_mac_address", "custom_vlan_id",
+		"custom_optical_splitter", "custom_installation_box", "custom_network_column",
+		"custom_olt", "custom_olt_slot", "custom_olt_slot_select", "custom_pon",
+		"custom_pon_select", "custom_installation_box_link", "custom_cto_port", "custom_pon_port",
+		"custom_onu_serial", "custom_onu_id", "custom_onu_id_type",
+		"custom_onu_auth_type", "custom_onu_auth_password", "custom_onu_number",
+		"custom_onu_model", "custom_onu_rx_signal", "custom_onu_tx_signal",
+		"custom_onu_signal_status", "custom_onu_signal_checked_at", "custom_network_notes",
+	]
+	provider_fields = [field for field in provider_fields if field in fieldnames]
+	details_tab = ["custom_details_tab"] if "custom_details_tab" in fieldnames else []
+	remaining = [field for field in fieldnames if field not in provider_fields and field not in details_tab]
+	make_property_setter(
+		"Subscription",
+		None,
+		"field_order",
+		json.dumps(provider_fields + details_tab + remaining),
+		"Text",
+	)
+	frappe.clear_cache(doctype="Subscription")
 
 
 def setup_fiberhome_roles():

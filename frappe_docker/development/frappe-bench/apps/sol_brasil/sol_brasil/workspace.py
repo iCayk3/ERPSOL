@@ -60,8 +60,7 @@ MODULES = {
         "shortcuts": [
 			("Servidores NAS", "NAS RADIUS", "List"),
             ("OLTs", "OLT", "List"),
-            ("Cadastrar OLT", "OLT", "New"),
-			("Operações FiberHome", "Operação FiberHome", "List"),
+			("Caixas CTO/NAP", "Caixa de Atendimento", "List"),
             ("Fabricantes", "Brand", "List"),
             ("Modelos e itens", "Item", "List"),
             ("Equipamentos", "Asset", "List"),
