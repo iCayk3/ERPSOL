@@ -207,7 +207,10 @@ doc_events = {
 		"on_trash": "sol_brasil.subscription.register_contract_deletion",
 	},
 	"Sales Invoice": {
-		"validate": "sol_brasil.subscription.validate_invoice_contract",
+		"validate": [
+			"sol_brasil.subscription.validate_invoice_contract",
+			"sol_brasil.central_cobranca.set_invoice_reference_fields",
+		],
 		"after_insert": "sol_brasil.financial_activity.register_invoice_creation",
 		"on_update": [
 			"sol_brasil.financial_activity.register_invoice_update",

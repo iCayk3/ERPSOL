@@ -412,6 +412,35 @@ Cliente principal:
 
 O contrato foi validado como vinculado ao cliente de demonstração.
 
+## Central de cobrança
+
+Primeira versão implementada em `sol_brasil/central_cobranca.py` e na página Desk
+`sol_brasil/page/central_de_cobranca`.
+
+Rota: `/app/central-de-cobranca`
+
+Funcionalidades iniciais:
+
+- indicadores de faturas em aberto, vencidas e vencendo hoje;
+- distribuição por situação do contrato;
+- filtros por mês de referência, período, situação do contrato e limite de resultados;
+- listagem de faturas pendentes com cliente, telefone, contrato, PPPoE/plano, mês de referência, vencimento, dias de atraso, valor em aberto e valor a cobrar;
+- ações para abrir cliente, abrir fatura, registrar recebimento, renegociar vencimento/valor e recalcular contratos.
+
+O mês de referência do faturamento fica gravado em `Sales Invoice.custom_billing_reference_month`
+no formato `AAAA-MM`. Ele representa o mês do serviço faturado, não o mês do vencimento.
+Renegociações alteram `due_date`, marcam `custom_renegotiated`, gravam
+`custom_negotiated_amount`, permitem `custom_waive_interest_penalty` e preservam
+`custom_billing_reference_month`, garantindo que relatórios de faturado x recebido não mudem
+o valor para o mês errado. O valor contábil original da fatura permanece em `grand_total` e
+`outstanding_amount`; a central usa `custom_negotiated_amount` como valor operacional a cobrar
+quando houver acordo.
+
+O botão `Relatório mensal` na Central de cobrança usa o mesmo mês de referência para mostrar
+faturado, recebido, em aberto, renegociadas e a cobrar negociado.
+
+O workspace `Financeiro` possui atalho direto para a Central de cobrança.
+
 ## Arquivos centrais do app
 
 - `sol_brasil/hooks.py`

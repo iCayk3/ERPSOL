@@ -386,6 +386,59 @@ CUSTOM_FIELDS = {
 			"insert_after": "custom_interest_plan",
 		},
 	],
+	"Sales Invoice": [
+		{
+			"fieldname": "custom_billing_reference_section",
+			"fieldtype": "Section Break",
+			"label": "Referência do faturamento",
+			"insert_after": "due_date",
+		},
+		{
+			"fieldname": "custom_billing_reference_month",
+			"fieldtype": "Data",
+			"label": "Mês de referência",
+			"description": "Mês do serviço faturado no formato AAAA-MM. Não deve mudar em renegociações.",
+			"read_only": 1,
+			"in_standard_filter": 1,
+			"insert_after": "custom_billing_reference_section",
+		},
+		{
+			"fieldname": "custom_original_due_date",
+			"fieldtype": "Date",
+			"label": "Vencimento original",
+			"read_only": 1,
+			"insert_after": "custom_billing_reference_month",
+		},
+		{
+			"fieldname": "custom_renegotiated",
+			"fieldtype": "Check",
+			"label": "Renegociado",
+			"read_only": 1,
+			"insert_after": "custom_original_due_date",
+		},
+		{
+			"fieldname": "custom_waive_interest_penalty",
+			"fieldtype": "Check",
+			"label": "Zerar juros e multa",
+			"read_only": 1,
+			"insert_after": "custom_renegotiated",
+		},
+		{
+			"fieldname": "custom_negotiated_amount",
+			"fieldtype": "Currency",
+			"label": "Valor negociado",
+			"description": "Valor acordado para cobrança. Não altera o faturamento original.",
+			"read_only": 1,
+			"insert_after": "custom_waive_interest_penalty",
+		},
+		{
+			"fieldname": "custom_renegotiation_notes",
+			"fieldtype": "Small Text",
+			"label": "Observações da renegociação",
+			"read_only": 1,
+			"insert_after": "custom_negotiated_amount",
+		},
+	],
 	"Subscription Plan": [
 		{"fieldname": "custom_access_configuration_section", "fieldtype": "Section Break", "label": "Configuração técnica do acesso", "insert_after": "billing_interval_count"},
 		{"fieldname": "custom_download_mbps", "fieldtype": "Int", "label": "Download (Mbps)", "non_negative": 1, "insert_after": "custom_access_configuration_section"},
@@ -1021,6 +1074,9 @@ def setup_provider_services():
 def setup_customer_fields():
 	migrate_customer_olt_link()
 	create_custom_fields(CUSTOM_FIELDS, update=True)
+	from sol_brasil.central_cobranca import backfill_invoice_reference_months
+
+	backfill_invoice_reference_months(ignore_permissions=True)
 	setup_customer_numeric_naming()
 	backfill_customer_numeric_codes()
 	remove_obsolete_radius_fields()

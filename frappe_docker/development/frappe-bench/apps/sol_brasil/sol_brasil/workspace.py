@@ -37,6 +37,7 @@ MODULES = {
     "Financeiro": {
         "icon": "credit-card",
         "shortcuts": [
+            ("Central de cobrança", "/app/central-de-cobranca"),
             ("Faturas", "Sales Invoice", "List"),
             ("Emitir fatura", "Sales Invoice", "New"),
             ("Recebimentos", "Payment Entry", "List"),
