@@ -37,7 +37,7 @@ MODULES = {
     "Financeiro": {
         "icon": "credit-card",
         "shortcuts": [
-            ("Central de cobrança", "/app/central-de-cobranca"),
+            ("Central de cobrança", "central-de-cobranca", "Page"),
             ("Faturas", "Sales Invoice", "List"),
             ("Emitir fatura", "Sales Invoice", "New"),
             ("Recebimentos", "Payment Entry", "List"),
@@ -330,10 +330,10 @@ def _sync_workspace(name, definition):
                 "shortcuts",
                 {"label": shortcut[0], "type": "URL", "url": shortcut[1]},
             )
-        elif shortcut[2] == "Report":
+        elif shortcut[2] in ("Report", "Page"):
             workspace.append(
                 "shortcuts",
-                {"label": shortcut[0], "type": "Report", "link_to": shortcut[1]},
+                {"label": shortcut[0], "type": shortcut[2], "link_to": shortcut[1]},
             )
         else:
             workspace.append(

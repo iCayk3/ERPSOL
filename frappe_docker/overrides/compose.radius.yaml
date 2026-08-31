@@ -1,0 +1,71 @@
+services:
+  radius-db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${RADIUS_DB_NAME:-radius}
+      MARIADB_USER: ${RADIUS_DB_USER:-radius_app}
+      MARIADB_PASSWORD: ${RADIUS_DB_PASSWORD:?define RADIUS_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${RADIUS_DB_ROOT_PASSWORD:?define RADIUS_DB_ROOT_PASSWORD}
+    volumes:
+      - radius-db-data:/var/lib/mysql
+      - ./radius/sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh --connect --innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks: [default, erp-development]
+
+  radius-primary:
+    build: ./radius
+    image: sol-provedor/freeradius:3.2.10
+    restart: unless-stopped
+    environment: &radius-environment
+      RADIUS_DB_HOST: radius-db
+      RADIUS_DB_NAME: ${RADIUS_DB_NAME:-radius}
+      RADIUS_DB_USER: ${RADIUS_DB_USER:-radius_app}
+      RADIUS_DB_PASSWORD: ${RADIUS_DB_PASSWORD:?define RADIUS_DB_PASSWORD}
+      RADIUS_LAB_SECRET: ${RADIUS_LAB_SECRET:?define RADIUS_LAB_SECRET}
+      RADIUS_LAB_NETWORK: ${RADIUS_LAB_NETWORK:?define RADIUS_LAB_NETWORK}
+    depends_on:
+      radius-db:
+        condition: service_healthy
+    ports:
+      - "${RADIUS_AUTH_PORT:-1812}:1812/udp"
+      - "${RADIUS_ACCT_PORT:-1813}:1813/udp"
+      - "${RADIUS_COA_PORT:-3799}:3799/udp"
+    healthcheck:
+      test: ["CMD-SHELL", "freeradius -XC >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks: [default, erp-development]
+
+  radius-secondary:
+    build: ./radius
+    image: sol-provedor/freeradius:3.2.10
+    profiles: ["radius-ha"]
+    restart: unless-stopped
+    environment: *radius-environment
+    depends_on:
+      radius-db:
+        condition: service_healthy
+    ports:
+      - "${RADIUS_SECONDARY_AUTH_PORT:-1814}:1812/udp"
+      - "${RADIUS_SECONDARY_ACCT_PORT:-1815}:1813/udp"
+      - "${RADIUS_SECONDARY_COA_PORT:-3800}:3799/udp"
+    healthcheck:
+      test: ["CMD-SHELL", "freeradius -XC >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks: [default, erp-development]
+
+volumes:
+  radius-db-data:
+
+networks:
+  erp-development:
+    external: true
+    name: ${ERP_DOCKER_NETWORK:-devcontainer-example_default}

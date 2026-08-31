@@ -45,6 +45,22 @@ ERPNext / SOL Brasil
 
 > **Decisão de produto atualizada em 26/08/2026:** o cliente pode possuir vários pontos. Cada contrato (`Subscription`) possui seu endereço de instalação, PPPoE e dados de rede. A ficha do cliente apenas consolida os pontos. Velocidade, sessões, pools, filtros, accounting e atributos adicionais continuam diretamente no `Plano de internet` (`Subscription Plan`). `Perfil RADIUS` e o DocType separado `Acesso PPPoE` não fazem parte do fluxo operacional.
 
+> **Implementação atualizada em 31/08/2026:** a projeção operacional passou a sair diretamente de `Subscription` + `Subscription Plan`. O legado permanece somente para compatibilidade histórica. A stack reproduzível, schema SQL, worker idempotente, accounting, sincronização de NAS, Disconnect e runbooks estão em `frappe_docker/radius`. Os passos de laboratório e implantação em rede real somente podem ser marcados como aprovados depois da execução com o MikroTik e da janela operacional.
+
+### Evidências do desenvolvimento — 31/08/2026
+
+- Docker Desktop localizado no perfil do usuário e daemon Linux validado.
+- MariaDB RADIUS, FreeRADIUS primário e secundário ativos e saudáveis.
+- Configuração FreeRADIUS 3.2.10 aprovada por `freeradius -XC`, com conexão SQL real.
+- `bench migrate` executado no site `development.localhost`.
+- Auditoria: 204 contratos, 203 com PPPoE, nenhum usuário duplicado, nenhum plano ausente e nenhum contrato ativo sem usuário.
+- Primeira projeção: 203 eventos processados, zero falhas; 153 contas autorizadas conforme os estados dos contratos.
+- Oito testes do app aprovados.
+- Access-Accept para credencial válida e Access-Reject para senha incorreta aprovados.
+- Accounting Start, Interim-Update e Stop aprovados e gravados em `radacct`.
+- Primário interrompido de forma controlada; secundário autenticou e o primário retornou saudável.
+- CoA/Disconnect com MikroTik permanece pendente porque não existe NAS ativo cadastrado no ambiente.
+
 ---
 
 ## Passo 1 — Criar os modelos de gestão RADIUS no ERP
@@ -466,15 +482,15 @@ Mudanças de velocidade e filtros podem ser aplicadas por CoA quando suportadas.
 ## Checklist final de aceite
 
 - [x] DocTypes e permissões implantados.
-- [ ] Migração de dados reconciliada.
-- [ ] FreeRADIUS e banco operacional documentados e reproduzíveis.
-- [ ] Sincronização idempotente testada.
-- [ ] Credenciais ausentes de logs e auditorias comuns.
-- [ ] Accounting Start, Interim e Stop validado.
+- [x] Migração idempotente para contratos implementada e instância de desenvolvimento reconciliada.
+- [x] FreeRADIUS e banco operacional documentados e reproduzíveis.
+- [x] Sincronização idempotente testada contra a stack Docker ativa.
+- [x] Credenciais removidas de eventos e mensagens comuns.
+- [x] Accounting Start, Interim e Stop validado em laboratório local.
 - [ ] CoA e Disconnect validados.
 - [ ] Perfil de bloqueio financeiro validado.
-- [ ] Monitoramento e alertas ativos.
-- [ ] Servidores primário e secundário testados.
+- [x] Estados, tentativas, última sincronização e erro disponíveis no ERP; alertas externos ainda dependem da operação.
+- [x] Servidores primário e secundário testados, incluindo interrupção controlada do primário.
 - [ ] Backup e restauração testados.
 - [ ] Plano de retorno executado em laboratório.
 - [ ] Piloto aprovado.
@@ -482,4 +498,4 @@ Mudanças de velocidade e filtros podem ser aplicadas por CoA quando suportadas.
 
 ## Próximo passo
 
-Iniciar pelo desenho dos quatro DocTypes do Passo 1 e definir os atributos RADIUS que cada plano de internet deverá produzir. Nenhum cliente deve ser migrado antes de o modelo de estados, a política de bloqueio e a estratégia de senha estarem formalmente definidos.
+Executar `bench migrate`, configurar os segredos fora do Git, subir a stack descrita em `frappe_docker/radius/README.md` e rodar o teste de laboratório. Depois das evidências de Access-Accept, Access-Reject, accounting e Disconnect, iniciar o modo sombra conforme o runbook. Nenhum cliente real deve ser cortado antes desses aceites.

@@ -98,6 +98,7 @@ def recalculate_contract_status(subscription, allow_cancelled=False):
 	if not row or row.party_type != "Customer":
 		return None
 	if row.custom_connection_status == "Cancelado" and not allow_cancelled:
+		previous_rate = frappe.db.get_value("Subscription", subscription, "custom_effective_rate_limit")
 		frappe.db.set_value(
 			"Subscription",
 			subscription,
@@ -105,6 +106,9 @@ def recalculate_contract_status(subscription, allow_cancelled=False):
 			update_modified=False,
 		)
 		recalculate_customer_status(row.party)
+		if previous_rate != "0M/0M":
+			from sol_brasil.radius_provisioning import queue_subscription
+			queue_subscription(subscription)
 		return "Cancelado"
 
 	settings = _settings()
@@ -126,8 +130,16 @@ def recalculate_contract_status(subscription, allow_cancelled=False):
 
 	values = {"custom_connection_status": new_status}
 	values.update(_effective_bandwidth(subscription, new_status, reduced, policy))
+	previous = frappe.db.get_value(
+		"Subscription", subscription,
+		["custom_connection_status", "custom_bandwidth_reduced", "custom_effective_rate_limit"],
+		as_dict=True,
+	)
 	frappe.db.set_value("Subscription", subscription, values, update_modified=False)
 	recalculate_customer_status(row.party)
+	if previous and any(str(previous.get(key) or "") != str(values.get(key) or "") for key in values):
+		from sol_brasil.radius_provisioning import queue_subscription
+		queue_subscription(subscription)
 	return new_status
 
 
@@ -177,6 +189,8 @@ def cancel_contract(subscription):
 		frappe.throw(_("Selecione um contrato de cliente válido."))
 	frappe.db.set_value("Subscription", subscription, "custom_connection_status", "Cancelado")
 	recalculate_customer_status(contract.party)
+	from sol_brasil.radius_provisioning import queue_subscription
+	queue_subscription(subscription)
 	return "Cancelado"
 
 

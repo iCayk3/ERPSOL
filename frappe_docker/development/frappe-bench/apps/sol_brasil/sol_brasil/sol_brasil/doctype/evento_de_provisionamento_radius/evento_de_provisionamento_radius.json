@@ -22,7 +22,7 @@
  "module": "SOL Brasil",
  "name": "Evento de Provisionamento RADIUS",
  "permissions": [
-  {"export": 1, "read": 1, "report": 1, "role": "System Manager"},
+  {"export": 1, "read": 1, "write": 1, "report": 1, "role": "System Manager"},
   {"read": 1, "report": 1, "role": "Support Team"}
  ],
  "search_fields": "id_evento,acesso_pppoe,operacao",

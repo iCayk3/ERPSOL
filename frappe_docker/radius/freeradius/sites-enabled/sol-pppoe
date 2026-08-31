@@ -1,0 +1,31 @@
+server sol-pppoe {
+  listen {
+    type = auth
+    ipaddr = *
+    port = 1812
+  }
+  listen {
+    type = acct
+    ipaddr = *
+    port = 1813
+  }
+  authorize {
+    filter_username
+    sql
+    pap
+  }
+  authenticate {
+    Auth-Type PAP {
+      pap
+    }
+  }
+  preacct {
+    acct_unique
+  }
+  accounting {
+    sql
+  }
+  session {
+    sql
+  }
+}

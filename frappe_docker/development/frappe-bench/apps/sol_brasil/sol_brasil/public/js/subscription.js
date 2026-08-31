@@ -142,6 +142,22 @@ frappe.ui.form.on("Subscription", {
 		sol_load_available_cto_ports(frm);
 		setTimeout(() => sol_reorder_subscription_tabs(frm), 0);
 		if (!frm.is_new() && frm.doc.party_type === "Customer") {
+			if (frm.doc.custom_pppoe_username) {
+				frm.add_custom_button(__("Sessões e consumo"), () => {
+					frappe.call({
+						method: "sol_brasil.radius_accounting.get_subscription_sessions",
+						args: { subscription: frm.doc.name }, freeze: true,
+						callback: ({ message }) => {
+							const rows = message?.recent || [];
+							const content = rows.length
+								? rows.map((row) => `<tr><td>${frappe.utils.escape_html(row[0] || "")}</td><td>${frappe.utils.escape_html(row[1] || "")}</td><td>${frappe.utils.escape_html(row[2] || "")}</td><td>${frappe.datetime.str_to_user(row[3] || "")}</td><td>${frappe.datetime.str_to_user(row[4] || "")}</td></tr>`).join("")
+								: `<tr><td colspan="5" class="text-muted">${__("Nenhuma sessão registrada.")}</td></tr>`;
+							frappe.msgprint({ title: __("Sessões RADIUS — {0}", [message?.username || ""]), wide: true,
+								message: `<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>${__("Sessão")}</th><th>NAS</th><th>IPv4</th><th>${__("Início")}</th><th>${__("Fim")}</th></tr></thead><tbody>${content}</tbody></table></div>` });
+						},
+					});
+				}, __("RADIUS"));
+			}
 			if (frm.doc.custom_connection_status === "Cancelado") {
 				frm.add_custom_button(__("Reativar contrato"), () => {
 					frappe.call({

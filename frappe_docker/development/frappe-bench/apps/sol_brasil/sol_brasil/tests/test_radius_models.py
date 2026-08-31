@@ -6,7 +6,7 @@ from unittest.mock import patch
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sol_brasil.radius_provisioning import create_provisioning_event
+from sol_brasil.radius_provisioning import _reply_attributes, create_provisioning_event
 from sol_brasil.internet_plan import validate_internet_plan
 from sol_brasil.subscription import _validate_pppoe_and_network
 
@@ -174,6 +174,16 @@ class TestRadiusModels(IntegrationTestCase):
 		self.assertNotIn("segredo-que-nao-pode-vazar", payload["conteudo"])
 		self.assertNotIn("senha_pppoe", payload["conteudo"])
 		self.assertTrue(json.loads(payload["conteudo"])["credencial_alterada"])
+
+	def test_operational_reply_uses_effective_policy_and_rejects_secret_attributes(self):
+		attributes = _reply_attributes({
+			"rate_limit": "25M/100M", "accounting_interval": 300,
+			"ipv4_pool": "assinantes", "filter_id": "internet",
+			"additional_attributes": {"Session-Timeout": 3600, "User-Password": "nao-vazar"},
+		})
+		self.assertEqual(attributes["Mikrotik-Rate-Limit"], "25M/100M")
+		self.assertEqual(attributes["Framed-Pool"], "assinantes")
+		self.assertNotIn("User-Password", attributes)
 
 
 def run_smoke_tests():

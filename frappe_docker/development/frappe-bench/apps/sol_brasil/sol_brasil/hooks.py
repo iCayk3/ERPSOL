@@ -199,12 +199,17 @@ doc_events = {
 		"after_insert": [
 			"sol_brasil.subscription.register_contract_creation",
 			"sol_brasil.business_rules.recalculate_contract_status",
+			"sol_brasil.radius_provisioning.queue_subscription",
 		],
 		"on_update": [
 			"sol_brasil.subscription.register_contract_update",
 			"sol_brasil.business_rules.recalculate_contract_status",
+			"sol_brasil.radius_provisioning.queue_subscription",
 		],
-		"on_trash": "sol_brasil.subscription.register_contract_deletion",
+		"on_trash": [
+			"sol_brasil.subscription.register_contract_deletion",
+			"sol_brasil.radius_provisioning.queue_subscription_removal",
+		],
 	},
 	"Sales Invoice": {
 		"validate": [
@@ -252,9 +257,11 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-# 	"all": [
-# 		"sol_brasil.tasks.all"
-# 	],
+	"cron": {
+		"*/2 * * * *": ["sol_brasil.radius_provisioning.process_pending_events"],
+		"17 * * * *": ["sol_brasil.radius_provisioning.reconcile_radius"],
+		"23 * * * *": ["sol_brasil.radius_provisioning.synchronize_nas"],
+	},
 	"daily": [
 		"sol_brasil.business_rules.recalculate_all_contract_statuses"
 	],

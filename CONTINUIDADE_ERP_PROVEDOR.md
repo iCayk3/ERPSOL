@@ -258,7 +258,7 @@ Campos técnicos adicionados ao plano:
 - `Mikrotik-Rate-Limit` gerado automaticamente;
 - atributos RADIUS adicionais em JSON sanitizado.
 
-Os DocTypes `Acesso PPPoE` e `Perfil RADIUS` permanecem somente como legado técnico temporário e não possuem atalhos no fluxo. Não devem ser usados para novos cadastros. `NAS RADIUS` permanece para concentradores e `Evento de Provisionamento RADIUS` será aproveitado pela integração futura.
+Os DocTypes `Acesso PPPoE` e `Perfil RADIUS` permanecem somente como legado técnico temporário e não possuem atalhos no fluxo. Não devem ser usados para novos cadastros. `NAS RADIUS` permanece para concentradores e `Evento de Provisionamento RADIUS` é a fila persistente usada pela integração operacional.
 
 Arquivos principais:
 
@@ -280,7 +280,7 @@ Decisões aplicadas:
 - senhas e segredos usam campos protegidos;
 - atributos adicionais do plano não aceitam chaves de senha ou segredo;
 - operações FiberHome agora são executadas a partir do contrato/ponto e registram o contrato no log;
-- o worker e o banco operacional FreeRADIUS ainda não foram implementados, pois pertencem aos Passos 3 e 4.
+- o worker e o banco operacional FreeRADIUS foram implementados e validados; os modelos legados não participam da projeção.
 
 Migração aplicada:
 
@@ -441,6 +441,110 @@ faturado, recebido, em aberto, renegociadas e a cobrar negociado.
 
 O workspace `Financeiro` possui atalho direto para a Central de cobrança.
 
+O atalho da Central de cobrança é do tipo nativo `Page`, apontando para
+`central-de-cobranca`. Não usar um atalho do tipo `URL` nesse caso, pois páginas internas devem
+ser abertas pelo roteador do Frappe e permanecer na mesma aba.
+
+## Sincronização do ambiente — 31/08/2026
+
+- O repositório local e o GitHub foram conferidos após suspeita de alterações ausentes.
+- Existe somente a branch remota `origin/main`; o código local e o remoto estão no mesmo commit
+  `f8723ab` (`feat: adiciona central de cobrança`, de 29/08/2026).
+- Nenhum commit posterior feito em outra máquina estava disponível no GitHub nesta verificação.
+- O código disponível foi reaplicado ao site `development.localhost` com migração completa,
+  execução de `sol_brasil.install.setup_customer_fields`, compilação do app e limpeza de cache.
+- A migração, os hooks `after_migrate`, o build e as traduções terminaram sem erro.
+- Os apps `frappe`, `erpnext` e `sol_brasil` estão instalados; o DocType `Caixa de Atendimento`
+  foi confirmado no banco e o site respondeu `HTTP 200` após a atualização.
+- Caso existam alterações mais recentes na outra máquina, elas precisam ser commitadas e enviadas
+  para `origin/main` (ou sua branch remota informada) antes que possam ser instaladas aqui.
+
+## Implantação operacional RADIUS/PPPoE — 31/08/2026
+
+Esta seção substitui qualquer anotação anterior dizendo que FreeRADIUS, worker ou banco operacional ainda não existem.
+
+### Arquitetura vigente
+
+- `Customer` é o titular e consolida seus pontos.
+- Cada `Subscription` é um ponto e contém credencial PPPoE, situação, endereço e topologia.
+- `Subscription Plan` contém velocidade, sessões, accounting, pools, filtros e atributos RADIUS.
+- `Regras de Negocio` e a política opcional do plano calculam situação e banda efetiva.
+- O ERP grava eventos sem senha em `Evento de Provisionamento RADIUS`.
+- O worker lê a senha protegida somente no processamento e projeta o estado em um MariaDB separado.
+- FreeRADIUS consulta somente o banco operacional; nunca consulta o ERP durante o login.
+- `Acesso PPPoE` e `Perfil RADIUS` são legado e não devem ser usados em novos fluxos.
+
+### Serviços instalados nesta máquina
+
+| Serviço | Container | Portas no host | Estado validado |
+|---|---|---|---|
+| Banco operacional | `frappe_docker-radius-db-1` | somente rede Docker | saudável |
+| FreeRADIUS primário | `frappe_docker-radius-primary-1` | UDP 1812, 1813, 3799 | saudável |
+| FreeRADIUS secundário | `frappe_docker-radius-secondary-1` | UDP 1814, 1815, 3800 | saudável |
+
+Imagem comum: `sol-provedor/freeradius:3.2.10`.
+
+Os segredos foram gerados aleatoriamente e armazenados como variáveis do perfil do Windows. Eles não estão no Git e não devem ser copiados para a máquina de casa. Cada estação gera seus próprios segredos.
+
+Variáveis usadas: `RADIUS_DB_PASSWORD`, `RADIUS_DB_ROOT_PASSWORD`, `RADIUS_LAB_SECRET`, `RADIUS_LAB_NETWORK` e `ERP_DOCKER_NETWORK`.
+
+Durante o laboratório local, `RADIUS_LAB_NETWORK` está restrita a `127.0.0.1/32`. Antes de usar um MikroTik, trocar pelo IP `/32` ou rede confiável real e recriar os dois servidores.
+
+### Evidências já obtidas
+
+- `freeradius -XC`: configuração válida e conexão MySQL confirmada.
+- `bench migrate`: concluído em `development.localhost`.
+- 8 testes automatizados RADIUS aprovados.
+- Auditoria: 204 contratos, 203 com PPPoE, zero usuários duplicados, zero planos ausentes e zero contratos ativos sem usuário.
+- Primeira carga: 203 eventos concluídos, zero falhas.
+- 153 contas autorizadas; contratos bloqueados, suspensos ou cancelados ficaram sem credencial operacional.
+- Access-Accept para senha válida e Access-Reject para senha incorreta aprovados.
+- Accounting Start, Interim-Update e Stop aprovados e gravados em `radacct`.
+- Failover aprovado: o primário foi interrompido, o secundário autenticou e o primário voltou saudável.
+- Scheduler do site habilitado.
+- CoA/Disconnect real ainda não foi validado porque não há `NAS RADIUS` ativo nem MikroTik conectado.
+
+### Arquivos da implantação
+
+- `GUIA_IMPLANTACAO_RADIUS_PPPOE.md`
+- `frappe_docker/overrides/compose.radius.yaml`
+- `frappe_docker/radius/Dockerfile`
+- `frappe_docker/radius/sql/001-radius-schema.sql`
+- `frappe_docker/radius/freeradius/`
+- `frappe_docker/radius/README.md`
+- `frappe_docker/radius/bootstrap-development.ps1`
+- `frappe_docker/radius/validate-lab.ps1`
+- `frappe_docker/radius/runbooks/RUNBOOK_ROLLOUT.md`
+- `sol_brasil/radius_provisioning.py`
+- `sol_brasil/radius_accounting.py`
+- `sol_brasil/radius_coa.py`
+
+### Como reproduzir na máquina de casa
+
+1. Sincronizar esta mesma versão do repositório pelo Git.
+2. Instalar e iniciar Docker Desktop no modo Linux.
+3. Iniciar primeiro `devcontainer-example`, criando a rede e o container Frappe.
+4. Executar na raiz do repositório:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\frappe_docker\radius\bootstrap-development.ps1
+```
+
+O script localiza o Docker mesmo quando instalado no perfil do usuário, gera segredos próprios, constrói primário e secundário, configura o site, executa migração, auditoria, sincronização e primeira carga. Não copiar `site_config.json`, senhas do banco ou segredos de NAS entre as máquinas.
+
+No contrato, os campos `Provisionamento RADIUS`, versão, última sincronização e erro indicam a situação. O botão **RADIUS → Sessões e consumo** consulta o accounting do ponto.
+
+### Próximo passo real
+
+Criar um MikroTik CHR em Hyper-V, VMware ou VirtualBox. RouterOS/CHR não é uma imagem Docker oficial. Depois:
+
+1. cadastrar o CHR em `NAS RADIUS` com segredo próprio e CoA na porta 3799;
+2. autorizar somente o IP do CHR em `RADIUS_LAB_NETWORK`;
+3. recriar os dois serviços;
+4. configurar `/radius` e `/ppp aaa` no CHR;
+5. testar plano, IP/pool, limite de sessão, redução, bloqueio, pagamento, desbloqueio e Disconnect;
+6. somente após isso iniciar modo sombra e piloto.
+
 ## Arquivos centrais do app
 
 - `sol_brasil/hooks.py`
@@ -535,9 +639,11 @@ Após qualquer alteração funcional, técnica, de dados, fluxo, instalação ou
 
 ## Planejamento recomendado
 
-### Prioridade 1 — Estruturar a rede como cadastros próprios
+> Esta lista é o roadmap amplo do produto. Para a retomada imediata, seguir **Próximo passo real** na seção RADIUS acima; não reiniciar etapas de modelagem que já foram concluídas.
 
-Hoje OLT, PON, CTO e ONU são campos textuais na ficha. Para uma operação real, criar DocTypes relacionados:
+### Prioridade 1 — Estruturar a rede como cadastros próprios (parcialmente concluída)
+
+OLT e CTO/NAP já são cadastros próprios, com seleção derivada de slot/PON e controle de portas ocupadas pelo contrato. Permanecem como evoluções futuras:
 
 - POP
 - OLT
@@ -552,14 +658,12 @@ Hoje OLT, PON, CTO e ONU são campos textuais na ficha. Para uma operação real
 
 Depois substituir gradualmente campos de texto por Links. Isso permitirá ocupação de portas, disponibilidade, mapas, inventário e prevenção de duplicidade.
 
-### Prioridade 2 — Autenticação e integração de rede
+### Prioridade 2 — Autenticação e integração de rede (RADIUS implantado)
 
-- Criar entidade de acesso PPPoE independente, vinculada ao contrato e cliente.
-- Preparar integração com RADIUS/FreeRADIUS.
-- Preparar integração com MikroTik, Huawei, ZTE e outros fabricantes.
-- Sincronizar bloqueio, desbloqueio e troca de plano.
-- Registrar logs de autenticação e última conexão.
-- Nunca expor senha PPPoE em listagens ou logs.
+- PPPoE pertence ao contrato; não criar entidade operacional independente.
+- FreeRADIUS, banco SQL, worker, bloqueio, desbloqueio, troca de plano e accounting estão implementados.
+- Próximo alvo é validar MikroTik CHR, CoA/Disconnect e depois ampliar integrações de fabricantes.
+- Nunca expor senha PPPoE em listagens, eventos ou logs.
 
 ### Prioridade 3 — Contrato próprio do provedor
 
@@ -628,7 +732,9 @@ O `Subscription` atende à recorrência, mas ainda possui terminologia e regras 
 - Consolidar mudanças em commits pequenos e documentados.
 - Planejar atualização futura do Frappe/ERPNext sem alterar diretamente o core.
 
-## Próxima tarefa sugerida
+## Histórico da modelagem de rede
+
+O texto abaixo registra decisões que levaram à estrutura atual. A próxima tarefa vigente é o laboratório MikroTik CHR descrito na seção RADIUS, não recriar estes cadastros.
 
 O POP foi considerado opcional para a operação atual. O cadastro próprio de `OLT` foi implementado com identificação, situação, fabricante, modelo, número de série, IP de gerenciamento validado, local de instalação e observações. O workspace `Rede e Equipamentos` possui atalhos para listar e cadastrar OLTs.
 
